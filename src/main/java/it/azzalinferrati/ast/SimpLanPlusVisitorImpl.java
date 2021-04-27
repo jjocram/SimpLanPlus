@@ -1,7 +1,21 @@
 package it.azzalinferrati.ast;
 
+import it.azzalinferrati.ast.node.ArgNode;
+import it.azzalinferrati.ast.node.BlockNode;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.type.BoolTypeNode;
+import it.azzalinferrati.ast.node.type.IntTypeNode;
+import it.azzalinferrati.ast.node.type.PointerTypeNode;
+import it.azzalinferrati.ast.node.declaration.DecFunNode;
+import it.azzalinferrati.ast.node.declaration.DecVarNode;
 import it.azzalinferrati.parser.SimpLanPlusParser;
+import it.azzalinferrati.parser.SimpLanPlusParser.ArgContext;
+import it.azzalinferrati.parser.SimpLanPlusParser.DeclarationContext;
+import it.azzalinferrati.parser.SimpLanPlusParser.StatementContext;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -11,7 +25,18 @@ public class SimpLanPlusVisitorImpl implements SimpLanPlusVisitor<Node> {
 
     @Override
     public Node visitBlock(SimpLanPlusParser.BlockContext ctx) {
-        return null;
+        List<Node> declarations = new ArrayList<>();
+        List<Node> statements = new ArrayList<>();
+        
+        for(DeclarationContext declarationContext: ctx.declaration()) {
+            declarations.add(visit(declarationContext));
+        }
+        
+        for(StatementContext statementContext: ctx.statement()) {
+            statements.add(visit(statementContext));
+        }
+
+        return new BlockNode(declarations, statements);
     }
 
     @Override
@@ -26,22 +51,44 @@ public class SimpLanPlusVisitorImpl implements SimpLanPlusVisitor<Node> {
 
     @Override
     public Node visitDecFun(SimpLanPlusParser.DecFunContext ctx) {
-        return null;
+        Node type = visit(ctx.type());
+        String id = ctx.ID().getText();
+        List<Node> args = new ArrayList<>();
+        for(ArgContext argContext: ctx.arg()) {
+            args.add(visit(argContext));
+        }
+        Node block = visit(ctx.block());
+
+        return new DecFunNode(type, id, args, block);
     }
 
     @Override
     public Node visitDecVar(SimpLanPlusParser.DecVarContext ctx) {
-        return null;
+        Node type = visit(ctx.type());
+        String id = ctx.ID().getText();
+        Node exp = visit(ctx.exp());
+
+        return new DecVarNode(type, id, exp);
     }
 
     @Override
     public Node visitType(SimpLanPlusParser.TypeContext ctx) {
-        return null;
+        final String text = ctx.getText();
+        if (text.equals("int")) {
+            return new IntTypeNode();
+        } else if(text.equals("bool")) {
+            return new BoolTypeNode();
+        } 
+
+        return new PointerTypeNode(visit(ctx.type()));
     }
 
     @Override
     public Node visitArg(SimpLanPlusParser.ArgContext ctx) {
-        return null;
+        Node type = visit(ctx.type());
+        String id = ctx.ID().getText();
+
+        return new ArgNode(type, id);
     }
 
     @Override

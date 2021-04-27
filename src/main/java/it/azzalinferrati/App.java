@@ -31,6 +31,9 @@ public class App {
         // SimpLan lexer
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(charStream);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+        
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(new VerboseListener());
 
         // Check for lexical errors
         if (lexer.errorCount() > 0) {
