@@ -29,7 +29,7 @@ public class App {
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
         // Check for lexical errors
-        if (lexer.lexicalErrors > 0) {
+        if (lexer.errorCount() > 0) {
             System.err.println("The program was not in the right format. Exiting the compilation error");
             System.exit(1);
         }

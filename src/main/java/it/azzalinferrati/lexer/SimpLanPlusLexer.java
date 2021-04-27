@@ -1,5 +1,5 @@
 // Generated from .\src\main\java\it\azzalinferrati\lexer\SimpLanPlus.g4 by ANTLR 4.9.1
-package it.azzalinferrati;
+package it.azzalinferrati.lexer;
 
 import java.util.List;
 import java.util.ArrayList;
