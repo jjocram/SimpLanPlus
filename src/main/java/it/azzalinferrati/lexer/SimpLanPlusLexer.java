@@ -1,5 +1,9 @@
-// Generated from src/main/java/it/azzalinferrati/lexer/SimpLanPlus.g4 by ANTLR 4.9
-package it.azzalinferrati.lexer;
+// Generated from .\src\main\java\it\azzalinferrati\lexer\SimpLanPlus.g4 by ANTLR 4.9.1
+package it.azzalinferrati;
+
+import java.util.List;
+import java.util.ArrayList;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -11,9 +15,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class SimpLanPlusLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.9", RuntimeMetaData.VERSION); }
-
-	public int lexicalErrors=0;
+	static { RuntimeMetaData.checkVersion("4.9.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -95,6 +97,13 @@ public class SimpLanPlusLexer extends Lexer {
 	}
 
 
+	private List<String> errors = new ArrayList<>();
+
+	public int errorCount() {
+		return errors.size();
+	}
+
+
 	public SimpLanPlusLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
@@ -129,7 +138,7 @@ public class SimpLanPlusLexer extends Lexer {
 	private void ERR_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 0:
-			 System.out.println("Invalid char: "+ getText()); lexicalErrors++; 
+			 errors.add("Invalid character: "+ getText()); 
 			break;
 		}
 	}

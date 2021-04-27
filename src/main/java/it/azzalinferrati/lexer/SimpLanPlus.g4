@@ -1,6 +1,16 @@
 grammar SimpLanPlus;
 
-// THIS IS THE PARSER INPUT
+@lexer::header {
+import java.util.List;
+import java.util.ArrayList;
+}
+@lexer::members {
+private List<String> errors = new ArrayList<>();
+
+public int errorCount() {
+	return errors.size();
+}
+}
 
 block	    : '{' declaration* statement* '}';
 
@@ -74,7 +84,4 @@ WS              : (' '|'\t'|'\n'|'\r')-> skip;
 LINECOMMENTS 	: '//' (~('\n'|'\r'))* -> skip;
 BLOCKCOMMENTS   : '/*'( ~('/'|'*')|'/'~'*'|'*'~'/'|BLOCKCOMMENTS)* '*/' -> skip;
 
-//VERY SIMPLISTIC ERROR CHECK FOR THE LEXING PROCESS, THE OUTPUT GOES DIRECTLY TO THE TERMINAL
-//THIS IS WRONG!!!!
-//FIXME
-ERR     : . { System.out.println("Invalid char: "+ getText()); lexicalErrors++; } -> channel(HIDDEN);
+ERR     : . { errors.add("Invalid character: "+ getText()); } -> channel(HIDDEN);

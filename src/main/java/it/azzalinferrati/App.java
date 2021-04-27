@@ -2,9 +2,11 @@ package it.azzalinferrati;
 
 import it.azzalinferrati.ast.SimpLanPlusVisitor;
 import it.azzalinferrati.ast.SimpLanPlusVisitorImpl;
+import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.lexer.SimpLanPlusLexer;
 import it.azzalinferrati.parser.SimpLanPlusParser;
 //import org.antlr.v4.runtime.ANTLRInputStream;
+import it.azzalinferrati.parser.VerboseListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -34,6 +36,8 @@ public class App {
 
         // SimpLan parser and visitor
         SimpLanPlusParser parser = new SimpLanPlusParser(tokenStream);
-        SimpLanPlusVisitor visitor = new SimpLanPlusVisitorImpl();
+        parser.removeErrorListeners();
+        parser.addErrorListener(new VerboseListener());
+        SimpLanPlusVisitor<Node> visitor = new SimpLanPlusVisitorImpl(/*parser.block()*/);
     }
 }
