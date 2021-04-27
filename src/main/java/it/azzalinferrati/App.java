@@ -18,8 +18,12 @@ import org.antlr.v4.runtime.CommonTokenStream;
  */
 public class App {
     public static void main(String[] args) throws Exception {
+        if(args.length != 1) {
+            System.err.println("SimpLanPlus compiler: you must specify a file name!");
+            System.exit(1);
+        }
         // File to read
-        String filename = "testsFile/test1.simplan";
+        String filename = args[0];
         //FileInputStream fileInputStream = new FileInputStream(filename);
         //ANTLRInputStream inputStream = new ANTLRInputStream(fileInputStream);
         CharStream charStream = CharStreams.fromFileName(filename);

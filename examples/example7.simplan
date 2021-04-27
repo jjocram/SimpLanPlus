@@ -1,0 +1,16 @@
+
+{
+    int u = 1 ;
+    void f(^int x, int n) { 
+        if (n == 0) {
+            print(x);
+            delete x;
+        }
+        else {
+            ^int y = new;
+            y^ = x^ * n;
+            f(y,n-1);
+        }	
+    }
+    f(u,6);
+}
