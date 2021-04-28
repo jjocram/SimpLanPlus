@@ -3,8 +3,7 @@ package it.azzalinferrati.ast.node.declaration;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ibm.icu.text.MessagePatternUtil.ArgNode;
-
+import it.azzalinferrati.ast.node.ArgNode;
 import it.azzalinferrati.ast.node.BlockNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;

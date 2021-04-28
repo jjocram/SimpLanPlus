@@ -1,15 +1,8 @@
 package it.azzalinferrati.ast;
 
 import it.azzalinferrati.ast.node.*;
-import it.azzalinferrati.ast.node.expression.BaseExpNode;
-import it.azzalinferrati.ast.node.expression.ExpNode;
-import it.azzalinferrati.ast.node.statement.AssigtStatNode;
-import it.azzalinferrati.ast.node.statement.BlockStatNode;
-import it.azzalinferrati.ast.node.statement.CallStatNode;
-import it.azzalinferrati.ast.node.statement.DeletStatNode;
-import it.azzalinferrati.ast.node.statement.IteStatNode;
-import it.azzalinferrati.ast.node.statement.PrintStatNode;
-import it.azzalinferrati.ast.node.statement.RetStatNode;
+import it.azzalinferrati.ast.node.expression.*;
+import it.azzalinferrati.ast.node.statement.*;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
 import it.azzalinferrati.ast.node.type.IntTypeNode;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
@@ -78,11 +71,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public BlockStatNode visitBlockStat(SimpLanPlusParser.BlockStatContext ctx) {
         return new BlockStatNode(visitBlock(ctx.block()));
-    }
-
-    @Override
-    public Node visitDeclaration(SimpLanPlusParser.DeclarationContext ctx) {
-        return null;
     }
 
     @Override
@@ -166,7 +154,11 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitIte(SimpLanPlusParser.IteContext ctx) {
-        return null;
+        ExpNode condition = (ExpNode) visit(ctx.condition);
+        StatementNode thenStatement = (StatementNode) visit(ctx.thenBranch);
+        StatementNode elseStatement = (StatementNode) visit(ctx.elseBranch);
+
+        return new IteNode(condition, thenStatement, elseStatement);
     }
 
     @Override
@@ -175,32 +167,38 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         List<ExpNode> parameters = new ArrayList<>();
 
         for (ExpContext expContext : ctx.exp()) {
-            parameters.add(visit(expContext));
+            parameters.add((ExpNode) visit(expContext));
         }
 
         return new CallNode(id, parameters);
     }
 
     @Override
-    public Node visitBaseExp(SimpLanPlusParser.BaseExpContext ctx) {
+    public BaseExpNode visitBaseExp(SimpLanPlusParser.BaseExpContext ctx) {
         Node exp = visit(ctx.exp());
 
         return new BaseExpNode(exp);
     }
 
     @Override
-    public Node visitBinExp(SimpLanPlusParser.BinExpContext ctx) {
-        return null;
+    public BinaryExpNode visitBinExp(SimpLanPlusParser.BinExpContext ctx) {
+        ExpNode leftExpression = (ExpNode) visit(ctx.left);
+        String operator = ctx.op.getText();
+        ExpNode rightExpression = (ExpNode) visit(ctx.right);
+
+        return new BinaryExpNode(leftExpression, operator, rightExpression);
     }
 
     @Override
-    public Node visitDerExp(SimpLanPlusParser.DerExpContext ctx) {
-        return null;
+    public DereferenceExpNode visitDerExp(SimpLanPlusParser.DerExpContext ctx) {
+        LhsNode lhs = visitLhs(ctx.lhs());
+
+        return new DereferenceExpNode(lhs);
     }
 
     @Override
-    public Node visitNewExp(SimpLanPlusParser.NewExpContext ctx) {
-        return null;
+    public NewExpNode visitNewExp(SimpLanPlusParser.NewExpContext ctx) {
+        return new NewExpNode();
     }
 
     @Override
@@ -209,8 +207,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitNegExp(SimpLanPlusParser.NegExpContext ctx) {
-        return null;
+    public NegateExpNode visitNegExp(SimpLanPlusParser.NegExpContext ctx) {
+        ExpNode exp = (ExpNode) visit(ctx.exp());
+
+        return new NegateExpNode(exp);
     }
 
     @Override
@@ -219,12 +219,30 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public Node visitCallExp(SimpLanPlusParser.CallExpContext ctx) {
-        return null;
+    public CallExpNode visitCallExp(SimpLanPlusParser.CallExpContext ctx) {
+        CallNode callNode = visitCall(ctx.call());
+
+        return new CallExpNode(callNode);
     }
 
     @Override
     public Node visitNotExp(SimpLanPlusParser.NotExpContext ctx) {
+        ExpNode exp = (ExpNode) visit(ctx.exp());
+
+        return new NotExpNode(exp);
+    }
+
+    @Override
+    public Node visitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) {
+        DecFunNode decFun = visitDecFun(ctx.decFun());
+
+        return null;
+    }
+
+    @Override
+    public Node visitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) {
+        DecVarNode decVar = visitDecVar(ctx.decVar());
+
         return null;
     }
 

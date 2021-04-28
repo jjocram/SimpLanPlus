@@ -1,19 +1,17 @@
-package it.azzalinferrati.ast.node;
+package it.azzalinferrati.ast.node.expression;
 
-import it.azzalinferrati.ast.node.expression.ExpNode;
+import it.azzalinferrati.ast.node.CallNode;
+import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class CallNode implements Node {
-    final private String id;
-    final private List<ExpNode> args;
+public class CallExpNode extends ExpNode{
+    final private CallNode call;
 
-    public CallNode(String id, List<ExpNode> args) {
-        this.id = id;
-        this.args = args;
+    public CallExpNode(CallNode call) {
+        this.call = call;
     }
 
     @Override
