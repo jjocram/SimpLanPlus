@@ -1,16 +1,18 @@
 package it.azzalinferrati.ast.node;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
 public class ArgNode implements Node {
 
-    final private Node type;
+    final private TypeNode type;
     final private String id;
 
-    public ArgNode(final Node type, final String id) {
+    public ArgNode(final TypeNode type, final String id) {
         this.type = type;
         this.id = id;
     }

@@ -10,11 +10,11 @@ import java.util.List;
 
 public class CallNode implements Node {
     final private String id;
-    final private List<ExpNode> args;
+    final private List<ExpNode> params;
 
-    public CallNode(String id, List<ExpNode> args) {
+    public CallNode(String id, List<ExpNode> params) {
         this.id = id;
-        this.args = args;
+        this.params = params;
     }
 
     @Override

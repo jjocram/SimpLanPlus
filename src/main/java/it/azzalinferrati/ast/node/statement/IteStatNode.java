@@ -8,9 +8,9 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 
 public class IteStatNode extends StatementNode {
     
-    final private Node ite;
+    final private IteNode ite;
 
-    public IteStatNode(final Node ite) {
+    public IteStatNode(final IteNode ite) {
         this.ite = ite;
     }
 

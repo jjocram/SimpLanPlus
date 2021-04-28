@@ -7,9 +7,9 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import java.util.ArrayList;
 
 public class BaseExpNode extends ExpNode {
-    final private Node exp;
+    final private ExpNode exp;
 
-    public BaseExpNode(Node exp) {
+    public BaseExpNode(ExpNode exp) {
         this.exp = exp;
     }
 

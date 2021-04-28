@@ -7,9 +7,9 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import java.util.ArrayList;
 
 public class NegateExpNode extends ExpNode {
-    final private Node exp;
+    final private ExpNode exp;
 
-    public NegateExpNode(Node exp) {
+    public NegateExpNode(ExpNode exp) {
         this.exp = exp;
     }
 

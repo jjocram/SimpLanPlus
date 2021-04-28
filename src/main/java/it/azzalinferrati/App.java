@@ -3,6 +3,7 @@ package it.azzalinferrati;
 import it.azzalinferrati.ast.SimpLanPlusVisitor;
 import it.azzalinferrati.ast.SimpLanPlusVisitorImpl;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.statement.BlockNode;
 import it.azzalinferrati.lexer.SimpLanPlusLexer;
 //import org.antlr.v4.runtime.ANTLRInputStream;
 import it.azzalinferrati.parser.SimpLanPlusParser;
@@ -13,9 +14,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 
 //import java.io.FileInputStream;
 
-/**
- * Hello world!
- */
 public class App {
     public static void main(String[] args) throws Exception {
         if(args.length != 1) {
@@ -45,6 +43,8 @@ public class App {
         SimpLanPlusParser parser = new SimpLanPlusParser(tokenStream);
         parser.removeErrorListeners();
         parser.addErrorListener(new VerboseListener());
-        SimpLanPlusVisitor<Node> visitor = new SimpLanPlusVisitorImpl(/*parser.block()*/);
+        SimpLanPlusVisitor<Node> visitor = new SimpLanPlusVisitorImpl();
+
+        Node AST = visitor.visit(parser.block());
     }
 }

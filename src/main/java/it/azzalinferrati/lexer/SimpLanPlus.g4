@@ -34,7 +34,7 @@ type        : 'int'
             | 'bool'
 	        | '^' type ;
 
-funType     : type | 'void';
+funType     : type | 'void'; // It is like a type but with void for function
 
 arg         : type ID;
 

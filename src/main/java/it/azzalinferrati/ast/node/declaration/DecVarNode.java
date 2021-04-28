@@ -3,16 +3,18 @@ package it.azzalinferrati.ast.node.declaration;
 import java.util.ArrayList;
 
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.expression.ExpNode;
+import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
 public class DecVarNode extends DeclarationNode {
 
-    final private Node type;
+    final private TypeNode type;
     final private String id;
-    final private Node exp;
+    final private ExpNode exp;
 
-    public DecVarNode(final Node type, final String id, final Node exp) {
+    public DecVarNode(final TypeNode type, final String id, final ExpNode exp) {
         this.type = type;
         this.id = id;
         this.exp = exp;
