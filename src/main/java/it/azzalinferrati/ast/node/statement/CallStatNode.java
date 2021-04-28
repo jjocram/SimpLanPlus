@@ -2,7 +2,6 @@ package it.azzalinferrati.ast.node.statement;
 
 import java.util.ArrayList;
 
-import it.azzalinferrati.ast.node.CallNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;

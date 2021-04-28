@@ -1,21 +1,12 @@
-package it.azzalinferrati.ast.node;
+package it.azzalinferrati.ast.node.type;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class BlockNode implements Node {
-
-    final private List<Node> declarations;
-
-    final private List<Node> statements;
-
-    public BlockNode(final List<Node> declarations, final List<Node> statements) {
-        this.declarations = declarations;
-        this.statements = statements;
-    }
+public class VoidTypeNode extends TypeNode {
 
     @Override
     public String toPrint(String indent) {

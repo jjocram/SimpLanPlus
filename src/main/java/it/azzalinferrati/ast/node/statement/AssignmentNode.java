@@ -1,15 +1,19 @@
-package it.azzalinferrati.ast.node;
+package it.azzalinferrati.ast.node.statement;
 
+import it.azzalinferrati.ast.node.LhsNode;
+import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
 import java.util.ArrayList;
 
-public class DeletionNode implements Node{
-    final private String id;
+public class AssignmentNode implements Node {
+    final private LhsNode lhs;
+    final private Node exp;
 
-    public DeletionNode(String id) {
-        this.id = id;
+    public AssignmentNode(LhsNode lhs, Node exp) {
+        this.lhs = lhs;
+        this.exp = exp;
     }
 
     @Override

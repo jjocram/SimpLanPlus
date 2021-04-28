@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.azzalinferrati.ast.node.ArgNode;
-import it.azzalinferrati.ast.node.BlockNode;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.statement.BlockNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class DecFunNode extends DeclarationNode {
+public class DecFunNode implements Node {
     final private Node type;
     final private String id;
     final private List<ArgNode> args;

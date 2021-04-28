@@ -26,13 +26,15 @@ statement   : assignment ';'#assigtStat
 declaration : decFun    #declarateFun
             | decVar    #declarateVar;
 
-decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
+decFun	    : funType ID '(' (arg (',' arg)*)? ')' block ;
 
 decVar      : type ID ('=' exp)? ';' ;
 
 type        : 'int'
             | 'bool'
 	        | '^' type ;
+
+funType     : type | 'void';
 
 arg         : type ID;
 

@@ -1,16 +1,15 @@
-package it.azzalinferrati.ast.node;
+package it.azzalinferrati.ast.node.statement;
 
+import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
 import java.util.ArrayList;
 
-public class AssignmentNode implements Node{
-    final private LhsNode lhs;
+public class RetNode implements Node {
     final private Node exp;
 
-    public AssignmentNode(LhsNode lhs, Node exp) {
-        this.lhs = lhs;
+    public RetNode(Node exp) {
         this.exp = exp;
     }
 

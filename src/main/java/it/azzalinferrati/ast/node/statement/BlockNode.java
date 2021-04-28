@@ -1,17 +1,22 @@
 package it.azzalinferrati.ast.node.statement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.declaration.DeclarationNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class RetStatNode extends StatementNode {
+public class BlockNode implements Node {
 
-    final private RetNode ret;
+    final private List<DeclarationNode> declarations;
 
-    public RetStatNode(final RetNode ret) {
-        this.ret = ret;
+    final private List<StatementNode> statements;
+
+    public BlockNode(final List<DeclarationNode> declarations, final List<StatementNode> statements) {
+        this.declarations = declarations;
+        this.statements = statements;
     }
 
     @Override

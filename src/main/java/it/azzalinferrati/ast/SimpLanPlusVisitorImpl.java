@@ -9,6 +9,9 @@ import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.ast.node.declaration.DecFunNode;
 import it.azzalinferrati.ast.node.declaration.DecVarNode;
+import it.azzalinferrati.ast.node.declaration.DeclarateFunNode;
+import it.azzalinferrati.ast.node.declaration.DeclarateVarNode;
+import it.azzalinferrati.ast.node.declaration.DeclarationNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +27,15 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public BlockNode visitBlock(SimpLanPlusParser.BlockContext ctx) {
-        List<Node> declarations = new ArrayList<>();
-        List<Node> statements = new ArrayList<>();
+        List<DeclarationNode> declarations = new ArrayList<>();
+        List<StatementNode> statements = new ArrayList<>();
         
         for(DeclarationContext declarationContext: ctx.declaration()) {
-            declarations.add(visit(declarationContext));
+            declarations.add((DeclarationNode) visit(declarationContext));
         }
         
         for(StatementContext statementContext: ctx.statement()) {
-            statements.add(visit(statementContext));
+            statements.add((StatementNode) visit(statementContext));
         }
 
         return new BlockNode(declarations, statements);
@@ -74,8 +77,18 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
+    public DeclarateFunNode visitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) {
+        return new DeclarateFunNode(visitDecFun(ctx.decFun()));
+    }
+
+    @Override
+    public DeclarateVarNode visitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) {
+        return new DeclarateVarNode(visitDecVar(ctx.decVar()));
+    }
+
+    @Override
     public DecFunNode visitDecFun(SimpLanPlusParser.DecFunContext ctx) {
-        Node type = visit(ctx.type());
+        TypeNode type = visitType(ctx.type());
         String id = ctx.ID().getText();
         List<ArgNode> args = new ArrayList<>();
         for(ArgContext argContext: ctx.arg()) {
@@ -146,10 +159,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public ReturnNode visitRet(SimpLanPlusParser.RetContext ctx) {
+    public RetNode visitRet(SimpLanPlusParser.RetContext ctx) {
         Node exp = visit(ctx.exp());
 
-        return new ReturnNode(exp);
+        return new RetNode(exp);
     }
 
     @Override
@@ -230,20 +243,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         ExpNode exp = (ExpNode) visit(ctx.exp());
 
         return new NotExpNode(exp);
-    }
-
-    @Override
-    public Node visitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) {
-        DecFunNode decFun = visitDecFun(ctx.decFun());
-
-        return null;
-    }
-
-    @Override
-    public Node visitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) {
-        DecVarNode decVar = visitDecVar(ctx.decVar());
-
-        return null;
     }
 
     @Override

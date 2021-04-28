@@ -1,7 +1,7 @@
 package it.azzalinferrati.ast.node.expression;
 
-import it.azzalinferrati.ast.node.CallNode;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.statement.CallNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 

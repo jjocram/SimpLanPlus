@@ -1,19 +1,21 @@
-package it.azzalinferrati.ast.node;
+package it.azzalinferrati.ast.node.statement;
 
+import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class CallNode implements Node {
-    final private String id;
-    final private List<ExpNode> args;
+public class IteNode implements Node {
+    final private ExpNode condition;
+    final private StatementNode thenStatement;
+    final private StatementNode elseStatement;
 
-    public CallNode(String id, List<ExpNode> args) {
-        this.id = id;
-        this.args = args;
+    public IteNode(ExpNode condition, StatementNode thenStatement, StatementNode elseStatement) {
+        this.condition = condition;
+        this.thenStatement = thenStatement;
+        this.elseStatement = elseStatement;
     }
 
     @Override
