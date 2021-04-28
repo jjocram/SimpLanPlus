@@ -1,9 +1,7 @@
-// Generated from .\src\main\java\it\azzalinferrati\lexer\SimpLanPlus.g4 by ANTLR 4.9.1
+// Generated from src/main/java/it/azzalinferrati/lexer/SimpLanPlus.g4 by ANTLR 4.9
 package it.azzalinferrati.ast;
-
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
-
 import it.azzalinferrati.parser.SimpLanPlusParser;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -20,11 +18,54 @@ public interface SimpLanPlusVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(SimpLanPlusParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimpLanPlusParser#statement}.
+	 * Visit a parse tree produced by the {@code assigtStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStatement(SimpLanPlusParser.StatementContext ctx);
+	T visitAssigtStat(SimpLanPlusParser.AssigtStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code deletStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeletStat(SimpLanPlusParser.DeletStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrintStat(SimpLanPlusParser.PrintStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code retStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRetStat(SimpLanPlusParser.RetStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code iteStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIteStat(SimpLanPlusParser.IteStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code callStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallStat(SimpLanPlusParser.CallStatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blockStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockStat(SimpLanPlusParser.BlockStatContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimpLanPlusParser#declaration}.
 	 * @param ctx the parse tree

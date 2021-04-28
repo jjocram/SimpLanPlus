@@ -14,13 +14,13 @@ public int errorCount() {
 
 block	    : '{' declaration* statement* '}';
 
-statement   : assignment ';'
-	    | deletion ';'
-	    | print ';'
-	    | ret ';'
-	    | ite
-	    | call ';'
-	    | block;
+statement   : assignment ';'#assigtStat
+	        | deletion ';'  #deletStat
+	        | print ';'     #printStat
+	        | ret ';'       #retStat
+	        | ite           #iteStat
+	        | call ';'      #callStat
+	        | block         #blockStat;
 
 
 declaration : decFun
@@ -32,7 +32,7 @@ decVar      : type ID ('=' exp)? ';' ;
 
 type        : 'int'
             | 'bool'
-	    | '^' type ;
+	        | '^' type ;
 
 arg         : type ID;
 
@@ -44,17 +44,17 @@ deletion    : 'delete' ID;
 
 print	    : 'print' exp;
 
-ret	    : 'return' (exp)?;
+ret	        : 'return' (exp)?;
 
 ite         : 'if' '(' exp ')' statement ('else' statement)?;
 
 call        : ID '(' (exp(',' exp)*)? ')';
 
-exp	    : '(' exp ')'				        #baseExp
-	    | '-' exp					        #negExp
+exp	    : '(' exp ')'				                        #baseExp
+	    | '-' exp					                        #negExp
 	    | '!' exp                                           #notExp
-	    | lhs						#derExp
-	    | 'new'						#newExp
+	    | lhs						                        #derExp
+	    | 'new'						                        #newExp
 	    | left=exp op=('*' | '/')               right=exp   #binExp
 	    | left=exp op=('+' | '-')               right=exp   #binExp
 	    | left=exp op=('<' | '<=' | '>' | '>=') right=exp   #binExp
@@ -63,7 +63,7 @@ exp	    : '(' exp ')'				        #baseExp
 	    | left=exp op='||'                      right=exp   #binExp
 	    | call                                              #callExp
 	    | BOOL                                              #boolExp
-	    | NUMBER					        #valExp;
+	    | NUMBER					                        #valExp;
 
 
 // THIS IS THE LEXER INPUT
@@ -73,11 +73,11 @@ BOOL        : 'true'|'false';
 
 //IDs
 fragment CHAR 	    : 'a'..'z' |'A'..'Z' ;
-ID          : CHAR (CHAR | DIGIT)* ;
+ID                  : CHAR (CHAR | DIGIT)* ;
 
 //Numbers
 fragment DIGIT	    : '0'..'9';
-NUMBER      : DIGIT+;
+NUMBER              : DIGIT+;
 
 //ESCAPE SEQUENCES
 WS              : (' '|'\t'|'\n'|'\r')-> skip;

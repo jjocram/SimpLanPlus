@@ -1,9 +1,7 @@
-// Generated from .\src\main\java\it\azzalinferrati\lexer\SimpLanPlus.g4 by ANTLR 4.9.1
+// Generated from src/main/java/it/azzalinferrati/lexer/SimpLanPlus.g4 by ANTLR 4.9
 package it.azzalinferrati.ast;
-
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-
 import it.azzalinferrati.parser.SimpLanPlusParser;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -21,15 +19,89 @@ public interface SimpLanPlusListener extends ParseTreeListener {
 	 */
 	void exitBlock(SimpLanPlusParser.BlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SimpLanPlusParser#statement}.
+	 * Enter a parse tree produced by the {@code assigtStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatement(SimpLanPlusParser.StatementContext ctx);
+	void enterAssigtStat(SimpLanPlusParser.AssigtStatContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SimpLanPlusParser#statement}.
+	 * Exit a parse tree produced by the {@code assigtStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatement(SimpLanPlusParser.StatementContext ctx);
+	void exitAssigtStat(SimpLanPlusParser.AssigtStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code deletStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeletStat(SimpLanPlusParser.DeletStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code deletStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeletStat(SimpLanPlusParser.DeletStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintStat(SimpLanPlusParser.PrintStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code printStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintStat(SimpLanPlusParser.PrintStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code retStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterRetStat(SimpLanPlusParser.RetStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code retStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitRetStat(SimpLanPlusParser.RetStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code iteStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteStat(SimpLanPlusParser.IteStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code iteStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteStat(SimpLanPlusParser.IteStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code callStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCallStat(SimpLanPlusParser.CallStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code callStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCallStat(SimpLanPlusParser.CallStatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code blockStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlockStat(SimpLanPlusParser.BlockStatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code blockStat}
+	 * labeled alternative in {@link SimpLanPlusParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlockStat(SimpLanPlusParser.BlockStatContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SimpLanPlusParser#declaration}.
 	 * @param ctx the parse tree

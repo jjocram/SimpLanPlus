@@ -8,13 +8,14 @@ import it.azzalinferrati.ast.node.type.IntTypeNode;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.declaration.DecFunNode;
 import it.azzalinferrati.ast.node.declaration.DecVarNode;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import it.azzalinferrati.parser.SimpLanPlusParser;
 import it.azzalinferrati.parser.SimpLanPlusParser.ArgContext;
 import it.azzalinferrati.parser.SimpLanPlusParser.DeclarationContext;
 import it.azzalinferrati.parser.SimpLanPlusParser.StatementContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -40,7 +41,37 @@ public class SimpLanPlusVisitorImpl implements SimpLanPlusVisitor<Node> {
     }
 
     @Override
-    public Node visitStatement(SimpLanPlusParser.StatementContext ctx) {
+    public Node visitAssigtStat(SimpLanPlusParser.AssigtStatContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Node visitDeletStat(SimpLanPlusParser.DeletStatContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Node visitPrintStat(SimpLanPlusParser.PrintStatContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Node visitRetStat(SimpLanPlusParser.RetStatContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Node visitIteStat(SimpLanPlusParser.IteStatContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Node visitCallStat(SimpLanPlusParser.CallStatContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Node visitBlockStat(SimpLanPlusParser.BlockStatContext ctx) {
         return null;
     }
 
