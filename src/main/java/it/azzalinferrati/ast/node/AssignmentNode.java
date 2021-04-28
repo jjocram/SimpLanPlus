@@ -5,11 +5,11 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 
 import java.util.ArrayList;
 
-public class AssigNode implements Node{
-    final private Node lhs;
+public class AssignmentNode implements Node{
+    final private LhsNode lhs;
     final private Node exp;
 
-    public AssigNode(Node lhs, Node exp) {
+    public AssignmentNode(LhsNode lhs, Node exp) {
         this.lhs = lhs;
         this.exp = exp;
     }

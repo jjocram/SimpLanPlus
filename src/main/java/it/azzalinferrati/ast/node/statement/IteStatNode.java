@@ -6,7 +6,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class IteStatNode implements Node {
+public class IteStatNode extends StatementNode {
     
     final private Node ite;
 

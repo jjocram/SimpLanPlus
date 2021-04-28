@@ -6,7 +6,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class BoolTypeNode implements Node {
+public class BoolTypeNode extends TypeNode {
 
     @Override
     public String toPrint(String indent) {

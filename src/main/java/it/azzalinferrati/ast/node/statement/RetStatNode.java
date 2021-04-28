@@ -3,14 +3,15 @@ package it.azzalinferrati.ast.node.statement;
 import java.util.ArrayList;
 
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.ReturnNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class RetStatNode implements Node {
+public class RetStatNode extends StatementNode {
 
-    final private Node ret;
+    final private ReturnNode ret;
 
-    public RetStatNode(final Node ret) {
+    public RetStatNode(final ReturnNode ret) {
         this.ret = ret;
     }
 

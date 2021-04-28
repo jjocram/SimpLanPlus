@@ -6,11 +6,11 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class PointerTypeNode implements Node {
+public class PointerTypeNode extends TypeNode {
 
-    final Node pointedType;
+    final TypeNode pointedType;
 
-    public PointerTypeNode(final Node pointedType) {
+    public PointerTypeNode(final TypeNode pointedType) {
         this.pointedType = pointedType;
     }
 
