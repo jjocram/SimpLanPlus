@@ -113,13 +113,25 @@ public class SimpLanPlusBaseListener implements SimpLanPlusListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration(SimpLanPlusParser.DeclarationContext ctx) { }
+	@Override public void enterDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration(SimpLanPlusParser.DeclarationContext ctx) { }
+	@Override public void exitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

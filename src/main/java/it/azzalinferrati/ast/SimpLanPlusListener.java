@@ -103,15 +103,29 @@ public interface SimpLanPlusListener extends ParseTreeListener {
 	 */
 	void exitBlockStat(SimpLanPlusParser.BlockStatContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SimpLanPlusParser#declaration}.
+	 * Enter a parse tree produced by the {@code declarateFun}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaration(SimpLanPlusParser.DeclarationContext ctx);
+	void enterDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SimpLanPlusParser#declaration}.
+	 * Exit a parse tree produced by the {@code declarateFun}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaration(SimpLanPlusParser.DeclarationContext ctx);
+	void exitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code declarateVar}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code declarateVar}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SimpLanPlusParser#decFun}.
 	 * @param ctx the parse tree

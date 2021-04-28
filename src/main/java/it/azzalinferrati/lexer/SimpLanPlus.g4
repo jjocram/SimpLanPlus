@@ -23,8 +23,8 @@ statement   : assignment ';'#assigtStat
 	        | block         #blockStat;
 
 
-declaration : decFun
-            | decVar ;
+declaration : decFun    #declarateFun
+            | decVar    #declarateVar;
 
 decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
 
@@ -46,7 +46,7 @@ print	    : 'print' exp;
 
 ret	        : 'return' (exp)?;
 
-ite         : 'if' '(' exp ')' statement ('else' statement)?;
+ite         : 'if' '(' condition=exp ')' thenBranch=statement ('else' elseBranch=statement)?;
 
 call        : ID '(' (exp(',' exp)*)? ')';
 

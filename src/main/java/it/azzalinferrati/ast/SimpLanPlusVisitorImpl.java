@@ -20,6 +20,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
+
     @Override
     public Node visitBlock(SimpLanPlusParser.BlockContext ctx) {
         List<Node> declarations = new ArrayList<>();
@@ -69,11 +70,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public Node visitBlockStat(SimpLanPlusParser.BlockStatContext ctx) {
         return visit(ctx.block());
-    }
-
-    @Override
-    public Node visitDeclaration(SimpLanPlusParser.DeclarationContext ctx) {
-        return null;
     }
 
     @Override
@@ -217,6 +213,16 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public Node visitNotExp(SimpLanPlusParser.NotExpContext ctx) {
         return null;
+    }
+
+    @Override
+    public Node visitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) {
+        return super.visitDeclarateFun(ctx);
+    }
+
+    @Override
+    public Node visitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) {
+        return super.visitDeclarateVar(ctx);
     }
 
     @Override

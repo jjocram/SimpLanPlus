@@ -67,11 +67,19 @@ public interface SimpLanPlusVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlockStat(SimpLanPlusParser.BlockStatContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimpLanPlusParser#declaration}.
+	 * Visit a parse tree produced by the {@code declarateFun}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaration(SimpLanPlusParser.DeclarationContext ctx);
+	T visitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declarateVar}
+	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimpLanPlusParser#decFun}.
 	 * @param ctx the parse tree
