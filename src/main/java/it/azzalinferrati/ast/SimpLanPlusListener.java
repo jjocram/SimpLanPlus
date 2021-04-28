@@ -1,4 +1,4 @@
-// Generated from src/main/java/it/azzalinferrati/lexer/SimpLanPlus.g4 by ANTLR 4.9
+// Generated from .\src\main\java\it\azzalinferrati\lexer\SimpLanPlus.g4 by ANTLR 4.9.1
 package it.azzalinferrati.ast;
 import it.azzalinferrati.parser.SimpLanPlusParser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -156,6 +156,16 @@ public interface SimpLanPlusListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitType(SimpLanPlusParser.TypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SimpLanPlusParser#funType}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunType(SimpLanPlusParser.FunTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SimpLanPlusParser#funType}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunType(SimpLanPlusParser.FunTypeContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SimpLanPlusParser#arg}.
 	 * @param ctx the parse tree

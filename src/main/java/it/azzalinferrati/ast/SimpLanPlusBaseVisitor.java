@@ -1,7 +1,7 @@
-// Generated from src/main/java/it/azzalinferrati/lexer/SimpLanPlus.g4 by ANTLR 4.9
+// Generated from .\src\main\java\it\azzalinferrati\lexer\SimpLanPlus.g4 by ANTLR 4.9.1
 package it.azzalinferrati.ast;
-import it.azzalinferrati.parser.SimpLanPlusParser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+import it.azzalinferrati.parser.SimpLanPlusParser;
 
 /**
  * This class provides an empty implementation of {@link SimpLanPlusVisitor},
@@ -103,6 +103,13 @@ public class SimpLanPlusBaseVisitor<T> extends AbstractParseTreeVisitor<T> imple
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitType(SimpLanPlusParser.TypeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitFunType(SimpLanPlusParser.FunTypeContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
