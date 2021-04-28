@@ -38,37 +38,37 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitAssigtStat(SimpLanPlusParser.AssigtStatContext ctx) {
-        return null;
+        return visit(ctx.assignment());
     }
 
     @Override
     public Node visitDeletStat(SimpLanPlusParser.DeletStatContext ctx) {
-        return null;
+        return visit(ctx.deletion());
     }
 
     @Override
     public Node visitPrintStat(SimpLanPlusParser.PrintStatContext ctx) {
-        return null;
+        return visit(ctx.print());
     }
 
     @Override
     public Node visitRetStat(SimpLanPlusParser.RetStatContext ctx) {
-        return null;
+        return visit(ctx.ret());
     }
 
     @Override
     public Node visitIteStat(SimpLanPlusParser.IteStatContext ctx) {
-        return null;
+        return visit(ctx.ite());
     }
 
     @Override
     public Node visitCallStat(SimpLanPlusParser.CallStatContext ctx) {
-        return null;
+        return visit(ctx.call());
     }
 
     @Override
     public Node visitBlockStat(SimpLanPlusParser.BlockStatContext ctx) {
-        return null;
+        return visit(ctx.block());
     }
 
     @Override
