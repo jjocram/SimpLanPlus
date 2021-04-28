@@ -1,6 +1,6 @@
 .idea/
 .vscode/
-
+quicktest.simplan
 *.antlr/
 
 # Created by https://www.toptal.com/developers/gitignore/api/java,maven
