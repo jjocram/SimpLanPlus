@@ -3,17 +3,20 @@ package it.azzalinferrati.ast.node.declaration;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ibm.icu.text.MessagePatternUtil.ArgNode;
+
+import it.azzalinferrati.ast.node.BlockNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class DecFunNode implements Node {
+public class DecFunNode extends DeclarationNode {
     final private Node type;
     final private String id;
-    final private List<Node> args;
-    final private Node block;
+    final private List<ArgNode> args;
+    final private BlockNode block;
 
-    public DecFunNode(final Node type, final String id, final List<Node> args, final Node block) {
+    public DecFunNode(final Node type, final String id, final List<ArgNode> args, final BlockNode block) {
         this.type = type;
         this.id = id;
         this.args = args;

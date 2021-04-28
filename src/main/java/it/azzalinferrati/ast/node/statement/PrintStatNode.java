@@ -3,14 +3,15 @@ package it.azzalinferrati.ast.node.statement;
 import java.util.ArrayList;
 
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.PrintNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class PrintStatNode implements Node {
+public class PrintStatNode extends StatementNode {
 
-    final private Node print;
+    final private PrintNode print;
 
-    public PrintStatNode(final Node print) {
+    public PrintStatNode(final PrintNode print) {
         this.print = print;
     }
 

@@ -6,7 +6,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class DecVarNode implements Node {
+public class DecVarNode extends DeclarationNode {
 
     final private Node type;
     final private String id;

@@ -6,7 +6,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class IntTypeNode implements Node {
+public class IntTypeNode extends TypeNode {
 
     @Override
     public String toPrint(String indent) {

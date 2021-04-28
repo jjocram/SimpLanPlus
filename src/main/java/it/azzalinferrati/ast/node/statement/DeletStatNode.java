@@ -2,15 +2,16 @@ package it.azzalinferrati.ast.node.statement;
 
 import java.util.ArrayList;
 
+import it.azzalinferrati.ast.node.DeletionNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class DeletStatNode implements Node {
+public class DeletStatNode extends StatementNode {
 
-    final private Node deletion;
+    final private DeletionNode deletion;
 
-    public DeletStatNode(final Node deletion) {
+    public DeletStatNode(final DeletionNode deletion) {
         this.deletion = deletion;
     }
 

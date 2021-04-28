@@ -6,7 +6,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 
 import java.util.ArrayList;
 
-public class NegateExpNode implements Node {
+public class NegateExpNode extends ExpNode {
     final private Node exp;
 
     public NegateExpNode(Node exp) {

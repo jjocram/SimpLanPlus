@@ -8,9 +8,9 @@ import java.util.List;
 
 public class CallNode implements Node {
     final private String id;
-    final private List<Node> args;
+    final private List<ArgNode> args;
 
-    public CallNode(String id, List<Node> args) {
+    public CallNode(String id, List<ArgNode> args) {
         this.id = id;
         this.args = args;
     }

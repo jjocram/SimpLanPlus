@@ -2,15 +2,16 @@ package it.azzalinferrati.ast.node.statement;
 
 import java.util.ArrayList;
 
+import it.azzalinferrati.ast.node.BlockNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class BlockStatNode implements Node {
+public class BlockStatNode extends StatementNode {
 
-    final private Node block;
+    final private BlockNode block;
 
-    public BlockStatNode(final Node block) {
+    public BlockStatNode(final BlockNode block) {
         this.block = block;
     }
 

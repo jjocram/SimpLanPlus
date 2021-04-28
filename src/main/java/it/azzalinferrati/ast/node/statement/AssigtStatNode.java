@@ -2,15 +2,16 @@ package it.azzalinferrati.ast.node.statement;
 
 import java.util.ArrayList;
 
+import it.azzalinferrati.ast.node.AssignmentNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 
-public class AssigtStatNode implements Node {
+public class AssigtStatNode extends StatementNode {
 
-    final private Node assignment;
+    final private AssignmentNode assignment;
 
-    public AssigtStatNode(final Node assignment) {
+    public AssigtStatNode(final AssignmentNode assignment) {
         this.assignment = assignment;
     }
 
