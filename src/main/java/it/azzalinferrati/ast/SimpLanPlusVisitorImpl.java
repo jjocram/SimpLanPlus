@@ -1,8 +1,7 @@
 package it.azzalinferrati.ast;
 
-import it.azzalinferrati.ast.node.ArgNode;
-import it.azzalinferrati.ast.node.BlockNode;
-import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.*;
+import it.azzalinferrati.ast.node.expression.BaseExpNode;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
 import it.azzalinferrati.ast.node.type.IntTypeNode;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
@@ -16,13 +15,10 @@ import it.azzalinferrati.parser.SimpLanPlusParser;
 import it.azzalinferrati.parser.SimpLanPlusParser.ArgContext;
 import it.azzalinferrati.parser.SimpLanPlusParser.DeclarationContext;
 import it.azzalinferrati.parser.SimpLanPlusParser.StatementContext;
-
-import org.antlr.v4.runtime.tree.ErrorNode;
+import it.azzalinferrati.parser.SimpLanPlusParser.ExpContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class SimpLanPlusVisitorImpl implements SimpLanPlusVisitor<Node> {
+public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visitBlock(SimpLanPlusParser.BlockContext ctx) {
@@ -124,27 +120,39 @@ public class SimpLanPlusVisitorImpl implements SimpLanPlusVisitor<Node> {
 
     @Override
     public Node visitAssignment(SimpLanPlusParser.AssignmentContext ctx) {
-        return null;
+        Node lhs = visit(ctx.lhs());
+        Node exp = visit(ctx.exp());
+
+        return new AssigNode(lhs, exp);
     }
 
     @Override
     public Node visitLhs(SimpLanPlusParser.LhsContext ctx) {
-        return null;
+        String id = ctx.ID().getText();
+        Node lhs = visit(ctx.lhs());
+
+        return new LhsNode(id, lhs);
     }
 
     @Override
     public Node visitDeletion(SimpLanPlusParser.DeletionContext ctx) {
-        return null;
+        String id = ctx.ID().getText();
+
+        return new DeletionNode(id);
     }
 
     @Override
     public Node visitPrint(SimpLanPlusParser.PrintContext ctx) {
-        return null;
+        Node exp = visit(ctx.exp());
+
+        return new PrintNode(exp);
     }
 
     @Override
     public Node visitRet(SimpLanPlusParser.RetContext ctx) {
-        return null;
+        Node exp = visit(ctx.exp());
+
+        return new ReturnNode(exp);
     }
 
     @Override
@@ -154,12 +162,21 @@ public class SimpLanPlusVisitorImpl implements SimpLanPlusVisitor<Node> {
 
     @Override
     public Node visitCall(SimpLanPlusParser.CallContext ctx) {
-        return null;
+        String id = ctx.ID().getText();
+        List<Node> args = new ArrayList<>();
+
+        for (ExpContext expContext : ctx.exp()) {
+            args.add(visit(expContext));
+        }
+
+        return new CallNode(id, args);
     }
 
     @Override
     public Node visitBaseExp(SimpLanPlusParser.BaseExpContext ctx) {
-        return null;
+        Node exp = visit(ctx.exp());
+
+        return new BaseExpNode(exp);
     }
 
     @Override
@@ -203,22 +220,7 @@ public class SimpLanPlusVisitorImpl implements SimpLanPlusVisitor<Node> {
     }
 
     @Override
-    public Node visit(ParseTree parseTree) {
-        return null;
-    }
-
-    @Override
-    public Node visitChildren(RuleNode ruleNode) {
-        return null;
-    }
-
-    @Override
-    public Node visitTerminal(TerminalNode terminalNode) {
-        return null;
-    }
-
-    @Override
-    public Node visitErrorNode(ErrorNode errorNode) {
-        return null;
+    public Node visit(ParseTree tree) {
+        return tree!=null ? super.visit(tree) : null;
     }
 }
