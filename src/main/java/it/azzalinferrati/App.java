@@ -46,5 +46,10 @@ public class App {
         SimpLanPlusVisitor<Node> visitor = new SimpLanPlusVisitorImpl();
 
         Node AST = visitor.visit(parser.block());
+
+        if (parser.getNumberOfSyntaxErrors() > 0){
+            System.err.println("There was syntax errors in the file, look above.");
+            System.exit(1);
+        }
     }
 }
