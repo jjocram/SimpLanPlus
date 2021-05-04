@@ -6,15 +6,16 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import java.util.ArrayList;
 
 public class LhsNode implements Node{
-    final private String id;
+    final private IdNode id;
+    // LhsNode is just a plain identifier only when lhs == null.
     final private LhsNode lhs;
 
-    public LhsNode(String id, LhsNode lhs) {
+    public LhsNode(IdNode id, LhsNode lhs) {
         this.id = id;
         this.lhs = lhs;
     }
 
-    public String getId() {
+    public IdNode getId() {
         return id;
     }
 

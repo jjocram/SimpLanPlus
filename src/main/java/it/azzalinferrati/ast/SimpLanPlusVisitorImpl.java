@@ -88,7 +88,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public DecFunNode visitDecFun(SimpLanPlusParser.DecFunContext ctx) {
         TypeNode type = visitFunType(ctx.funType());
-        String id = ctx.ID().getText();
+        IdNode id = new IdNode(ctx.ID().getText());
         List<ArgNode> args = new ArrayList<>();
         for(ArgContext argContext: ctx.arg()) {
             args.add(visitArg(argContext));
@@ -101,7 +101,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public DecVarNode visitDecVar(SimpLanPlusParser.DecVarContext ctx) {
         TypeNode type = visitType(ctx.type());
-        String id = ctx.ID().getText();
+        IdNode id = new IdNode(ctx.ID().getText());
         ExpNode exp = (ExpNode) visit(ctx.exp());
 
         return new DecVarNode(type, id, exp);
@@ -131,7 +131,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public ArgNode visitArg(SimpLanPlusParser.ArgContext ctx) {
         TypeNode type = visitType(ctx.type());
-        String id = ctx.ID().getText();
+        IdNode id = new IdNode(ctx.ID().getText());
 
         return new ArgNode(type, id);
     }
@@ -149,7 +149,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         // TODO: Recursive function, check with Gilberto Filè teaching
         if (ctx.lhs() == null) {
             // lhs: ID
-            String id = ctx.ID().getText();
+            IdNode id = new IdNode(ctx.ID().getText());
             return new LhsNode(id, null);
         } else{
             // lhs: lhs '^'
@@ -160,7 +160,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public DeletionNode visitDeletion(SimpLanPlusParser.DeletionContext ctx) {
-        String id = ctx.ID().getText();
+        IdNode id = new IdNode(ctx.ID().getText());
 
         return new DeletionNode(id);
     }
@@ -190,7 +190,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public CallNode visitCall(SimpLanPlusParser.CallContext ctx) {
-        String id = ctx.ID().getText();
+        IdNode id = new IdNode(ctx.ID().getText());
         List<ExpNode> parameters = new ArrayList<>();
 
         for (ExpContext expContext : ctx.exp()) {

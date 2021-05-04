@@ -9,13 +9,13 @@ import java.util.ArrayList;
 
 public class IteNode implements Node {
     final private ExpNode condition;
-    final private StatementNode thenStatement;
-    final private StatementNode elseStatement;
+    final private StatementNode thenBranch;
+    final private StatementNode elseBranch;
 
-    public IteNode(ExpNode condition, StatementNode thenStatement, StatementNode elseStatement) {
+    public IteNode(ExpNode condition, StatementNode thenBranch, StatementNode elseBranch) {
         this.condition = condition;
-        this.thenStatement = thenStatement;
-        this.elseStatement = elseStatement;
+        this.thenBranch = thenBranch;
+        this.elseBranch = elseBranch;
     }
 
     @Override
