@@ -15,7 +15,7 @@ public class NotExpNode extends ExpNode{
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return "!" + exp.toPrint(indent);
     }
 
     @Override

@@ -16,8 +16,7 @@ public class PrintStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return print.toPrint(indent);
     }
 
     @Override

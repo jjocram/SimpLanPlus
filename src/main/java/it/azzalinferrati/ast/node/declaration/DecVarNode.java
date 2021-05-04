@@ -25,7 +25,12 @@ public class DecVarNode extends DeclarationNode {
     public String toPrint(String indent) {
         final String declaration = indent
                 + "Variable\t>>\n" + id.toPrint(" ") + " : " + type.toPrint("");
-        final String body = exp.toPrint(" ");
+        /* A declaration could be
+            - type ID;
+            - type ID = exp
+            Exp is optional
+        */
+        final String body = exp != null ? exp.toPrint(" ") : "";
 
         return declaration + body;
     }

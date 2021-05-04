@@ -20,7 +20,9 @@ public class CallNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        String parametersToPrint = params.stream().map((argNode) -> argNode.toPrint(indent)).reduce("(", (arg1, arg2) -> arg1 + "," + arg2);
+        parametersToPrint += ")";
+        return indent + "call " + id.toPrint(indent) + parametersToPrint;
     }
 
     @Override

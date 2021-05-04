@@ -16,8 +16,7 @@ public class DeletStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return deletion.toPrint(indent);
     }
 
     @Override

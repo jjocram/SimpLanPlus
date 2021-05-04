@@ -19,7 +19,7 @@ public class AssignmentNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + lhs.toPrint(indent) + " = " + exp.toPrint(indent);
     }
 
     @Override

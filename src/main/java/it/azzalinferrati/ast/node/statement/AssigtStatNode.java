@@ -16,8 +16,7 @@ public class AssigtStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return indent + assignment.toPrint(indent);
     }
 
     @Override

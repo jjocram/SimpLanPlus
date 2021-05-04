@@ -16,8 +16,7 @@ public class BlockStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return block.toPrint(indent);
     }
 
     @Override
