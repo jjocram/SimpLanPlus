@@ -18,8 +18,7 @@ public class ArgNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return indent + id.toPrint("") + " : " + type.toPrint("");
     }
 
     @Override

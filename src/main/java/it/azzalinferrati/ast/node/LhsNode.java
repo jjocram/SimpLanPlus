@@ -21,7 +21,11 @@ public class LhsNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        if(lhs == null) {
+            return indent + id.toPrint("");
+        }
+        
+        return lhs.toPrint("") + "^";
     }
 
     @Override

@@ -16,8 +16,7 @@ public class DeclarateFunNode extends DeclarationNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return indent + decFun.toPrint(" ");
     }
 
     @Override

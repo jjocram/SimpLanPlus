@@ -23,8 +23,11 @@ public class DecVarNode extends DeclarationNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        final String declaration = indent
+                + "Variable\t>>\n" + id.toPrint(" ") + " : " + type.toPrint("");
+        final String body = exp.toPrint(" ");
+
+        return declaration + body;
     }
 
     @Override

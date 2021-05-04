@@ -16,7 +16,7 @@ public class NumberNode extends ExpNode {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + value;
     }
 
     @Override

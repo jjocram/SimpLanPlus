@@ -16,8 +16,7 @@ public class DeclarateVarNode extends DeclarationNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return indent + decVar.toPrint(" ");
     }
 
     @Override

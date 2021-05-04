@@ -10,8 +10,7 @@ public class BoolTypeNode extends TypeNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return indent + "bool";
     }
 
     @Override

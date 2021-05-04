@@ -16,8 +16,7 @@ public class PointerTypeNode extends TypeNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return indent + "^" + pointedType.toPrint("");
     }
 
     @Override

@@ -51,5 +51,7 @@ public class App {
             System.err.println("There was syntax errors in the file, look above.");
             System.exit(1);
         }
+
+        System.out.println(AST.toPrint(""));
     }
 }

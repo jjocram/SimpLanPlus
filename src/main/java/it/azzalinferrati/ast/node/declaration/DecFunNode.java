@@ -26,8 +26,13 @@ public class DecFunNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        final String declaration = indent
+                + "Function declaration\t>>\n" + id.toPrint(" ") + " : " + args.stream().map((arg) -> arg.toPrint(" "))
+                        .reduce("", (arg1, arg2) -> (arg1.isEmpty() ? "(" + arg1 + ")" : arg1) + " x " + "(" + arg2 + ")")
+                + " -> " + type.toPrint("");
+        final String body = indent + "Function body\t>>\n" + block.toPrint(indent + "  ");
+
+        return declaration + body;
     }
 
     @Override
