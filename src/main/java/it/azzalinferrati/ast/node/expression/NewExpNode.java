@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class NewExpNode extends ExpNode{
     @Override
     public String toPrint(String indent) {
-        return null;
+        return "new";
     }
 
     @Override

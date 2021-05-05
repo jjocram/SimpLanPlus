@@ -19,7 +19,7 @@ public class BinaryExpNode extends ExpNode{
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + leftExpression.toPrint("") + " " + operator + " " + rightExpression.toPrint(indent);
     }
 
     @Override

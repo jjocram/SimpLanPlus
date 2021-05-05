@@ -15,7 +15,7 @@ public class BaseExpNode extends ExpNode {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "(" + exp.toPrint(indent) + ")";
     }
 
     @Override

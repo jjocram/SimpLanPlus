@@ -6,16 +6,16 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 
 import java.util.ArrayList;
 
-public class NegateExpNode extends ExpNode {
+public class NegativeExpNode extends ExpNode {
     final private ExpNode exp;
 
-    public NegateExpNode(ExpNode exp) {
+    public NegativeExpNode(ExpNode exp) {
         this.exp = exp;
     }
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return "-" + exp.toPrint(indent);
     }
 
     @Override

@@ -20,7 +20,9 @@ public class IteNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return "if " + condition.toPrint(indent) + " then:\n" +
+                thenBranch.toPrint(indent+"  ") + "\nelse:\n" +
+                elseBranch.toPrint(indent+"  ");
     }
 
     @Override

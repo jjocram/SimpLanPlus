@@ -16,8 +16,7 @@ public class IteStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        // TODO Auto-generated method stub
-        return null;
+        return ite.toPrint(indent);
     }
 
     @Override

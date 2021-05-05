@@ -16,7 +16,7 @@ public class CallExpNode extends ExpNode{
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + call.toPrint(indent);
     }
 
     @Override

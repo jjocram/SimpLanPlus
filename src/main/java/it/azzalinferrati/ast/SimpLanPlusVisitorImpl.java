@@ -208,10 +208,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public NegateExpNode visitNegExp(SimpLanPlusParser.NegExpContext ctx) {
+    public NegativeExpNode visitNegExp(SimpLanPlusParser.NegExpContext ctx) {
         ExpNode exp = (ExpNode) visit(ctx.exp());
 
-        return new NegateExpNode(exp);
+        return new NegativeExpNode(exp);
     }
 
     @Override
