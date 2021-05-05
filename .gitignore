@@ -1,4 +1,5 @@
 .idea/
+SimPlanPlus.iml
 .vscode/
 quicktest.simplan
 *.antlr/
