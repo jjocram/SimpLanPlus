@@ -16,7 +16,7 @@ public class DereferenceExpNode extends ExpNode{
 
     @Override
     public String toPrint(String indent) {
-        return indent + lhs.toPrint(indent) + "^";
+        return indent + lhs.toPrint(indent);
     }
 
     @Override

@@ -26,13 +26,13 @@ public class DecFunNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        final String declaration = indent
-                + "Function declaration\t>>\n" + id.toPrint(" ") + " : " + args.stream().map((arg) -> arg.toPrint(" "))
-                        .reduce("", (arg1, arg2) -> (arg1.isEmpty() ? "(" + arg1 + ")" : arg1) + " x " + "(" + arg2 + ")")
+        final String declaration = indent + "Function dec\t>> " + id.toPrint(" ") + " : "
+                + args.stream().map((arg) -> "(" + arg.toPrint("") + ")").reduce("",
+                        (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " X ")) + arg2)
                 + " -> " + type.toPrint("");
-        final String body = indent + "Function body\t>>\n" + block.toPrint(indent + "  ");
+        final String body = indent + "Function body\t>>\n" + block.toPrint(indent);
 
-        return declaration + body;
+        return declaration + "\n" + body;
     }
 
     @Override

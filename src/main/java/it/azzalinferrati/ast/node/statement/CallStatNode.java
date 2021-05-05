@@ -16,7 +16,7 @@ public class CallStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        return call.toPrint(indent);
+        return indent + call.toPrint("");
     }
 
     @Override

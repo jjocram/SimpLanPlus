@@ -16,7 +16,7 @@ public class AssigtStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent + assignment.toPrint(indent);
+        return indent + assignment.toPrint("");
     }
 
     @Override

@@ -16,7 +16,7 @@ public class DeclarateVarNode extends DeclarationNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent + decVar.toPrint(" ");
+        return decVar.toPrint(indent);
     }
 
     @Override

@@ -21,10 +21,13 @@ public class BlockNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        String declarationsToPrint = declarations.stream().map((dec1) -> dec1.toPrint(indent + "  ")).reduce("", (dec1, dec2) -> dec1 + "\n" + dec2);
-        String statementsToPrint = statements.stream().map((stm1) -> stm1.toPrint(indent + "  ")).reduce("", (stm1, stm2) -> stm1 + "\n" + stm2);
+        String declarationsToPrint = declarations.stream().map((dec1) -> dec1.toPrint(indent + "  ")).reduce("",
+                (dec1, dec2) -> (dec1.isEmpty() ? dec1 : (dec1 + "\n")) + dec2);
+        String statementsToPrint = statements.stream().map((stm1) -> stm1.toPrint(indent + "  ")).reduce("",
+                (stm1, stm2) -> (stm1.isEmpty() ? stm1 : (stm1 + "\n")) + stm2);
 
-        return indent + "{\n" + declarationsToPrint + "\n" + statementsToPrint + "\n}";
+        return indent + "{\n" + (declarationsToPrint.isEmpty() ? "" : (declarationsToPrint + "\n"))
+                + (statementsToPrint.isEmpty() ? "" : (statementsToPrint + "\n")) + indent + "}";
     }
 
     @Override
@@ -44,5 +47,5 @@ public class BlockNode implements Node {
         // TODO Auto-generated method stub
         return null;
     }
-    
+
 }

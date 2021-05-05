@@ -16,7 +16,7 @@ public class RetStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        return ret.toPrint(indent);
+        return indent + ret.toPrint("");
     }
 
     @Override

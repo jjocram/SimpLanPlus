@@ -16,7 +16,7 @@ public class DeclarateFunNode extends DeclarationNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent + decFun.toPrint(" ");
+        return decFun.toPrint(indent);
     }
 
     @Override
