@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class IdNode implements Node {
-
+    //TODO: extends
     private final String id;
 
     public IdNode(final String id) {
@@ -19,9 +20,8 @@ public class IdNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        // TODO Auto-generated method stub
-        return null;
+    public Node typeCheck() throws TypeCheckingException {
+        return null; // Nothing to return
     }
 
     @Override

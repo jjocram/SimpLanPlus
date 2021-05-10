@@ -8,6 +8,7 @@ import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class DecVarNode extends DeclarationNode {
 
@@ -36,9 +37,13 @@ public class DecVarNode extends DeclarationNode {
     }
 
     @Override
-    public Node typeCheck() {
-        // TODO Auto-generated method stub
-        return null;
+    public TypeNode typeCheck() throws TypeCheckingException {
+        // type must be <= to exp.typeCheck()
+        if (type == null || exp == null || !Node.isSubtype(type, exp)) {
+            // Error
+            throw new TypeCheckingException("Expression: " + exp.toPrint("") + " cannot be assigned to " + id.toPrint("") + " of type " + type.toPrint(""));
+        }
+        return null; // Nothing to return
     }
 
     @Override

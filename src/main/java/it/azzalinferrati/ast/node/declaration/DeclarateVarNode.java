@@ -2,9 +2,10 @@ package it.azzalinferrati.ast.node.declaration;
 
 import java.util.ArrayList;
 
-import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class DeclarateVarNode extends DeclarationNode {
 
@@ -20,9 +21,8 @@ public class DeclarateVarNode extends DeclarationNode {
     }
 
     @Override
-    public Node typeCheck() {
-        // TODO Auto-generated method stub
-        return null;
+    public TypeNode typeCheck() throws TypeCheckingException {
+        return decVar.typeCheck();
     }
 
     @Override

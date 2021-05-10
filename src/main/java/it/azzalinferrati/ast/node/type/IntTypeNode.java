@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class IntTypeNode extends TypeNode {
 
@@ -14,9 +15,8 @@ public class IntTypeNode extends TypeNode {
     }
 
     @Override
-    public Node typeCheck() {
-        // TODO Auto-generated method stub
-        return null;
+    public Node typeCheck() throws TypeCheckingException {
+        return null; // Nothing to return
     }
 
     @Override

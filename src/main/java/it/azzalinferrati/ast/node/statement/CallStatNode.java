@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class CallStatNode extends StatementNode {
 
@@ -20,7 +21,7 @@ public class CallStatNode extends StatementNode {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck() throws TypeCheckingException {
         // TODO Auto-generated method stub
         return null;
     }

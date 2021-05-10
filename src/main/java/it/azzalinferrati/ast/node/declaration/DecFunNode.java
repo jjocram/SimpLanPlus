@@ -2,26 +2,33 @@ package it.azzalinferrati.ast.node.declaration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import it.azzalinferrati.ast.node.ArgNode;
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.statement.BlockNode;
+import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class DecFunNode implements Node {
     final private TypeNode type;
     final private IdNode id;
     final private List<ArgNode> args;
     final private BlockNode block;
+    final private FunTypeNode funType; // Used in semantic analysis
 
     public DecFunNode(final TypeNode type, final IdNode id, final List<ArgNode> args, final BlockNode block) {
         this.type = type;
         this.id = id;
         this.args = args;
         this.block = block;
+
+        List<TypeNode> argsType = args.stream().map(ArgNode::getType).collect(Collectors.toList());
+        funType = new FunTypeNode(argsType, type);
     }
 
     @Override
@@ -36,9 +43,12 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
-        // TODO Auto-generated method stub
-        return null;
+    public TypeNode typeCheck() throws TypeCheckingException {
+        if (type == null || block == null || !Node.isSubtype(type, block)) {
+            // Error
+            throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type.toPrint(""));
+        }
+        return null; // Nothing to return
     }
 
     @Override

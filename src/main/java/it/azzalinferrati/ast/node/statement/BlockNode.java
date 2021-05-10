@@ -7,6 +7,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.declaration.DeclarationNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class BlockNode implements Node {
 
@@ -31,7 +32,7 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck() throws TypeCheckingException {
         // TODO Auto-generated method stub
         return null;
     }

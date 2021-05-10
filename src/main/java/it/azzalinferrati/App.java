@@ -8,9 +8,12 @@ import it.azzalinferrati.lexer.SimpLanPlusLexer;
 //import org.antlr.v4.runtime.ANTLRInputStream;
 import it.azzalinferrati.parser.SimpLanPlusParser;
 import it.azzalinferrati.parser.VerboseListener;
+import it.azzalinferrati.semanticanalysis.Environment;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+
+import java.util.ArrayList;
 
 //import java.io.FileInputStream;
 
@@ -52,6 +55,6 @@ public class App {
             System.exit(1);
         }
 
-        System.out.println(AST.toPrint(""));
+        Environment environment = new Environment(new ArrayList<>(), -1, 0);
     }
 }

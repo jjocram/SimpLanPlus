@@ -1,23 +1,31 @@
 package it.azzalinferrati.ast.node.type;
 
-import java.util.ArrayList;
-
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
-public class PointerTypeNode extends TypeNode {
+import java.util.ArrayList;
+import java.util.List;
 
-    final TypeNode pointedType;
+public class FunTypeNode extends TypeNode {
 
-    public PointerTypeNode(final TypeNode pointedType) {
-        this.pointedType = pointedType;
+    final private List<TypeNode> params;
+    final private TypeNode returned;
+
+    public FunTypeNode(List<TypeNode> params, TypeNode returned) {
+        this.params = params;
+        this.returned = returned;
     }
 
     @Override
     public String toPrint(String indent) {
-        return indent + "^" + pointedType.toPrint("");
+        final String declaration = indent +
+                params.stream().map((arg) ->  arg.toPrint("")).reduce("",
+                (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " X ")) + arg2)
+                + " -> " + returned.toPrint("");
+
+        return declaration;
     }
 
     @Override
@@ -27,14 +35,11 @@ public class PointerTypeNode extends TypeNode {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        // TODO Auto-generated method stub
         return null;
     }
-    
 }

@@ -5,6 +5,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class CallNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public Node typeCheck() throws TypeCheckingException {
         return null;
     }
 
