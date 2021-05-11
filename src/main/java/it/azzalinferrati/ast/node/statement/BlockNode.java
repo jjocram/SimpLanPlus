@@ -5,6 +5,8 @@ import java.util.List;
 
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.declaration.DeclarationNode;
+import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.ast.node.type.VoidTypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -32,9 +34,23 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public Node typeCheck() throws TypeCheckingException {
-        // TODO Auto-generated method stub
-        return null;
+    public TypeNode typeCheck() throws TypeCheckingException {
+        for (DeclarationNode dec : declarations) {
+            dec.typeCheck(); // The important is to perform type check, not to get the returned value
+        }
+
+        for (StatementNode stm : statements) {
+            stm.typeCheck(); // The important is to perform type check, not to get the returned value
+        }
+
+        if (statements.size() > 0 ){
+            StatementNode lastStatement = statements.get(statements.size()-1);
+            if (lastStatement instanceof RetStatNode){
+                return lastStatement.typeCheck();
+            }
+        }
+
+        return new VoidTypeNode();
     }
 
     @Override

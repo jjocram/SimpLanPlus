@@ -1,5 +1,7 @@
 package it.azzalinferrati.ast.node;
 
+import it.azzalinferrati.ast.node.type.PointerTypeNode;
+import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -30,8 +32,17 @@ public class LhsNode implements Node{
     }
 
     @Override
-    public Node typeCheck() throws TypeCheckingException {
-        return null;
+    public TypeNode typeCheck() throws TypeCheckingException {
+        if(lhs == null){
+            return id.typeCheck();
+        }
+        return new PointerTypeNode(lhs.typeCheck());
+        /*
+        int a = 3;
+        int *pa = &a;
+        int **ppa = &&a;
+        int ***pppa = &a; //wrong type
+        */
     }
 
     @Override

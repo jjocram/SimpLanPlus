@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
+import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
@@ -38,10 +39,17 @@ public class DecVarNode extends DeclarationNode {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        // type must be <= to exp.typeCheck()
-        if (type == null || exp == null || !Node.isSubtype(type, exp)) {
-            // Error
-            throw new TypeCheckingException("Expression: " + exp.toPrint("") + " cannot be assigned to " + id.toPrint("") + " of type " + type.toPrint(""));
+        if (exp != null) {
+            System.out.println("EXP: " + exp.typeCheck() + " TYPE: " + type.getClass());
+            // exp.typeCheck() == null => exp è new
+            if ((exp.typeCheck() == null && !(type instanceof PointerTypeNode))) {
+                throw new TypeCheckingException("Expression new cannot be used with a non-pointer");
+            } else {
+                // type must be <= to exp.typeCheck()
+                if (exp.typeCheck() != null && !Node.isSubtype(type, exp)) {
+                    throw new TypeCheckingException("Expression: " + exp.toPrint("") + " cannot be assigned to " + id.toPrint("") + " of type " + type.toPrint(""));
+                }
+            }
         }
         return null; // Nothing to return
     }

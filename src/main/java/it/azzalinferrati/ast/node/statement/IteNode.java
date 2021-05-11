@@ -2,6 +2,8 @@ package it.azzalinferrati.ast.node.statement;
 
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
+import it.azzalinferrati.ast.node.type.BoolTypeNode;
+import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -27,8 +29,16 @@ public class IteNode implements Node {
     }
 
     @Override
-    public Node typeCheck() throws TypeCheckingException {
-        return null;
+    public TypeNode typeCheck() throws TypeCheckingException {
+        if (!(condition.typeCheck() instanceof BoolTypeNode)) {
+            throw new TypeCheckingException("Condition " + condition.toPrint("") + " is not of type bool");
+        }
+
+        if (!Node.isSubtype(thenBranch.typeCheck(), elseBranch.typeCheck())) {
+            throw new TypeCheckingException("Then branch and else branch have different return types");
+        }
+
+        return thenBranch.typeCheck(); // thenBranch has the same type of elseBranch
     }
 
     @Override

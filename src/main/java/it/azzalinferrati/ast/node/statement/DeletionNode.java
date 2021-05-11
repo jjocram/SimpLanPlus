@@ -2,6 +2,8 @@ package it.azzalinferrati.ast.node.statement;
 
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.type.PointerTypeNode;
+import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -21,7 +23,10 @@ public class DeletionNode implements Node {
     }
 
     @Override
-    public Node typeCheck() throws TypeCheckingException {
+    public TypeNode typeCheck() throws TypeCheckingException {
+        if(!(id.typeCheck() instanceof PointerTypeNode)){
+            throw new TypeCheckingException("Variable " + id.toPrint("") + " is not a pointer");
+        }
         return null;
     }
 

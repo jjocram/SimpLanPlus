@@ -4,11 +4,15 @@ import it.azzalinferrati.ast.SimpLanPlusVisitor;
 import it.azzalinferrati.ast.SimpLanPlusVisitorImpl;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.statement.BlockNode;
+import it.azzalinferrati.ast.node.type.IntTypeNode;
+import it.azzalinferrati.ast.node.type.PointerTypeNode;
+import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.lexer.SimpLanPlusLexer;
 //import org.antlr.v4.runtime.ANTLRInputStream;
 import it.azzalinferrati.parser.SimpLanPlusParser;
 import it.azzalinferrati.parser.VerboseListener;
 import it.azzalinferrati.semanticanalysis.Environment;
+import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -52,6 +56,13 @@ public class App {
 
         if (parser.getNumberOfSyntaxErrors() > 0){
             System.err.println("There was syntax errors in the file, look above.");
+            System.exit(1);
+        }
+
+        try {
+            AST.typeCheck();
+        } catch (TypeCheckingException typeCheckingException) {
+            System.err.println(typeCheckingException.getMessage());
             System.exit(1);
         }
 
