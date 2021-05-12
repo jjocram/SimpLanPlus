@@ -43,9 +43,9 @@ public class BlockNode implements Node {
             stm.typeCheck(); // The important is to perform type check, not to get the returned value
         }
 
-        if (statements.size() > 0 ){
+        if (statements.size() > 0){
             StatementNode lastStatement = statements.get(statements.size()-1);
-            if (lastStatement instanceof RetStatNode){
+            if (lastStatement instanceof RetStatNode) {
                 return lastStatement.typeCheck();
             }
         }

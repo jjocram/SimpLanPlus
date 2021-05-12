@@ -27,7 +27,8 @@ public class DeletionNode implements Node {
         if(!(id.typeCheck() instanceof PointerTypeNode)){
             throw new TypeCheckingException("Variable " + id.toPrint("") + " is not a pointer");
         }
-        return null;
+
+        return null; // Nothing to return
     }
 
     @Override

@@ -35,7 +35,7 @@ public class IteNode implements Node {
         }
 
         if (!Node.isSubtype(thenBranch.typeCheck(), elseBranch.typeCheck())) {
-            throw new TypeCheckingException("Then branch and else branch have different return types");
+            throw new TypeCheckingException("\"Then\" branch and \"Else\" branch have different return types");
         }
 
         return thenBranch.typeCheck(); // thenBranch has the same type of elseBranch

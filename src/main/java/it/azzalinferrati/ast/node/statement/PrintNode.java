@@ -23,7 +23,9 @@ public class PrintNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        return exp.typeCheck();
+        exp.typeCheck(); // Executes the type checking on the expression (throwing exceptions if needed)
+
+        return null; // Nothing to return
     }
 
     @Override
