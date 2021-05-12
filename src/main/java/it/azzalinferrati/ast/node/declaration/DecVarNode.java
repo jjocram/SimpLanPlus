@@ -39,19 +39,27 @@ public class DecVarNode extends DeclarationNode {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if (exp != null) {
-            System.out.println("EXP: " + exp.typeCheck() + " TYPE: " + type.getClass());
-            // exp.typeCheck() == null => exp è new
-            if ((exp.typeCheck() == null && !(type instanceof PointerTypeNode))) {
-                throw new TypeCheckingException("Expression new cannot be used with a non-pointer");
-            } else {
-                // type must be <= to exp.typeCheck()
-                if (exp.typeCheck() != null && !Node.isSubtype(type, exp)) {
-                    throw new TypeCheckingException("Expression: " + exp.toPrint("") + " cannot be assigned to " + id.toPrint("") + " of type " + type.toPrint(""));
-                }
-            }
+        if(exp == null) {
+            // Only declaration of variable occurs (e.g. "int a;")
+            return null;
         }
-        return null; // Nothing to return
+        
+        TypeNode expType = exp.typeCheck();
+
+        boolean isNewExp = expType == null;
+
+        if(isNewExp && type instanceof PointerTypeNode) {
+            // This represents the declaration and assignment of a pointer (e.g. "^int a = new; ^^^bool b = new;")
+            return null;
+        }
+
+        // exp is not null (therefore exists)
+        if(!isNewExp && Node.isSubtype(expType, type)) {
+            // The expression is not "new" but is an integer, a boolean or a pointer
+            return null;
+        }
+
+        throw new TypeCheckingException("Expression: " + exp.toPrint("") + " cannot be assigned to " + id.toPrint("") + " of type " + type.toPrint(""));
     }
 
     @Override
