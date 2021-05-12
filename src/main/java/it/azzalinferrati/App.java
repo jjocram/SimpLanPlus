@@ -55,13 +55,13 @@ public class App {
             System.exit(1);
         }
 
-        try {
-            AST.typeCheck();
-        } catch (TypeCheckingException typeCheckingException) {
-            System.err.println(typeCheckingException.getMessage());
-            System.exit(1);
-        }
+        // try {
+        //     AST.typeCheck();
+        // } catch (TypeCheckingException typeCheckingException) {
+        //     System.err.println(typeCheckingException.getMessage());
+        //     System.exit(1);
+        // }
 
-        Environment environment = new Environment(new ArrayList<>(), -1, 0);
+        // Environment environment = new Environment(new ArrayList<>(), -1, 0);
     }
 }
