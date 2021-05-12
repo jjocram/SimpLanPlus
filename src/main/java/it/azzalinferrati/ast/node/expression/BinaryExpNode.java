@@ -47,7 +47,7 @@ public class BinaryExpNode extends ExpNode{
             case "+":
             case "-":
                 // Both must be integer type
-                if (!Node.isSubtype(leftType, new IntTypeNode()) || !Node.isSubtype(rightType, new IntTypeNode())) {
+                if (!(leftType instanceof IntTypeNode) || !(rightType instanceof IntTypeNode)) {
                     throw new TypeCheckingException("Expressions are not of type int");
                 }
                 return new IntTypeNode();
@@ -55,14 +55,14 @@ public class BinaryExpNode extends ExpNode{
             case "<=":
             case ">":
             case ">=":
-                if (!Node.isSubtype(leftType, new IntTypeNode()) || !Node.isSubtype(rightType, new IntTypeNode())) {
+                if (!(leftType instanceof IntTypeNode) || !(rightType instanceof IntTypeNode)) {
                     throw new TypeCheckingException("Expressions are not of type int");
                 }
                 return new BoolTypeNode();
             case "&&":
             case "||":
                 // Both must be bool
-                if (!Node.isSubtype(leftType, new BoolTypeNode()) || !Node.isSubtype(rightType, new BoolTypeNode())) {
+                if (!(leftType instanceof BoolTypeNode) || !(rightType instanceof BoolTypeNode)) {
                     throw new TypeCheckingException("Expressions are not of type bool");
                 }
                 return new BoolTypeNode();

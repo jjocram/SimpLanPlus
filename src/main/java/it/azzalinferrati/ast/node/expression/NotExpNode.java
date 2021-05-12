@@ -24,9 +24,10 @@ public class NotExpNode extends ExpNode{
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if(!Node.isSubtype(exp.typeCheck(), new BoolTypeNode())){
-            throw new TypeCheckingException("Expression: " + exp.toPrint("") +" must be of type bool");
+        if(!(exp.typeCheck() instanceof BoolTypeNode)){
+            throw new TypeCheckingException("Expression: " + exp.toPrint("") + " must be of type bool");
         }
+        
         return new BoolTypeNode();
     }
 

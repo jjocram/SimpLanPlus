@@ -1,6 +1,5 @@
 package it.azzalinferrati.ast.node.expression;
 
-import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.IntTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
@@ -23,9 +22,10 @@ public class NegativeExpNode extends ExpNode {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if(!Node.isSubtype(exp.typeCheck(), new IntTypeNode())){
-            throw new TypeCheckingException("Expression: " + exp.toPrint("") +" must be of type int");
+        if(!(exp.typeCheck() instanceof IntTypeNode)){
+            throw new TypeCheckingException("Expression: " + exp.toPrint("") + " must be of type int");
         }
+        
         return new IntTypeNode();
     }
 

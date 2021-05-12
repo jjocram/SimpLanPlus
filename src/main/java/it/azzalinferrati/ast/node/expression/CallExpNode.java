@@ -1,6 +1,5 @@
 package it.azzalinferrati.ast.node.expression;
 
-import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.statement.CallNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
@@ -23,7 +22,7 @@ public class CallExpNode extends ExpNode{
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        return call.typeCheck();
+        return call.getId().typeCheck();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package it.azzalinferrati.ast.node.expression;
 
-import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
