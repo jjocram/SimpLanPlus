@@ -18,6 +18,14 @@ public class FunTypeNode extends TypeNode {
         this.returned = returned;
     }
 
+    public List<TypeNode> getParams() {
+        return params;
+    }
+
+    public TypeNode getReturned() {
+        return returned;
+    }
+
     @Override
     public String toPrint(String indent) {
         final String declaration = indent +

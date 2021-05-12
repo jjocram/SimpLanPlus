@@ -11,6 +11,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CallNode implements Node {
     final private IdNode id;
@@ -19,6 +20,10 @@ public class CallNode implements Node {
     public CallNode(IdNode id, List<ExpNode> params) {
         this.id = id;
         this.params = params;
+    }
+    
+    public IdNode getId() {
+        return id;
     }
 
     @Override
@@ -30,12 +35,32 @@ public class CallNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        for (ExpNode exp : params) {
-            exp.typeCheck();
+        TypeNode idType = id.typeCheck();
+
+        if(!(idType instanceof FunTypeNode)) {
+            throw new TypeCheckingException("ID " + id.toPrint("") + " is not a function identifier");
         }
 
+        FunTypeNode funType = (FunTypeNode) idType;
 
-        return null;
+        List<TypeNode> formalFunArgTypes = funType.getParams();
+        List<TypeNode> actualFunArgTypes = new ArrayList<>();
+        
+        for (ExpNode exp : params) {
+            actualFunArgTypes.add(exp.typeCheck());
+        }
+
+        if(formalFunArgTypes.size() != actualFunArgTypes.size()) {
+            throw new TypeCheckingException("The number of actual parameters do not match that of the formal parameters of function " + id.toPrint(""));
+        }
+
+        for(int i = 0, size = formalFunArgTypes.size() ; i < size; i++) {
+            if(!Node.isSubtype(formalFunArgTypes.get(i), actualFunArgTypes.get(i))) {
+                throw new TypeCheckingException("In function " + id.toPrint("") + " expected argument of type " + formalFunArgTypes.get(i).toPrint("") + ", got " + actualFunArgTypes.get(i).toPrint(""));
+            }
+        }
+
+        return funType.getReturned();
     }
 
     @Override

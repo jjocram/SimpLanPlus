@@ -21,11 +21,7 @@ public class IdNode implements Node {
     public void setEntry(STEntry entry) {
         this.entry = entry;
     }
-
-    public TypeNode getType() {
-        return entry.getType();
-    }
-
+    
     @Override
     public String toPrint(String indent) {
         return indent + id;
@@ -33,9 +29,9 @@ public class IdNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if(entry.getType() instanceof FunTypeNode){
-            throw new TypeCheckingException("Type FunTypeNode is not allowed for identifiers");
-        }
+        // if(entry.getType() instanceof FunTypeNode) {
+        //     throw new TypeCheckingException("Type FunTypeNode is not allowed for identifiers");
+        // }
 
         return entry.getType();
     }

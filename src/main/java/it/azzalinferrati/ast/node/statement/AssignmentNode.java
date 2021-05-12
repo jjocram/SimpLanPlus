@@ -27,15 +27,32 @@ public class AssignmentNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if ((exp.typeCheck() == null && !(lhs.typeCheck() instanceof PointerTypeNode))) {
-            throw new TypeCheckingException("Expression new cannot be used with a non-pointer");
-        } else {
-            // type must be <= to exp.typeCheck()
-            if (exp.typeCheck() != null && !Node.isSubtype(lhs.typeCheck(), exp.typeCheck())) {
-                throw new TypeCheckingException("Left hand side " + lhs.toPrint("") + " has different type compared to expression " + exp.toPrint(""));
-            }
+        // if ((exp.typeCheck() == null && !(lhs.typeCheck() instanceof PointerTypeNode))) {
+        //     throw new TypeCheckingException("Expression new cannot be used with a non-pointer");
+        // } else {
+        //     // type must be <= to exp.typeCheck()
+        //     if (exp.typeCheck() != null && !Node.isSubtype(lhs.typeCheck(), exp.typeCheck())) {
+        //         throw new TypeCheckingException("Left hand side " + lhs.toPrint("") + " has different type compared to expression " + exp.toPrint(""));
+        //     }
+        // }
+        // return null;        
+        TypeNode lhsType = lhs.typeCheck();
+        TypeNode expType = exp.typeCheck();
+
+        boolean isNewExp = expType == null;
+
+        if(isNewExp && lhsType instanceof PointerTypeNode) {
+            // This represents the declaration and assignment of a pointer (e.g. "^int a; ^^^bool b; a = new; b = new;")
+            return null;
         }
-        return null;
+
+        // exp is not null (therefore exists)
+        if(!isNewExp && Node.isSubtype(expType, lhsType)) {
+            // The expression is not "new" but is an integer, a boolean or a pointer
+            return null;
+        }
+
+        throw new TypeCheckingException("Expression: " + exp.toPrint("") + " cannot be assigned to " + lhs.getId().toPrint("") + " of type " + lhsType.toPrint(""));
     }
 
     @Override

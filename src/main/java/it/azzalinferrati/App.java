@@ -3,10 +3,6 @@ package it.azzalinferrati;
 import it.azzalinferrati.ast.SimpLanPlusVisitor;
 import it.azzalinferrati.ast.SimpLanPlusVisitorImpl;
 import it.azzalinferrati.ast.node.Node;
-import it.azzalinferrati.ast.node.statement.BlockNode;
-import it.azzalinferrati.ast.node.type.IntTypeNode;
-import it.azzalinferrati.ast.node.type.PointerTypeNode;
-import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.lexer.SimpLanPlusLexer;
 //import org.antlr.v4.runtime.ANTLRInputStream;
 import it.azzalinferrati.parser.SimpLanPlusParser;
@@ -42,7 +38,7 @@ public class App {
 
         // Check for lexical errors
         if (lexer.errorCount() > 0) {
-            System.err.println("The program was not in the right format. Exiting the compilation error");
+            System.err.println("The program was not in the right format. The program cannot compile.");
             System.exit(1);
         }
 
