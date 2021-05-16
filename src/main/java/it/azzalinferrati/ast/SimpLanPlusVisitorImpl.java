@@ -107,6 +107,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         return new DecVarNode(type, id, exp);
     }
 
+
+
     @Override
     public TypeNode visitType(SimpLanPlusParser.TypeContext ctx) {
         final String text = ctx.getText();
@@ -239,7 +241,8 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public NewExpNode visitNewExp(SimpLanPlusParser.NewExpContext ctx) {
-        return new NewExpNode();
+        TypeNode type = visitType(ctx.type());
+        return new NewExpNode(type);
     }
 
     @Override

@@ -8,6 +8,12 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import java.util.ArrayList;
 
 public class NewExpNode extends ExpNode{
+    final private TypeNode type;
+
+    public NewExpNode(TypeNode type) {
+        this.type = type;
+    }
+
     @Override
     public String toPrint(String indent) {
         return indent + "new";

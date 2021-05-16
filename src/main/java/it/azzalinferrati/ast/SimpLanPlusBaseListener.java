@@ -1,11 +1,10 @@
-// Generated from .\src\main\java\it\azzalinferrati\lexer\SimpLanPlus.g4 by ANTLR 4.9.1
+// Generated from src/main/java/it/azzalinferrati/lexer/SimpLanPlus.g4 by ANTLR 4.9
 package it.azzalinferrati.ast;
 
+import it.azzalinferrati.parser.SimpLanPlusParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-
-import it.azzalinferrati.parser.SimpLanPlusParser;
 
 /**
  * This class provides an empty implementation of {@link SimpLanPlusListener},
