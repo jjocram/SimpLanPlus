@@ -56,7 +56,7 @@ exp	    : '(' exp ')'				                        #baseExp
 	    | '-' exp					                        #negExp
 	    | '!' exp                                           #notExp
 	    | lhs						                        #derExp
-	    | 'new'						                        #newExp
+	    | 'new'	type					                    #newExp
 	    | left=exp op=('*' | '/')               right=exp   #binExp
 	    | left=exp op=('+' | '-')               right=exp   #binExp
 	    | left=exp op=('<' | '<=' | '>' | '>=') right=exp   #binExp
