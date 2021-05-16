@@ -53,12 +53,14 @@ public class Environment {
      * @param type the type of the variable or function.
      * @throws MultipleDeclarationException when [id] is already present in the head of the Symbol Table.
      */
-    public void addNewDeclaration(final String id, final TypeNode type) throws MultipleDeclarationException {
+    public STEntry addNewDeclaration(final String id, final TypeNode type) throws MultipleDeclarationException {
         STEntry stEntry = new STEntry(nestingLevel, type, offset--);
         STEntry declaration = currentScope().put(id, stEntry);
         if(declaration != null) {
             throw new MultipleDeclarationException("Multiple declaration for ID: " + id + ". It was previously defined of type: " + declaration.getType().toPrint("") + ".");
         }
+
+        return stEntry;
     }
 
     /**

@@ -21,7 +21,11 @@ public class IdNode implements Node {
     public void setEntry(STEntry entry) {
         this.entry = entry;
     }
-    
+
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toPrint(String indent) {
         return indent + id;

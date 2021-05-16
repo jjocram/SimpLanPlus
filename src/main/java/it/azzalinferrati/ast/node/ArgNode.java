@@ -21,6 +21,10 @@ public class ArgNode implements Node {
         return type;
     }
 
+    public IdNode getId() {
+        return id;
+    }
+
     @Override
     public String toPrint(String indent) {
         return indent + id.toPrint("") + " : " + type.toPrint("");

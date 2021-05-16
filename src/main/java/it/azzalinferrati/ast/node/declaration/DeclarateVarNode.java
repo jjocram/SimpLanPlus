@@ -33,8 +33,7 @@ public class DeclarateVarNode extends DeclarationNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        // TODO Auto-generated method stub
-        return null;
+        return decVar.checkSemantics(env);
     }
     
 }

@@ -17,9 +17,20 @@ public class BlockNode implements Node {
 
     final private List<StatementNode> statements;
 
+    private boolean allowScopeCreation;
+
     public BlockNode(final List<DeclarationNode> declarations, final List<StatementNode> statements) {
         this.declarations = declarations;
         this.statements = statements;
+        allowScopeCreation = true;
+    }
+
+    public void allowScopeCreation() {
+        allowScopeCreation = true;
+    }
+
+    public void disallowScopeCreation() {
+        allowScopeCreation = false;
     }
 
     @Override
@@ -61,8 +72,27 @@ public class BlockNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        // TODO Auto-generated method stub
-        return null;
+        if (allowScopeCreation) {
+            env.pushNewScope();
+        }
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        if (!declarations.isEmpty()) {
+            //TODO: env.offset = -2
+            for (DeclarationNode declaration : declarations) {
+                errors.addAll(declaration.checkSemantics(env));
+            }
+        }
+
+        for (StatementNode statement : statements) {
+            errors.addAll(statement.checkSemantics(env));
+        }
+
+        if(allowScopeCreation) {
+            env.popScope();
+        }
+
+        return errors;
     }
 
 }

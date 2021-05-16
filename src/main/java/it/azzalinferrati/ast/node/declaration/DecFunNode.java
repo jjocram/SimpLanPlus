@@ -12,6 +12,7 @@ import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class DecFunNode implements Node {
@@ -59,8 +60,27 @@ public class DecFunNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        // TODO Auto-generated method stub
-        return null;
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        try {
+            id.setEntry(env.addNewDeclaration(id.getId(), funType));
+
+            env.pushNewScope();
+
+            for(ArgNode arg : args){
+                env.addNewDeclaration(arg.getId().getId(), arg.getType());
+            }
+            //TODO: check env.addNewDeclaration(id.getId(), funType); // For recursive calls
+
+            block.disallowScopeCreation();
+            errors.addAll(block.checkSemantics(env));
+            block.allowScopeCreation();
+
+            env.popScope();
+        } catch (MultipleDeclarationException exception) {
+            errors.add(new SemanticError(exception.getMessage()));
+        }
+        return errors;
     }
 
 }

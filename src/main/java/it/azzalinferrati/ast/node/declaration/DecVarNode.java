@@ -9,6 +9,7 @@ import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 public class DecVarNode extends DeclarationNode {
@@ -70,8 +71,16 @@ public class DecVarNode extends DeclarationNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        ArrayList<SemanticError> errors = new ArrayList<>();
 
+        errors.addAll(exp.checkSemantics(env));
+
+        try {
+            id.setEntry(env.addNewDeclaration(id.getId(), type));
+        } catch (MultipleDeclarationException exception) {
+            errors.add(new SemanticError(exception.getMessage()));
+        }
+
+        return errors;
+    }
 }

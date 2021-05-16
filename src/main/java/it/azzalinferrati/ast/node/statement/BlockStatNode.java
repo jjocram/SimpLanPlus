@@ -34,8 +34,7 @@ public class BlockStatNode extends StatementNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        // TODO Auto-generated method stub
-        return null;
+        return block.checkSemantics(env);
     }
     
 }
