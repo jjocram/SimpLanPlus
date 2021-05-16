@@ -1,9 +1,9 @@
 package it.azzalinferrati.semanticanalysis.exception;
 
-public class TypeCheckingException extends Exception{
+public class MissingDeclarationException extends Exception{
     private static final long serialVersionUID = 1L;
     
-    public TypeCheckingException(String message) {
+    public MissingDeclarationException(String message) {
         super(message);
     }
 }

@@ -55,6 +55,8 @@ public class App {
             System.exit(1);
         }
 
+        Environment environment = new Environment(new ArrayList<>());
+
         // try {
         //     AST.typeCheck();
         // } catch (TypeCheckingException typeCheckingException) {
@@ -62,6 +64,5 @@ public class App {
         //     System.exit(1);
         // }
 
-        // Environment environment = new Environment(new ArrayList<>(), -1, 0);
     }
 }
