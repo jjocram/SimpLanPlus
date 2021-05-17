@@ -3,5 +3,5 @@
         delete x;
         delete y;
     } 
-    //  cosa accade in {^int x = new ; f(x,x) ;} 
+    //  cosa accade in {^int x = new int; f(x,x) ;} 
 }

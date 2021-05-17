@@ -7,7 +7,7 @@
             delete x;
         }
         else {
-            ^int y = new;
+            ^int y = new int;
             y^ = x^ * n;
             f(y,n-1);
         }	
