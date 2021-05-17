@@ -47,16 +47,7 @@ public class DecVarNode extends DeclarationNode {
         
         TypeNode expType = exp.typeCheck();
 
-        boolean isNewExp = expType == null;
-
-        if(isNewExp && type instanceof PointerTypeNode) {
-            // This represents the declaration and assignment of a pointer (e.g. "^int a = new; ^^^bool b = new;")
-            return null;
-        }
-
-        // exp is not null (therefore exists)
-        if(!isNewExp && Node.isSubtype(expType, type)) {
-            // The expression is not "new" but is an integer, a boolean or a pointer
+        if(Node.isSubtype(expType, type)) {
             return null;
         }
 
