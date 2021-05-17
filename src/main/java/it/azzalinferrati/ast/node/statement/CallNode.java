@@ -69,6 +69,11 @@ public class CallNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(id.checkSemantics(env));
+        params.stream().forEach((p) -> errors.addAll(p.checkSemantics(env)));
+        
+        return errors;
     }
 }

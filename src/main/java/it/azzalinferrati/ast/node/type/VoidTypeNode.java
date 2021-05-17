@@ -27,8 +27,7 @@ public class VoidTypeNode extends TypeNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<>();
     }
     
 }

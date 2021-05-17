@@ -32,6 +32,6 @@ public class DereferenceExpNode extends ExpNode{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return lhs.checkSemantics(env);
     }
 }

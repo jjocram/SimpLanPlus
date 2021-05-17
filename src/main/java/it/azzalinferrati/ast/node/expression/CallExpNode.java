@@ -8,7 +8,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
 
-public class CallExpNode extends ExpNode{
+public class CallExpNode extends ExpNode {
     final private CallNode call;
 
     public CallExpNode(CallNode call) {
@@ -32,6 +32,6 @@ public class CallExpNode extends ExpNode{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return call.checkSemantics(env);
     }
 }

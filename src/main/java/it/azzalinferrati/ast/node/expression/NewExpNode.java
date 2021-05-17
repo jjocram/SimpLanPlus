@@ -38,6 +38,6 @@ public class NewExpNode extends ExpNode{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return new ArrayList<>();
     }
 }

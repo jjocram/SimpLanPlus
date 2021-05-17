@@ -78,6 +78,11 @@ public class BinaryExpNode extends ExpNode{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(leftExpression.checkSemantics(env));
+        errors.addAll(rightExpression.checkSemantics(env));
+        
+        return errors;
     }
 }

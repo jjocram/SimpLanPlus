@@ -36,6 +36,6 @@ public class NegativeExpNode extends ExpNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return exp.checkSemantics(env);
     }
 }

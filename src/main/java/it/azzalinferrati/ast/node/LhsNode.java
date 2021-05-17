@@ -52,6 +52,10 @@ public class LhsNode implements Node{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        if(lhs == null) {
+            return id.checkSemantics(env);
+        }
+
+        return lhs.checkSemantics(env);
     }
 }

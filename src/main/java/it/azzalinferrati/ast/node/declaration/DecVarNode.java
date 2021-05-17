@@ -63,8 +63,10 @@ public class DecVarNode extends DeclarationNode {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> errors = new ArrayList<>();
-
-        errors.addAll(exp.checkSemantics(env));
+        
+        if(exp != null) {
+            errors.addAll(exp.checkSemantics(env));
+        }
 
         try {
             id.setEntry(env.addNewDeclaration(id.getId(), type));

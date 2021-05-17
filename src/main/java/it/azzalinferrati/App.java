@@ -8,6 +8,7 @@ import it.azzalinferrati.lexer.SimpLanPlusLexer;
 import it.azzalinferrati.parser.SimpLanPlusParser;
 import it.azzalinferrati.parser.VerboseListener;
 import it.azzalinferrati.semanticanalysis.Environment;
+import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -56,13 +57,20 @@ public class App {
         }
 
         Environment environment = new Environment(new ArrayList<>());
+        
+        ArrayList<SemanticError> semanticErrors = AST.checkSemantics(environment);
 
-        // try {
-        //     AST.typeCheck();
-        // } catch (TypeCheckingException typeCheckingException) {
-        //     System.err.println(typeCheckingException.getMessage());
-        //     System.exit(1);
-        // }
+        if(!semanticErrors.isEmpty()) {
+            semanticErrors.stream().forEach(System.err::println);
+            System.exit(1);
+        }
+
+        try {
+            AST.typeCheck();
+        } catch (TypeCheckingException typeCheckingException) {
+            System.err.println(typeCheckingException.getMessage());
+            System.exit(1);
+        }
 
     }
 }

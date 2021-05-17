@@ -38,6 +38,6 @@ public class DeletionNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        return id.checkSemantics(env);
     }
 }
