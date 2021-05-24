@@ -5,6 +5,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.ast.node.type.VoidTypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -31,10 +32,11 @@ public class AssignmentNode implements Node {
         TypeNode expType = exp.typeCheck();
 
         if(Node.isSubtype(expType, lhsType)) {
-            return null;
+            //return null;
+            return new VoidTypeNode();
         }
 
-        throw new TypeCheckingException("Expression: " + exp.toPrint("") + " cannot be assigned to " + lhs.getId().toPrint("") + " of type " + lhsType.toPrint(""));
+        throw new TypeCheckingException("Expression: " + exp.toPrint("") + " of type " + exp.typeCheck().toPrint("") + " cannot be assigned to " + lhs.getId().toPrint("") + " of type " + lhsType.toPrint(""));
     }
 
     @Override

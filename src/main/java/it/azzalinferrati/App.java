@@ -56,6 +56,8 @@ public class App {
             System.exit(1);
         }
 
+        //System.out.println(AST.toPrint(""));
+
         Environment environment = new Environment(new ArrayList<>());
         
         ArrayList<SemanticError> semanticErrors = AST.checkSemantics(environment);

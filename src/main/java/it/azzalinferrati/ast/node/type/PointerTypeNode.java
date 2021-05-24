@@ -15,6 +15,10 @@ public class PointerTypeNode extends TypeNode {
         this.pointedType = pointedType;
     }
 
+    public TypeNode getPointedType() {
+        return pointedType;
+    }
+
     @Override
     public String toPrint(String indent) {
         return indent + "^" + pointedType.toPrint("");

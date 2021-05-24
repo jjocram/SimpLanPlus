@@ -64,18 +64,18 @@ public class Environment {
     }
 
     /**
-     * Searches [id] in the Symbol Table and returns its type, if present.
+     * Searches [id] in the Symbol Table and returns its entry, if present.
      * 
      * @param id the identifer of the variable or function.
-     * @return the type of the variable or function with that identifier.
+     * @return the entry in the symbol table of the variable or function with that identifier.
      * @throws MissingDeclarationException if [id] is not present.
      */
-    public TypeNode lookup(final String id) throws MissingDeclarationException {
+    public STEntry lookup(final String id) throws MissingDeclarationException {
         for(int i = nestingLevel; i >= 0; i--) {
             var ithScope = symbolTable.get(i);
             var stEntry = ithScope.get(id);
             if(stEntry != null) {
-                return stEntry.getType();
+                return stEntry;
             }
         }
         

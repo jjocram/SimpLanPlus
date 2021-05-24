@@ -20,7 +20,6 @@ public class IdNode implements Node {
     }
 
     public void setEntry(STEntry entry) {
-        System.out.println(entry.toPrint(""));
         this.entry = entry;
     }
 
@@ -49,7 +48,7 @@ public class IdNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         try {
-            env.lookup(id);
+            entry = env.lookup(id);
         } catch(MissingDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
         }

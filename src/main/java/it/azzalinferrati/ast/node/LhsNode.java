@@ -34,9 +34,23 @@ public class LhsNode implements Node{
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         if(lhs == null){
+            // Simple ID
             return id.typeCheck();
         }
-        return new PointerTypeNode(lhs.typeCheck());
+
+        // Dereference
+        return ((PointerTypeNode) lhs.typeCheck()).getPointedType();
+        /*
+        ^int y = new int;
+        y^ = 1;
+        */
+
+        /*
+        ^^int y = new ^int;
+        ^int x = new int
+        ^y = x
+        */
+
         /*
         int a = 3;
         int *pa = &a;

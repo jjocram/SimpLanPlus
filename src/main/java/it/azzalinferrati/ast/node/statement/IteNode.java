@@ -34,7 +34,7 @@ public class IteNode implements Node {
             throw new TypeCheckingException("Condition " + condition.toPrint("") + " is not of type bool");
         }
 
-        if (!Node.isSubtype(thenBranch.typeCheck(), elseBranch.typeCheck())) {
+        if (elseBranch != null && !Node.isSubtype(thenBranch.typeCheck(), elseBranch.typeCheck())) {
             throw new TypeCheckingException("\"Then\" branch and \"Else\" branch have different return types");
         }
 

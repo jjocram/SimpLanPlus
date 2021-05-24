@@ -2,6 +2,7 @@ package it.azzalinferrati.ast.node.statement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.declaration.DeclarationNode;
@@ -54,14 +55,29 @@ public class BlockNode implements Node {
             stm.typeCheck(); // The important is to perform type check, not to get the returned value
         }
 
-        if (statements.size() > 0){
-            StatementNode lastStatement = statements.get(statements.size()-1);
-            if (lastStatement instanceof RetStatNode) {
-                return lastStatement.typeCheck();
-            }
+        if (statements.size() == 0){
+            //No statements
+            return new VoidTypeNode();
         }
 
-        return new VoidTypeNode();
+        if (statements.stream().noneMatch(stm -> stm instanceof RetStatNode)) {
+            List<StatementNode> iteStatNodes = statements.stream().filter(stm -> stm instanceof IteStatNode).collect(Collectors.toList());
+            for (int i = 0; i < iteStatNodes.size()-1; i++) {
+                // Multiple if-then-else must have the same returned type
+                if (!Node.isSubtype(iteStatNodes.get(i).typeCheck(), iteStatNodes.get(i + 1).typeCheck())) {
+                    throw new TypeCheckingException("Multiple return statements with different returned types");
+                }
+            }
+            if (iteStatNodes.size() > 0) {
+                // There are if-then-else
+                return iteStatNodes.get(0).typeCheck();
+            }
+
+            //No return
+            return new VoidTypeNode();
+        }
+
+        return statements.get(statements.size() - 1).typeCheck();
     }
 
     @Override
@@ -86,6 +102,14 @@ public class BlockNode implements Node {
 
         for (StatementNode statement : statements) {
             errors.addAll(statement.checkSemantics(env));
+        }
+
+        if (statements.stream().anyMatch(stm -> stm instanceof RetStatNode)) {
+            var firstReturnStm = statements.stream().filter(stm -> stm instanceof RetStatNode).findFirst().get();
+            int returnIndex = statements.indexOf(firstReturnStm);
+            if (returnIndex + 1 < statements.size()) {
+                errors.add(new SemanticError("There is code after return statement"));
+            }
         }
 
         if(allowScopeCreation) {
