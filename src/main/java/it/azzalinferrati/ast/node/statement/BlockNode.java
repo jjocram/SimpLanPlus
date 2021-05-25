@@ -94,7 +94,6 @@ public class BlockNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         if (!declarations.isEmpty()) {
-            //TODO: env.offset = -2
             for (DeclarationNode declaration : declarations) {
                 errors.addAll(declaration.checkSemantics(env));
             }

@@ -63,7 +63,6 @@ public class DecFunNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         try {
-            // TODO: Do we need to decrement the offset ?
             id.setEntry(env.addNewDeclaration(id.getId(), funType));
 
             env.pushNewScope();
