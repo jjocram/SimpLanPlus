@@ -34,7 +34,8 @@ public class DecVarNode extends DeclarationNode {
         */
         final String body = exp != null ? ("\t- initialized with: " + exp.toPrint("")) : "";
 
-        return declaration + body;
+
+        return declaration + "\t- in the AR will be at offset: " + id.getOffset() + body;
     }
 
     @Override

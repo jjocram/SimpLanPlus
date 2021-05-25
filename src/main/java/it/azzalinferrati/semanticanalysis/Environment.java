@@ -1,9 +1,11 @@
 package it.azzalinferrati.semanticanalysis;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.exception.MissingDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
@@ -40,21 +42,30 @@ public class Environment {
     /**
      * Pushes new scope in the Symbol Table stack.
      * Increments the nesting level.
+     * Sets the offset to 0.
      */
     public void pushNewScope() {
         symbolTable.add(new HashMap<>());
         nestingLevel++;
+        offset = 0;
     }
 
     /**
      * Adds a new variable named [id] of type [type] into the current scope.
+     * The offset of functions will be set to -1, the offset of variables will be set to the current offset and later incremented.
      *  
      * @param id the identifer of the variable or function.
      * @param type the type of the variable or function.
      * @throws MultipleDeclarationException when [id] is already present in the head of the Symbol Table.
      */
     public STEntry addNewDeclaration(final String id, final TypeNode type) throws MultipleDeclarationException {
-        STEntry stEntry = new STEntry(nestingLevel, type, offset--);
+        STEntry stEntry;
+        if(type instanceof FunTypeNode) {
+            stEntry = new STEntry(nestingLevel, type, -1); // -1 is correct since after pop() is called the offset for the following variable will be set to 0.
+        } else {
+            stEntry = new STEntry(nestingLevel, type, offset);
+            offset += 1; // 1 = 4 Byte, for integers, boolean (1/0), pointers to boolean/integers.
+        }
         STEntry declaration = currentScope().put(id, stEntry);
         if(declaration != null) {
             throw new MultipleDeclarationException("Multiple declaration for ID: " + id + ". It was previously defined of type: " + declaration.getType().toPrint("") + ".");
@@ -85,9 +96,14 @@ public class Environment {
     /**
      * Pops the current active scope from the Symbol Table stack.
      * Decrements the nesting level.
+     * Sets the offset to the maximum offset in the previous scope + 1.
      */
     public void popScope() {
         symbolTable.remove(nestingLevel);
         nestingLevel--;
+        if(nestingLevel >= 0) {
+            var stEntry = symbolTable.get(nestingLevel).values().stream().max(Comparator.comparing(STEntry::getOffset));
+            offset = stEntry.isPresent() ? stEntry.get().getOffset() + 1 : 0;
+        }
     }
 }

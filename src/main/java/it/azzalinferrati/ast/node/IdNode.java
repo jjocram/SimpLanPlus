@@ -26,6 +26,14 @@ public class IdNode implements Node {
         return id;
     }
 
+    /**
+     * Returns the offset in the Symbol Table entry.
+     * @return the offset or -1 if the entry is not set.
+     */
+    public int getOffset() {
+        return entry != null ? entry.getOffset() : -1;
+    }
+
     @Override
     public String toPrint(String indent) {
         return indent + id;

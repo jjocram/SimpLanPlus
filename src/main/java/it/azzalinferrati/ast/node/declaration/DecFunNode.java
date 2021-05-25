@@ -63,14 +63,17 @@ public class DecFunNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         try {
+            // TODO: Do we need to decrement the offset ?
             id.setEntry(env.addNewDeclaration(id.getId(), funType));
 
             env.pushNewScope();
 
-            for(ArgNode arg : args){
-                env.addNewDeclaration(arg.getId().getId(), arg.getType());
+            for(ArgNode arg: args) {
+                var stEntry = env.addNewDeclaration(arg.getId().getId(), arg.getType());
+                arg.getId().setEntry(stEntry);
             }
-            //TODO: check env.addNewDeclaration(id.getId(), funType); // For recursive calls
+
+            env.addNewDeclaration(id.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
 
             block.disallowScopeCreation();
             errors.addAll(block.checkSemantics(env));

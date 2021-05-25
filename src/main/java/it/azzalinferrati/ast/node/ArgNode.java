@@ -27,7 +27,7 @@ public class ArgNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent + id.toPrint("") + " : " + type.toPrint("");
+        return indent + id.toPrint("") + " : " + type.toPrint("") + ", " + id.getOffset();
     }
 
     @Override
