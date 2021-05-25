@@ -12,6 +12,9 @@ public class STEntry {
     // Offset for code generation
     private int offset;
 
+    // Status of the variable
+    private Effect status;
+
 
     public STEntry(int nestingLevel, int offset) {
         this.nestingLevel = nestingLevel;
@@ -19,9 +22,8 @@ public class STEntry {
     }
 
     public STEntry(int nestingLevel, TypeNode type, int offset) {
-        this.nestingLevel = nestingLevel;
+        this(nestingLevel, offset);
         this.type = type;
-        this.offset = offset;
     }
 
     public void addType(TypeNode type) {
@@ -33,6 +35,13 @@ public class STEntry {
      */
     public TypeNode getType() {
         return type;
+    }
+
+    /**
+     * @return the current status of the variable.
+     */
+    public Effect getStatus() {
+        return status;
     }
 
     /**
