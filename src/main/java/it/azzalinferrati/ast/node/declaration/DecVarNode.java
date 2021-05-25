@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
-import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
