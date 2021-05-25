@@ -2,7 +2,6 @@ package it.azzalinferrati.ast.node;
 
 import java.util.ArrayList;
 
-import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.STEntry;

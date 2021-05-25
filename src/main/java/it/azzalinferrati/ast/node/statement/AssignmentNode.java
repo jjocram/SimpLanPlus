@@ -3,7 +3,6 @@ package it.azzalinferrati.ast.node.statement;
 import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
-import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.ast.node.type.VoidTypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
