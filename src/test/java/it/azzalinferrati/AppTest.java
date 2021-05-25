@@ -10,6 +10,7 @@ import org.junit.runners.Parameterized;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @RunWith(Parameterized.class)
 public class AppTest {
@@ -17,18 +18,23 @@ public class AppTest {
     public static Collection<Object[]> data() {
         String[] examplesFile = (new File("examples/")).list();
 
-        Collection<Object[]> params = new ArrayList<>(100);
+        List<String> filesWithErrors = new ArrayList<>();
+        filesWithErrors.add("example2.simplan");
+
+        Collection<Object[]> params = new ArrayList<>(9);
         assert examplesFile != null;
-        for(String fileName : examplesFile) {
-            params.add(new Object[] { fileName });
+        for (String fileName : examplesFile) {
+            params.add(new Object[]{fileName, filesWithErrors.contains(fileName) ? 1 : 0});
         }
         return params;
     }
 
     String exampleFile;
+    int expectedStatusCode;
 
-    public AppTest(String exampleFile) {
+    public AppTest(String exampleFile, int statusCode) {
         this.exampleFile = exampleFile;
+        this.expectedStatusCode = statusCode;
     }
 
     @Test
@@ -40,6 +46,6 @@ public class AppTest {
             systemExit = 0;
         }
 
-        assertEquals(0, systemExit);
+        assertEquals(expectedStatusCode, systemExit);
     }
 }
