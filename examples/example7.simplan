@@ -1,6 +1,7 @@
 
 {
-    int u = 1 ;
+    //int u = 1 ;
+    ^int u = new int;
     void f(^int x, int n) { 
         if (n == 0) {
             print(x);
@@ -12,5 +13,6 @@
             f(y,n-1);
         }	
     }
+    u^ = 1;
     f(u,6);
 }
