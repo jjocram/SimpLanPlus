@@ -19,6 +19,7 @@ public class STEntry {
     public STEntry(int nestingLevel, int offset) {
         this.nestingLevel = nestingLevel;
         this.offset = offset;
+        this.status = new Effect();
     }
 
     public STEntry(int nestingLevel, TypeNode type, int offset) {
@@ -49,6 +50,10 @@ public class STEntry {
      */
     public int getOffset() {
         return offset;
+    }
+
+    public void setStatus(Effect status) {
+        this.status = status;
     }
 
     /**

@@ -5,11 +5,13 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.ast.node.type.VoidTypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DeletionNode implements Node {
     final private IdNode id;
@@ -40,6 +42,15 @@ public class DeletionNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return id.checkSemantics(env);
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(id.checkSemantics(env));
+
+        Effect status = Effect.seq(id.getStatus(), Effect.DELETE);
+        if (status == Effect.ERROR) {
+            errors.add(new SemanticError("Effect analysis error"));
+        }
+
+        return errors;
     }
 }

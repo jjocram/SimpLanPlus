@@ -2,33 +2,45 @@ package it.azzalinferrati.semanticanalysis;
 
 public class Effect {
     // ⊥
-    public static final int INITIALIZED = 0;
+    private static final int _INITIALIZED = 0;
+    public static final Effect INITIALIZED = new Effect(_INITIALIZED);
     // rw
-    public static final int READ_WRITE = 1;
+    private static final int _READ_WRITE = 1;
+    public static final Effect READ_WRITE = new Effect(_READ_WRITE);
     // d
-    public static final int DELETE = 2;
+    private static final int _DELETE = 2;
+    public static final Effect DELETE = new Effect(_DELETE);
     // ⊤
-    public static final int ERROR = 3;
+    private static final int _ERROR = 3;
+    public static final Effect ERROR = new Effect(_ERROR);
 
-    private int value;
+    private final int value;
 
     public Effect(final int value) {
         this.value = value;
     }
 
     public Effect() {
-        this(INITIALIZED);
+        this(_INITIALIZED);
     }
 
     public static Effect max(final Effect e1, final Effect e2) {
-        return new Effect(e1.value > e2.value ? e1.value : e2.value);
+        return new Effect(Math.max(e1.value, e2.value));
     }
 
     public static Effect seq(final Effect e1, final Effect e2) {
-        return null;
+        if (max(e1, e2).value <= _READ_WRITE) {
+            return Effect.max(e1, e2);
+        }
+
+        if ((e1.value <= _READ_WRITE && e2.value == _DELETE) || (e1.value == _DELETE && e2.value == _INITIALIZED)) {
+            return new Effect(_DELETE);
+        }
+
+        return new Effect(_ERROR);
     }
 
     public static Effect par(final Effect e1, final Effect e2) {
-        return null;
+        return max(seq(e1, e2), seq(e2, e1));
     }
 }

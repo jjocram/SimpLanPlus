@@ -3,6 +3,7 @@ package it.azzalinferrati.ast.node;
 import java.util.ArrayList;
 
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.STEntry;
 import it.azzalinferrati.semanticanalysis.SemanticError;
@@ -20,6 +21,14 @@ public class IdNode implements Node {
 
     public void setEntry(STEntry entry) {
         this.entry = entry;
+    }
+
+    public void setStatus(Effect effect) {
+        entry.setStatus(effect);
+    }
+
+    public Effect getStatus() {
+        return entry.getStatus();
     }
 
     public String getId() {

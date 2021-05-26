@@ -103,7 +103,7 @@ public class Environment {
         nestingLevel--;
         if(nestingLevel >= 0) {
             var stEntry = symbolTable.get(nestingLevel).values().stream().max(Comparator.comparing(STEntry::getOffset));
-            offset = stEntry.isPresent() ? stEntry.get().getOffset() + 1 : 0;
+            offset = stEntry.map(entry -> entry.getOffset() + 1).orElse(0);
         }
     }
 }

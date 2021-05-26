@@ -5,6 +5,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.ast.node.type.VoidTypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -49,7 +50,13 @@ public class AssignmentNode implements Node {
 
         errors.addAll(lhs.checkSemantics(env));
         errors.addAll(exp.checkSemantics(env));
-        
+
+        Effect status = Effect.seq(lhs.getId().getStatus(), Effect.READ_WRITE);
+        lhs.getId().setStatus(status);
+        if (status == Effect.ERROR) {
+            errors.add(new SemanticError("Effect analysis error"));
+        }
+
         return errors;
     }
 }
