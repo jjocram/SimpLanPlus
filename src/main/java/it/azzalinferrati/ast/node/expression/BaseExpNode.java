@@ -2,6 +2,7 @@ package it.azzalinferrati.ast.node.expression;
 
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -33,7 +34,13 @@ public class BaseExpNode extends ExpNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return exp.checkSemantics(env);
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(exp.checkSemantics(env));
+
+        errors.addAll(checkVariablesStatus());
+
+        return errors;
     }
 
     @Override

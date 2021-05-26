@@ -5,6 +5,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
 import it.azzalinferrati.ast.node.type.IntTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -84,6 +85,8 @@ public class BinaryExpNode extends ExpNode{
 
         errors.addAll(leftExpression.checkSemantics(env));
         errors.addAll(rightExpression.checkSemantics(env));
+
+        errors.addAll(checkVariablesStatus());
         
         return errors;
     }

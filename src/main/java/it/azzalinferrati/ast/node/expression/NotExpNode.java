@@ -38,7 +38,13 @@ public class NotExpNode extends ExpNode{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return exp.checkSemantics(env);
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(exp.checkSemantics(env));
+
+        errors.addAll(checkVariablesStatus());
+
+        return errors;
     }
 
     @Override
