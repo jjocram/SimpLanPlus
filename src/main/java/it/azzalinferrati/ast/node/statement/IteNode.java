@@ -23,9 +23,9 @@ public class IteNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent + "If cond\t>> " + condition.toPrint("") + "\n" + indent + "Then stmt\t>>\n" +
-                thenBranch.toPrint(indent) + "\n" + indent + "Else stmt\t>>\n" +
-                (elseBranch != null ? elseBranch.toPrint(indent) : "");
+        return indent + "If cond\t>> " + condition.toPrint("") + "\n" + indent + "Then stmt\t>>\n"
+                + thenBranch.toPrint(indent) + "\n" + indent + "Else stmt\t>>\n"
+                + (elseBranch != null ? elseBranch.toPrint(indent) : "");
     }
 
     @Override
@@ -49,10 +49,29 @@ public class IteNode implements Node {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> errors = new ArrayList<>();
-    
-        errors.addAll(condition.checkSemantics(env));
-        errors.addAll(thenBranch.checkSemantics(env));
-        errors.addAll(elseBranch.checkSemantics(env));
+
+        /*
+         * Inference rule for If-Then-Else statement, following the lesson on Semantic
+         * Analysis, Effects Analysis.
+         * 
+         * env |- condition : env0    env0 |- thenBranch : env1    env0 |- elseBranch : env2
+         * ---------------------------------------------------------------------------------[If-e]
+         *   env |- 'if' '(' condition ')' thenBranch 'else' elseBranch : max(env1, env2)
+         */
+
+        errors.addAll(condition.checkSemantics(env)); // env |- condition : env0
+
+        if (elseBranch == null) {
+            errors.addAll(thenBranch.checkSemantics(env)); // env0 |- thenBranch : env1 (no else branch)
+        } else {
+            var thenBranchEnv = new Environment(env);
+            errors.addAll(thenBranch.checkSemantics(thenBranchEnv)); // env0 |- thenBranch : env1
+
+            var elseBranchEnv = new Environment(env);
+            errors.addAll(elseBranch.checkSemantics(elseBranchEnv)); // env0 |- elseBranch : env2
+
+            env = Environment.max(thenBranchEnv, elseBranchEnv);
+        }
 
         return errors;
     }

@@ -1,10 +1,13 @@
 package it.azzalinferrati.semanticanalysis;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
+import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.exception.MissingDeclarationException;
@@ -33,6 +36,19 @@ public class Environment {
 
     public Environment(List<Map<String, STEntry>> symTable) {
         this(symTable, -1, 0);
+    }
+
+    public Environment(Environment e) {
+        this(new ArrayList<>(), e.nestingLevel, e.offset);
+
+        for (var scope : e.symbolTable) {
+            final Map<String, STEntry> copiedScope = new HashMap<>();
+            for (var id : scope.keySet()) {
+                copiedScope.put(id, new STEntry(scope.get(id)));
+            }
+            this.symbolTable.add(copiedScope);
+        }
+
     }
 
     private Map<String, STEntry> currentScope() {
@@ -105,5 +121,64 @@ public class Environment {
             var stEntry = symbolTable.get(nestingLevel).values().stream().max(Comparator.comparing(STEntry::getOffset));
             offset = stEntry.map(entry -> entry.getOffset() + 1).orElse(0);
         }
+    }
+
+    /**
+     * Returning a new environment which has, for each identifie, the maximum effect
+     * set in the two environments. Assumes env1 and env2 are identical, except for
+     * the identifiers' statuses.
+     * 
+     * @param env1 first environment
+     * @param env2 second environment
+     * @return the maximum environment of the two
+     */
+    public static Environment max(final Environment env1, final Environment env2) {
+        var maxEnv = new Environment(new ArrayList<>(), env1.nestingLevel, env1.offset);
+        for (int i = 0, size = env1.symbolTable.size(); i < size; i++) {
+            var ithScope1 = env1.symbolTable.get(i);
+            var ithScope2 = env2.symbolTable.get(i);
+            final HashMap<String, STEntry> maxHashMap = new HashMap<>();
+            for (var id : ithScope1.keySet()) {
+                var entry1 = ithScope1.get(id);
+                var entry2 = ithScope2.get(id);
+
+                var maxEntry = new STEntry(entry1.getNestinglevel(), entry1.getType(), entry1.getOffset());
+                maxEntry.setStatus(Effect.max(entry1.getStatus(), entry2.getStatus()));
+
+                maxHashMap.put(id, maxEntry);
+            }
+            maxEnv.symbolTable.add(maxHashMap);
+        }
+        return maxEnv;
+    }
+
+    /**
+     * Checks the status of the variable and its status and updates it following the
+     * given rule, if the new status is Effect.ERROR then returns a SemanticError
+     * wrapped in a ArrayList. The ArrayList is returned just for simplicity.
+     * 
+     * @return a list with errors found while checking the status of each variable
+     *         used in the expression
+     */
+    public ArrayList<SemanticError> checkVariableStatus(final IdNode variable, final BiFunction<Effect, Effect, Effect> rule, final Effect effectToApply) {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        try {
+            var stEntry = lookup(variable.getId());
+            // Effect status = Effect.seq(stEntry.getStatus(), Effect.READ_WRITE);
+            Effect status = rule.apply(stEntry.getStatus(), effectToApply);
+
+            stEntry.setStatus(status);
+            variable.setStatus(status);
+
+            if (status == Effect.ERROR) {
+                errors.add(new SemanticError("Effect analysis error"));
+            }
+        } catch (MissingDeclarationException exception) {
+            // FIXME
+            errors.add(new SemanticError("This is embarassing..."));
+        }
+
+        return errors;
     }
 }

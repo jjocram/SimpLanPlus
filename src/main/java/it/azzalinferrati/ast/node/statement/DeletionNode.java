@@ -45,11 +45,7 @@ public class DeletionNode implements Node {
 
         errors.addAll(id.checkSemantics(env));
 
-        Effect status = Effect.seq(id.getStatus(), Effect.DELETE);
-        id.setStatus(status);
-        if (status == Effect.ERROR) {
-            errors.add(new SemanticError("Effect analysis error"));
-        }
+        errors.addAll(env.checkVariableStatus(id, Effect::seq, Effect.DELETE));
 
         return errors;
     }

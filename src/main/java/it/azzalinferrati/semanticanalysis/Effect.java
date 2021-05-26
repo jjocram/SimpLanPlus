@@ -16,12 +16,27 @@ public class Effect {
 
     private final int value;
 
-    public Effect(final int value) {
+    /**
+     * Constructor of Effect.
+     * @param value can be _INITIALIZED, _READ_WRITE, _DELETE, _ERROR.
+     */
+    private Effect(final int value) {
         this.value = value;
     }
 
+    /**
+     * Construct of Effect. Defaults to Effect.INITIALIZED.
+     */
     public Effect() {
         this(_INITIALIZED);
+    }
+
+    /**
+     * Copy constructor of Effect.
+     * @param e effect
+     */
+    public Effect(final Effect e) {
+        this(e.value);
     }
 
     public static Effect max(final Effect e1, final Effect e2) {

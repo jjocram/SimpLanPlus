@@ -37,7 +37,7 @@ public class CallExpNode extends ExpNode {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(call.checkSemantics(env));
-        errors.addAll(checkVariablesStatus());
+        errors.addAll(checkVariablesStatus(env));
 
         return errors;
     }

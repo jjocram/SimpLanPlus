@@ -42,7 +42,7 @@ public class NotExpNode extends ExpNode{
 
         errors.addAll(exp.checkSemantics(env));
 
-        errors.addAll(checkVariablesStatus());
+        errors.addAll(checkVariablesStatus(env));
 
         return errors;
     }

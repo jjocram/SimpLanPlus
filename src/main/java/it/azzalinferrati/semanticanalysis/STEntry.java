@@ -27,6 +27,15 @@ public class STEntry {
         this.type = type;
     }
 
+    /**
+     * Copy constructor of STEntry.
+     * @param s Symbol Table Entry
+     */
+    public STEntry(STEntry s) {
+        this(s.nestingLevel, s.type, s.offset);
+        this.status = new Effect(s.status);
+    }
+
     public void addType(TypeNode type) {
         this.type = type;
     }

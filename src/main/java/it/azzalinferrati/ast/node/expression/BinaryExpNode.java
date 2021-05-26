@@ -85,7 +85,7 @@ public class BinaryExpNode extends ExpNode{
         errors.addAll(leftExpression.checkSemantics(env));
         errors.addAll(rightExpression.checkSemantics(env));
 
-        errors.addAll(checkVariablesStatus());
+        errors.addAll(checkVariablesStatus(env));
         
         return errors;
     }
