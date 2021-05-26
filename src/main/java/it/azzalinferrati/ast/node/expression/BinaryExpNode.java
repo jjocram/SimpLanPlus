@@ -1,5 +1,6 @@
 package it.azzalinferrati.ast.node.expression;
 
+import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
 import it.azzalinferrati.ast.node.type.IntTypeNode;
@@ -9,6 +10,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BinaryExpNode extends ExpNode{
     final private ExpNode leftExpression;
@@ -84,5 +86,15 @@ public class BinaryExpNode extends ExpNode{
         errors.addAll(rightExpression.checkSemantics(env));
         
         return errors;
+    }
+
+    @Override
+    public List<IdNode> variables() {
+        List<IdNode> variables = new ArrayList<>();
+        
+        variables.addAll(leftExpression.variables());
+        variables.addAll(rightExpression.variables());
+
+        return variables;
     }
 }

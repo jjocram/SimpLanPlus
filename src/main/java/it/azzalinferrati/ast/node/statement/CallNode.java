@@ -11,6 +11,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CallNode implements Node {
     final private IdNode id;
@@ -75,5 +76,9 @@ public class CallNode implements Node {
         params.stream().forEach((p) -> errors.addAll(p.checkSemantics(env)));
         
         return errors;
+    }
+
+    public List<IdNode> variables() {
+        return params.stream().flatMap(exp -> exp.variables().stream()).collect(Collectors.toList());
     }
 }

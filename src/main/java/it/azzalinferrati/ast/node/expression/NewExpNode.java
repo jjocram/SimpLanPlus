@@ -1,5 +1,6 @@
 package it.azzalinferrati.ast.node.expression;
 
+import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
@@ -7,6 +8,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NewExpNode extends ExpNode{
     final private TypeNode type;
@@ -39,5 +41,10 @@ public class NewExpNode extends ExpNode{
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<IdNode> variables() {
+        return new ArrayList<>(); // Never will it have any variables in it.
     }
 }

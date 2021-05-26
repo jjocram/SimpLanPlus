@@ -1,5 +1,6 @@
 package it.azzalinferrati.ast.node.expression;
 
+import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.type.IntTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
@@ -7,6 +8,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NegativeExpNode extends ExpNode {
     final private ExpNode exp;
@@ -37,5 +39,10 @@ public class NegativeExpNode extends ExpNode {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return exp.checkSemantics(env);
+    }
+
+    @Override
+    public List<IdNode> variables() {
+        return exp.variables();
     }
 }
