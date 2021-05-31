@@ -165,18 +165,16 @@ public class Environment {
 
         try {
             var stEntry = lookup(variable.getId());
-            // Effect status = Effect.seq(stEntry.getStatus(), Effect.READ_WRITE);
             Effect status = rule.apply(stEntry.getStatus(), effectToApply);
 
             stEntry.setStatus(status);
             variable.setStatus(status);
 
-            if (status == Effect.ERROR) {
-                errors.add(new SemanticError("Effect analysis error"));
+            if (status.equals(Effect.ERROR)) {
+                errors.add(new SemanticError(variable.getId() +  " is used after deletion"));
             }
         } catch (MissingDeclarationException exception) {
-            // FIXME
-            errors.add(new SemanticError("This is embarassing..."));
+            errors.add(new SemanticError("Cannot perform effect analysis on " + variable.getId() + " since it is not declared."));
         }
 
         return errors;

@@ -1,5 +1,6 @@
 package it.azzalinferrati.ast.node.value;
 
+import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
@@ -8,6 +9,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BoolNode extends ExpNode {
     final private boolean value;
@@ -33,6 +35,11 @@ public class BoolNode extends ExpNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<IdNode> variables() {
         return new ArrayList<>();
     }
 }

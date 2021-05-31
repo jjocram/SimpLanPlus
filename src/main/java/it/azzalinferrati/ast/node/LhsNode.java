@@ -8,7 +8,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
 
-public class LhsNode implements Node{
+public class LhsNode implements Node {
     final private IdNode id;
     // LhsNode is just a plain identifier only when lhs == null.
     final private LhsNode lhs;

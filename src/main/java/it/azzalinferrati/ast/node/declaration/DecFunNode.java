@@ -63,14 +63,14 @@ public class DecFunNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         try {
-            id.setEntry(env.addNewDeclaration(id.getId(), funType));
+            id.setEntry(env.addNewDeclaration(id.getId(), funType)); // \Sigma_{FUN}
 
             env.pushNewScope();
 
             for(ArgNode arg: args) {
                 var stEntry = env.addNewDeclaration(arg.getId().getId(), arg.getType());
                 arg.getId().setEntry(stEntry);
-            }
+            } // \Sigma_0
 
             env.addNewDeclaration(id.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
 

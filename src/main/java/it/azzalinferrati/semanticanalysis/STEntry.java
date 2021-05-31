@@ -62,7 +62,7 @@ public class STEntry {
     }
 
     public void setStatus(Effect status) {
-        this.status = status;
+        this.status = new Effect(status);
     }
 
     /**

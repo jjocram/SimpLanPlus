@@ -6,6 +6,7 @@ import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
@@ -70,6 +71,9 @@ public class DecVarNode extends DeclarationNode {
 
         try {
             id.setEntry(env.addNewDeclaration(id.getId(), type));
+            if(exp != null) {
+                id.setStatus(Effect.READ_WRITE);
+            }
         } catch (MultipleDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
         }

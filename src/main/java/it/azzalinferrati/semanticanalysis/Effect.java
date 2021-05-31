@@ -58,4 +58,28 @@ public class Effect {
     public static Effect par(final Effect e1, final Effect e2) {
         return max(seq(e1, e2), seq(e2, e1));
     }
+
+    @Override
+    public String toString() {
+        switch(value) {
+            case _INITIALIZED:
+                return "INITIALIZED";
+            case _READ_WRITE:
+                return "READ_WRITE";
+            case _DELETE:
+                return "DELETE";
+            case _ERROR:
+                return "ERROR";
+            default:
+                return "";
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        Effect e = (Effect) obj;
+        return value == e.value;
+    }
 }
