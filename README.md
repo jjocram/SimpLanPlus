@@ -18,6 +18,7 @@ with ```fileName.ext``` the name of a source code file written in **SimpLanPlus*
 Available registers:
 
 - **$sp**: Stack Pointer points to the top of the stack
+- **$hp**: Heap Pointer points to the top of the heap
 - **$fp**: Frame Pointer points to the current Access Link relative to the active frame
 - **$al**: Access Link is used to go through the static chain (i.e. scopes)
 - **$ra**: Return address stores the return address
