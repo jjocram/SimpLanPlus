@@ -4,19 +4,19 @@ import it.azzalinferrati.ast.SimpLanPlusVisitor;
 import it.azzalinferrati.ast.SimpLanPlusVisitorImpl;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.lexer.SimpLanPlusLexer;
-//import org.antlr.v4.runtime.ANTLRInputStream;
 import it.azzalinferrati.parser.SimpLanPlusParser;
 import it.azzalinferrati.parser.VerboseListener;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
+import it.azzalinferrati.svm.ast.SVMVisitorImpl;
+import it.azzalinferrati.svm.lexer.SVMLexer;
+import it.azzalinferrati.svm.parser.SVMParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import java.util.ArrayList;
-
-//import java.io.FileInputStream;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -26,8 +26,6 @@ public class App {
         }
         // File to read
         String filename = args[0];
-        //FileInputStream fileInputStream = new FileInputStream(filename);
-        //ANTLRInputStream inputStream = new ANTLRInputStream(fileInputStream);
         CharStream charStream = CharStreams.fromFileName(filename);
 
         // SimpLan lexer
@@ -73,5 +71,33 @@ public class App {
         }
         
         System.out.println(AST.toPrint(""));
+
+
+        /*
+        // File to read
+        String filename = args[0];
+        //FileInputStream fileInputStream = new FileInputStream(filename);
+        //ANTLRInputStream inputStream = new ANTLRInputStream(fileInputStream);
+        CharStream charStream = CharStreams.fromFileName(filename);
+
+        SVMLexer lexer = new SVMLexer(charStream);
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(new VerboseListener());
+
+        if (lexer.errorCount() > 0) {
+            System.err.println("The program was not in the right format. The program cannot compile.");
+            System.exit(1);
+        }
+
+        SVMParser parser = new SVMParser(tokenStream);
+        parser.removeErrorListeners();
+        parser.addErrorListener(new VerboseListener());
+        SVMVisitorImpl visitor = new SVMVisitorImpl();
+        visitor.visit(parser.assembly());
+
+        System.out.println(visitor.getCode());
+         */
     }
 }
