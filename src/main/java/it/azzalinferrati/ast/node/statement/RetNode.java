@@ -33,7 +33,7 @@ public class RetNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return exp == null ? "" : exp.codeGeneration();
     }
 
     @Override

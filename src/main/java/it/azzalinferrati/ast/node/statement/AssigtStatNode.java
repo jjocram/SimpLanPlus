@@ -27,8 +27,7 @@ public class AssigtStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        return assignment.codeGeneration();
     }
 
     @Override

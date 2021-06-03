@@ -27,8 +27,7 @@ public class BlockStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        return block.codeGeneration();
     }
 
     @Override

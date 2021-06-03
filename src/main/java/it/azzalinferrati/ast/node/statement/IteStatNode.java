@@ -27,8 +27,7 @@ public class IteStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        return ite.codeGeneration();
     }
 
     @Override

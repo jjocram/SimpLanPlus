@@ -28,7 +28,7 @@ public class BaseExpNode extends ExpNode {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return exp.codeGeneration();
     }
 
     @Override

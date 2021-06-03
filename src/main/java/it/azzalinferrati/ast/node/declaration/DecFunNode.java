@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import it.azzalinferrati.LabelManager;
 import it.azzalinferrati.ast.node.ArgNode;
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
@@ -54,8 +55,20 @@ public class DecFunNode implements Node {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(id.getId()).append(":\n");
+        buffer.append("mv $fp $sp\n");
+        buffer.append("push $ra\n");
+        buffer.append(block.codeGeneration());
+        buffer.append("lw $t1 0($sp)\n");
+        buffer.append("mv $ra $t1\n");
+        buffer.append("addi $sp $sp ").append(args.size() + 2).append("\n");
+        buffer.append("lw $t1 0($sp)\n");
+        buffer.append("mv $fp $t1\n");
+        buffer.append("pop\n");
+        buffer.append("jr $ra\n");
+
+        return buffer.toString();
     }
 
     @Override

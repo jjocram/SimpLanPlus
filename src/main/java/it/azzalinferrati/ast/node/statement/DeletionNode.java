@@ -36,7 +36,11 @@ public class DeletionNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(id.codeGeneration());
+        buffer.append("del $a0\n");
+
+        return buffer.toString();
     }
 
     @Override

@@ -9,6 +9,7 @@ import it.azzalinferrati.parser.VerboseListener;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
+import it.azzalinferrati.svm.SVMInterpreter;
 import it.azzalinferrati.svm.ast.SVMVisitorImpl;
 import it.azzalinferrati.svm.lexer.SVMLexer;
 import it.azzalinferrati.svm.parser.SVMParser;
@@ -59,7 +60,7 @@ public class App {
         ArrayList<SemanticError> semanticErrors = AST.checkSemantics(environment);
         
         if(!semanticErrors.isEmpty()) {
-            semanticErrors.stream().forEach(System.err::println);
+            semanticErrors.forEach(System.err::println);
             System.exit(1);
         }
         
@@ -69,35 +70,33 @@ public class App {
             System.err.println(typeCheckingException.getMessage());
             System.exit(1);
         }
-        
-        System.out.println(AST.toPrint(""));
+
+        String generatedCode = AST.codeGeneration() + "halt";
+
+        //System.out.println(generatedCode);
 
 
-        /*
-        // File to read
-        String filename = args[0];
-        //FileInputStream fileInputStream = new FileInputStream(filename);
-        //ANTLRInputStream inputStream = new ANTLRInputStream(fileInputStream);
-        CharStream charStream = CharStreams.fromFileName(filename);
+        CharStream SVMcharStream = CharStreams.fromString(generatedCode);
 
-        SVMLexer lexer = new SVMLexer(charStream);
-        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+        SVMLexer SVMlexer = new SVMLexer(SVMcharStream);
+        CommonTokenStream SVMtokenStream = new CommonTokenStream(SVMlexer);
 
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(new VerboseListener());
+        SVMlexer.removeErrorListeners();
+        SVMlexer.addErrorListener(new VerboseListener());
 
-        if (lexer.errorCount() > 0) {
-            System.err.println("The program was not in the right format. The program cannot compile.");
+        if (SVMlexer.errorCount() > 0) {
+            System.err.println("Assembly code was not in the right format.");
             System.exit(1);
         }
 
-        SVMParser parser = new SVMParser(tokenStream);
-        parser.removeErrorListeners();
-        parser.addErrorListener(new VerboseListener());
-        SVMVisitorImpl visitor = new SVMVisitorImpl();
-        visitor.visit(parser.assembly());
+        SVMParser SVMparser = new SVMParser(SVMtokenStream);
+        SVMparser.removeErrorListeners();
+        SVMparser.addErrorListener(new VerboseListener());
+        SVMVisitorImpl SVMvisitor = new SVMVisitorImpl();
+        SVMvisitor.visit(SVMparser.assembly());
 
-        System.out.println(visitor.getCode());
-         */
+        SVMInterpreter interpreter = new SVMInterpreter(1000, 11, SVMvisitor.getCode());
+        interpreter.run();
+
     }
 }

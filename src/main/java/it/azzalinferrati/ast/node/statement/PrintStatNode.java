@@ -27,8 +27,7 @@ public class PrintStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        return print.codeGeneration();
     }
 
     @Override

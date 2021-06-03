@@ -30,7 +30,7 @@ public class NumberNode extends ExpNode {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return "li $a0 " + value + "\n";
     }
 
     @Override

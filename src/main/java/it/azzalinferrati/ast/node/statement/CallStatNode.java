@@ -27,8 +27,7 @@ public class CallStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        return call.codeGeneration();
     }
 
     @Override

@@ -68,7 +68,7 @@ public class STEntry {
     /**
      * @return the nesting level of the declaration.
      */
-    public int getNestinglevel() {
+    public int getNestingLevel() {
         return nestingLevel;
     }
 

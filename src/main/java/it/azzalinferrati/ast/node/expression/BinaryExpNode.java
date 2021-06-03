@@ -1,5 +1,6 @@
 package it.azzalinferrati.ast.node.expression;
 
+import it.azzalinferrati.LabelManager;
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
@@ -75,7 +76,146 @@ public class BinaryExpNode extends ExpNode{
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        LabelManager labelManager = LabelManager.getInstance();
+
+        buffer.append(leftExpression.codeGeneration());
+        buffer.append("push $a0\n");
+        buffer.append(rightExpression.codeGeneration());
+        buffer.append("lw $t1 0($sp)\n");
+        buffer.append("pop\n");
+
+
+        /*
+            e1 operator e1
+            $t1 = e1
+            $a0 = e2
+            and the stack is as before
+         */
+        switch (operator) {
+            case "==": {
+                String trueBranchLabel = labelManager.freshLabel("equalTrueBranch");
+                String endCheckLabel = labelManager.freshLabel("endEqualCheck");
+
+                buffer.append("beq $t1 $a0 ").append(trueBranchLabel).append("\n");
+                //False branch
+                buffer.append("li $a0 0\n");
+                buffer.append("b ").append(endCheckLabel).append("\n");
+                buffer.append(trueBranchLabel).append(":\n");
+                buffer.append("li $a0 1\n");
+                buffer.append(endCheckLabel).append(":\n");
+                break;
+            }
+            case "!=": {
+                String trueBranchLabel = labelManager.freshLabel("unequalTrueBranch");
+                String endCheckLabel = labelManager.freshLabel("endUnequalCheck");
+
+                buffer.append("beq $t1 $a0 ").append(trueBranchLabel).append("\n");
+                //False branch
+                buffer.append("li $a0 1\n");
+                buffer.append("b ").append(endCheckLabel).append("\n");
+                buffer.append(trueBranchLabel).append(":\n");
+                buffer.append("li $a0 0\n");
+                buffer.append(endCheckLabel).append(":\n");
+                break;
+            }
+            case "*": {
+                buffer.append("mult $a0 $t1 $a0\n");
+                break;
+            }
+            case "/": {
+                buffer.append("div $a0 $t1 $a0\n");
+                break;
+            }
+            case "+": {
+                buffer.append("add $a0 $t1 $a0\n");
+                break;
+            }
+            case "-": {
+                buffer.append("sub $a0 $t1 $a0\n");
+                break;
+            }
+            case "<": {
+                String equalTrueBranch = labelManager.freshLabel("equalTrueBranch");
+                String endEqualCheck = labelManager.freshLabel("endEqualCheck");
+                String lesseqTrueBranch = labelManager.freshLabel("lesseqTrueBranch");
+                String endLesseqCheck = labelManager.freshLabel("endLesseqCheck");
+
+                buffer.append("beq $t1 $a0 ").append(equalTrueBranch).append("\n");
+                //False branch => e1 != e2
+                buffer.append("bleq $t1 $a0 ").append(lesseqTrueBranch).append("\n");
+                //InnerFalse branch => e1 > e2
+                buffer.append("li $a0 0\n");
+                buffer.append("b ").append(endLesseqCheck).append("\n");
+                buffer.append(lesseqTrueBranch).append(":\n");
+                buffer.append("li $a0 1\n"); // e1 < e2
+                buffer.append(endLesseqCheck).append(":\n");
+                buffer.append("b ").append(endEqualCheck).append("\n");
+                buffer.append(equalTrueBranch).append(":\n");
+                buffer.append("li $a0 0\n");
+                buffer.append(endEqualCheck).append(":\n");
+
+                break;
+            }
+            case "<=": {
+                String trueBranchLabel = labelManager.freshLabel("lesseqTrueBranch");
+                String endCheckLabel = labelManager.freshLabel("endLesseqCheck");
+
+                buffer.append("bleq $t1 $a0 \n").append(trueBranchLabel).append("\n");
+                //False branch
+                buffer.append("li $a0 0\n");
+                buffer.append("b ").append(endCheckLabel).append("\n");
+                buffer.append(trueBranchLabel).append(":\n");
+                buffer.append("li $a0 1\n");
+                buffer.append(endCheckLabel).append(":\n");
+                break;
+            }
+            case ">": {
+                String trueBranchLabel = labelManager.freshLabel("greaterTrueBranch");
+                String endCheckLabel = labelManager.freshLabel("endGreaterCheck");
+
+                buffer.append("bleq $t1 $a0 \n").append(trueBranchLabel).append("\n");
+                //False branch
+                buffer.append("li $a0 1\n");
+                buffer.append("b ").append(endCheckLabel).append("\n");
+                buffer.append(trueBranchLabel).append(":\n");
+                buffer.append("li $a0 0\n");
+                buffer.append(endCheckLabel).append(":\n");
+                break;
+            }
+            case ">=": {
+                String equalTrueBranch = labelManager.freshLabel("equalTrueBranch");
+                String endEqualCheck = labelManager.freshLabel("endEqualCheck");
+                String lesseqTrueBranch = labelManager.freshLabel("lesseqTrueBranch");
+                String endLesseqCheck = labelManager.freshLabel("endLesseqCheck");
+
+                buffer.append("beq $t1 $a0 ").append(equalTrueBranch).append("\n");
+                //False branch => e1 != e2
+                buffer.append("bleq $t1 $a0 ").append(lesseqTrueBranch).append("\n");
+                //InnerFalse branch => e1 > e2
+                buffer.append("li $a0 1\n");
+                buffer.append("b ").append(endLesseqCheck);
+                buffer.append(lesseqTrueBranch).append(":\n");
+                buffer.append("li $a0 0\n"); // e1 < e2
+                buffer.append(endLesseqCheck).append(":\n");
+                buffer.append("b ").append(endEqualCheck);
+                buffer.append(equalTrueBranch).append(":\n");
+                buffer.append("li $a0 1\n"); // e1 == e2
+                buffer.append(endEqualCheck).append(":\n");
+
+                break;
+            }
+            case "&&": {
+                buffer.append("and $a0 $t1 $a0\n");
+                break;
+            }
+            case "||": {
+                buffer.append("or $a0 $t1 $a0\n");
+                break;
+            }
+        }
+
+        return buffer.toString();
     }
 
     @Override

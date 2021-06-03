@@ -51,6 +51,10 @@ public class Environment {
 
     }
 
+    public int getNestingLevel() {
+        return nestingLevel;
+    }
+
     private Map<String, STEntry> currentScope() {
         return symbolTable.get(nestingLevel);
     }
@@ -142,7 +146,7 @@ public class Environment {
                 var entry1 = ithScope1.get(id);
                 var entry2 = ithScope2.get(id);
 
-                var maxEntry = new STEntry(entry1.getNestinglevel(), entry1.getType(), entry1.getOffset());
+                var maxEntry = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
                 maxEntry.setStatus(Effect.max(entry1.getStatus(), entry2.getStatus()));
 
                 maxHashMap.put(id, maxEntry);

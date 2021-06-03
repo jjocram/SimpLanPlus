@@ -33,9 +33,12 @@ public class NotExpNode extends ExpNode{
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(exp.codeGeneration());
+        buffer.append("not $a0 $a0\n");
+        return buffer.toString();
     }
-
+    
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> errors = new ArrayList<>();

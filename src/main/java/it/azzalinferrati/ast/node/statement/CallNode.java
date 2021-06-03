@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class CallNode implements Node {
     final private IdNode id;
     final private List<ExpNode> params;
+    private int currentNestingLevel;
 
     public CallNode(IdNode id, List<ExpNode> params) {
         this.id = id;
@@ -65,7 +66,21 @@ public class CallNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("push $fp\n");
+        for (int i = params.size()-1; i >= 0; i--) {
+            buffer.append(params.get(i).codeGeneration());
+            buffer.append("push $a0\n");
+        }
+
+        buffer.append("lw $al 0($fp)\n");
+        for (int i=0; i < (currentNestingLevel - id.getNestingLevel()); i++) {
+            buffer.append("lw $al 0($al)\n");
+        }
+        buffer.append("push $al\n");
+        buffer.append("jal ").append(id.getId()).append("\n");
+
+        return buffer.toString();
     }
 
     @Override
@@ -74,7 +89,7 @@ public class CallNode implements Node {
 
         errors.addAll(id.checkSemantics(env));
         params.stream().forEach((p) -> errors.addAll(p.checkSemantics(env)));
-        
+        currentNestingLevel = env.getNestingLevel();
         return errors;
     }
 

@@ -64,6 +64,37 @@ public class LhsNode implements Node {
         return null;
     }
 
+    public String codeGenerationGetValue() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(id.codeGeneration());
+
+        LhsNode current = lhs;
+        while (current != null) {
+            buffer.append("lw $a0 0($a0)\n");
+            current = current.lhs;
+        }
+
+        return buffer.toString();
+    }
+
+    public String codeGenerationGetAddress() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("mv $al $fp\n");
+        for (int i = 0; i < (id.getCurrentNestingLevel() - id.getNestingLevel()); i++) {
+            buffer.append("lw $al 0($al)\n");
+        }
+
+        buffer.append("addi $a0 $al ").append(-id.getOffset()).append("\n");
+
+        LhsNode current = lhs;
+        while (current != null) {
+            buffer.append("lw $a0 0($a0)\n");
+            current = current.lhs;
+        }
+
+        return buffer.toString();
+    }
+
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         if(lhs == null) {

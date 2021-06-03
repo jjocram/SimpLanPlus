@@ -27,8 +27,7 @@ public class DeclarateFunNode extends DeclarationNode {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        return decFun.codeGeneration();
     }
 
     @Override

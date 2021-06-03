@@ -1,5 +1,6 @@
 package it.azzalinferrati.ast.node.statement;
 
+import it.azzalinferrati.LabelManager;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
@@ -43,7 +44,21 @@ public class IteNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuffer buffer = new StringBuffer();
+
+        String thenBranchLabel = LabelManager.getInstance().freshLabel("thenBranch");
+        String endIfLabel = LabelManager.getInstance().freshLabel("endIf");
+
+        buffer.append(condition.codeGeneration());
+        buffer.append("li $t1 1\n");
+        buffer.append("beq $a0 $t1 ").append(thenBranchLabel).append("\n");
+        buffer.append(elseBranch.codeGeneration());
+        buffer.append("b ").append(endIfLabel).append("\n");
+        buffer.append(thenBranchLabel).append(":\n");
+        buffer.append(thenBranch.codeGeneration());
+        buffer.append(endIfLabel).append(":\n");
+
+        return buffer.toString();
     }
 
     @Override

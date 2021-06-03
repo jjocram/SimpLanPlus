@@ -37,8 +37,7 @@ public class ArgNode implements Node {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        return "addi $sp $sp 1";
     }
 
     @Override

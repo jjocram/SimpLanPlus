@@ -32,7 +32,10 @@ public class PrintNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(exp.codeGeneration());
+        buffer.append("print $a0\n");
+        return buffer.toString();
     }
 
     @Override

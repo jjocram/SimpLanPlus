@@ -14,6 +14,7 @@ public class IdNode implements Node {
     //TODO: extends
     private final String id;
     private STEntry entry;
+    private int currentNestingLevel;
 
     public IdNode(final String id) {
         this.id = id;
@@ -33,6 +34,14 @@ public class IdNode implements Node {
 
     public String getId() {
         return id;
+    }
+
+    public int getNestingLevel() {
+        return entry.getNestingLevel();
+    }
+
+    public int getCurrentNestingLevel() {
+        return currentNestingLevel;
     }
 
     /**
@@ -55,8 +64,14 @@ public class IdNode implements Node {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("mv $al $fp\n");
+        for (int i = 0; i < (currentNestingLevel - getNestingLevel()); i++) {
+            buffer.append("lw $al 0($al)\n");
+        }
+        buffer.append("lw $a0 ").append(-getOffset()).append("($al)\n");
+
+        return buffer.toString();
     }
 
     @Override
@@ -65,6 +80,7 @@ public class IdNode implements Node {
 
         try {
             entry = env.lookup(id);
+            currentNestingLevel = env.getNestingLevel();
         } catch(MissingDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
         }

@@ -1,10 +1,13 @@
 package it.azzalinferrati.ast.node.statement;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.declaration.DeclarateFunNode;
+import it.azzalinferrati.ast.node.declaration.DeclarateVarNode;
 import it.azzalinferrati.ast.node.declaration.DeclarationNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.ast.node.type.VoidTypeNode;
@@ -55,14 +58,14 @@ public class BlockNode implements Node {
             stm.typeCheck(); // The important is to perform type check, not to get the returned value
         }
 
-        if (statements.size() == 0){
+        if (statements.size() == 0) {
             //No statements
             return new VoidTypeNode();
         }
 
         if (statements.stream().noneMatch(stm -> stm instanceof RetStatNode)) {
             List<StatementNode> iteStatNodes = statements.stream().filter(stm -> stm instanceof IteStatNode).collect(Collectors.toList());
-            for (int i = 0; i < iteStatNodes.size()-1; i++) {
+            for (int i = 0; i < iteStatNodes.size() - 1; i++) {
                 // Multiple if-then-else must have the same returned type
                 if (!Node.isSubtype(iteStatNodes.get(i).typeCheck(), iteStatNodes.get(i + 1).typeCheck())) {
                     throw new TypeCheckingException("Multiple return statements with different returned types");
@@ -82,8 +85,26 @@ public class BlockNode implements Node {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuffer buffer = new StringBuffer();
+
+        /*
+        declarations.stream()
+                .filter(dec -> dec instanceof DeclarateVarNode)
+                .collect(Collectors.toCollection(LinkedList::new))
+                .descendingIterator()
+                .forEachRemaining(dec -> buffer.append(dec.codeGeneration()));
+*/
+        declarations.stream()
+                .filter(dec -> dec instanceof DeclarateVarNode)
+                .forEach(varDec -> buffer.append(varDec.codeGeneration()));
+
+        statements.forEach(stm -> buffer.append(stm.codeGeneration()));
+
+        declarations.stream()
+                .filter(dec -> dec instanceof DeclarateFunNode)
+                .forEach(funDec -> buffer.append(funDec.codeGeneration()));
+
+        return buffer.toString();
     }
 
     @Override
@@ -111,7 +132,7 @@ public class BlockNode implements Node {
             }
         }
 
-        if(allowScopeCreation) {
+        if (allowScopeCreation) {
             env.popScope();
         }
 

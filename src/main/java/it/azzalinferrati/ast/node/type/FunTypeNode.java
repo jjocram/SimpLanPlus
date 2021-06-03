@@ -43,7 +43,7 @@ public class FunTypeNode extends TypeNode {
 
     @Override
     public String codeGeneration() {
-        return null;
+        return "";
     }
 
     @Override

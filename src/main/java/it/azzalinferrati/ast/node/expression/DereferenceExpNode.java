@@ -30,7 +30,7 @@ public class DereferenceExpNode extends ExpNode{
 
     @Override
     public String codeGeneration() {
-        return null;
+        return lhs.codeGenerationGetValue();
     }
 
     @Override

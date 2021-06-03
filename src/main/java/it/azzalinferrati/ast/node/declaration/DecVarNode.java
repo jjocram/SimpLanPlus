@@ -57,8 +57,16 @@ public class DecVarNode extends DeclarationNode {
 
     @Override
     public String codeGeneration() {
-        // TODO Auto-generated method stub
-        return null;
+        if (exp == null) {
+            return "addi $sp $sp -1\n";
+        }
+
+        // Declaration with initialization
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(exp.codeGeneration());
+        buffer.append("push $a0\n");
+
+        return buffer.toString();
     }
 
     @Override

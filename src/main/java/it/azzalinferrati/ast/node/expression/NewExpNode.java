@@ -35,7 +35,7 @@ public class NewExpNode extends ExpNode{
 
     @Override
     public String codeGeneration() {
-        return null;
+        return "li $t1 0\nsw $t1 0($hp)\n";
     }
 
     @Override

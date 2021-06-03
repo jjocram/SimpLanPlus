@@ -41,7 +41,15 @@ public class AssignmentNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(exp.codeGeneration());
+        buffer.append("push $a0\n");
+        buffer.append(lhs.codeGenerationGetAddress());
+        buffer.append("lw $t1 0($sp)\n");
+        buffer.append("pop\n");
+        buffer.append("sw $t1 0($a0)\n");
+
+        return buffer.toString();
     }
 
     @Override

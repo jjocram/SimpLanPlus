@@ -2,6 +2,7 @@ package it.azzalinferrati.svm;
 
 import it.azzalinferrati.svm.instruction.SVMInstruction;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,11 @@ class MemoryCell {
     public boolean isFree() {
         return !isUsed;
     }
+
+    @Override
+    public String toString() {
+        return "|" + data + "|";
+    }
 }
 
 public class SVMInterpreter {
@@ -50,15 +56,15 @@ public class SVMInterpreter {
 
         memory = new MemoryCell[memorySize];
         for (int i = 0; i < memorySize; i++) {
-            memory[i] = new MemoryCell(0, false);
+            memory[i] = new MemoryCell(-1, false);
         }
 
         $ip = 0;
 
         registers = new HashMap<>();
         registers.put("$sp", memorySize);
-        registers.put("$hp", -1);
-        registers.put("$fp", memorySize);
+        //registers.put("$hp", -1);
+        registers.put("$fp", memorySize-1);
         registers.put("$ra", null);
         registers.put("$al", null);
         registers.put("$a0", null);
@@ -70,17 +76,17 @@ public class SVMInterpreter {
     }
 
     private int hp() {
-        return registers.get("$hp");
-//        var firstFreeMemoryCell = Arrays.stream(memory).filter(MemoryCell::isFree).findFirst();
-//        if (firstFreeMemoryCell.isPresent()) {
-//            for (int i = 0; i < memorySize; i++) {
-//                if (memory[i] == firstFreeMemoryCell.get()) {
-//                    return i;
-//                }
-//            }
-//        }
-//
-//        return memorySize; // reach the end of memory nothing is free
+        //return registers.get("$hp");
+        var firstFreeMemoryCell = Arrays.stream(memory).filter(MemoryCell::isFree).findFirst();
+        if (firstFreeMemoryCell.isPresent()) {
+            for (int i = 0; i < memorySize; i++) {
+                if (memory[i] == firstFreeMemoryCell.get()) {
+                    return i;
+                }
+            }
+        }
+
+        return memorySize; // reach the end of memory nothing is free
     }
 
     private int fp() {
@@ -104,6 +110,10 @@ public class SVMInterpreter {
     }
 
     public void run() {
+        /*
+        debugCPU();
+        System.out.println("---------------------------");
+        */
         while (true) {
             if (hp() >= sp()) {
                 System.err.println("Error: out of memory");
@@ -119,46 +129,52 @@ public class SVMInterpreter {
 
             switch (instruction.getInstruction()) {
                 case "push":
-                    memory[sp()].setData(registers.get(arg1));
                     registers.put("$sp", sp() - 1); // sp -= 1
+                    memory[sp()].setData(registers.get(arg1));
                     break;
                 case "pop":
                     registers.put("$sp", sp() + 1); // sp += 1
                     break;
                 case "lw":
-                    // "memory address -> memory index"
+                    // "memory address -> memory ind
                     registers.put(arg1, memory[registers.get(arg2) + offset].getData());
                     break;
                 case "sw":
                     // "memory address -> memory index"
-                    memory[registers.get(arg2) + offset].setData(registers.get(arg1));
+                    if (arg2.equals("$hp")) {
+                        int heapAddress = hp();
+                        memory[heapAddress].setData(registers.get(arg1));
+                        registers.put("$a0", heapAddress);
+                    } else {
+                        memory[registers.get(arg2) + offset].setData(registers.get(arg1));
+                    }
                     break;
                 case "li":
                     registers.put(arg1, Integer.parseInt(arg2));
                     break;
                 case "add":
-                    registers.put(arg1, registers.get(arg2) + registers.get(arg2));
+                    registers.put(arg1, registers.get(arg2) + registers.get(arg3));
                     break;
                 case "sub":
-                    registers.put(arg1, registers.get(arg2) - registers.get(arg2));
+                    registers.put(arg1, registers.get(arg2) - registers.get(arg3));
                     break;
                 case "mult":
-                    registers.put(arg1, registers.get(arg2) * registers.get(arg2));
+                    registers.put(arg1, registers.get(arg2) * registers.get(arg3));
                     break;
                 case "div":
-                    registers.put(arg1, registers.get(arg2) / registers.get(arg2));
+                    registers.put(arg1, registers.get(arg2) / registers.get(arg3));
                     break;
                 case "addi":
-                    registers.put(arg1, registers.get(arg2) + Integer.parseInt(arg2));
+                    registers.put(arg1, registers.get(arg2) + Integer.parseInt(arg3));
                     break;
                 case "subi":
-                    registers.put(arg1, registers.get(arg2) - Integer.parseInt(arg2));
+                    registers.put(arg1, registers.get(arg2) - Integer.parseInt(arg3));
                     break;
                 case "multi":
-                    registers.put(arg1, registers.get(arg2) * Integer.parseInt(arg2));
+                    registers.put(arg1, registers.get(arg2) * Integer.parseInt(arg3));
                     break;
                 case "divi":
-                    registers.put(arg1, registers.get(arg2) / Integer.parseInt(arg2));
+                    registers.put(arg1, registers.get(arg2) / Integer.parseInt(arg3));
                     break;
                 case "and": {
                     boolean input1 = registers.get(arg2) == 1;
@@ -193,7 +209,7 @@ public class SVMInterpreter {
                     registers.put(arg1, result);
                     break;
                 }
-                case "notb":{
+                case "notb": {
                     int result = arg2.equals("1") ? 0 : 1;
                     registers.put(arg1, result);
                     break;
@@ -202,12 +218,12 @@ public class SVMInterpreter {
                     registers.put(arg1, registers.get(arg2));
                     break;
                 case "beq":
-                    if (registers.get(arg1).equals(registers.get(arg2))){
+                    if (registers.get(arg1).equals(registers.get(arg2))) {
                         $ip = Integer.parseInt(arg3);
                     }
                     break;
                 case "bleq":
-                    if (registers.get(arg1) <= registers.get(arg2)){
+                    if (registers.get(arg1) <= registers.get(arg2)) {
                         $ip = Integer.parseInt(arg3);
                     }
                     break;
@@ -233,6 +249,21 @@ public class SVMInterpreter {
                     System.err.println("Error: unrecognized SVMInstruction");
                     return;
             }
+            /*
+            System.out.println(instruction);
+            debugCPU();
+            System.out.println("---------------------------");
+            */
+        }
+    }
+
+    private void debugCPU() {
+        registers.keySet().forEach(key -> {
+            System.out.println(key + ": " + registers.get(key));
+        });
+
+        for (int i = 0; i < memorySize; i++) {
+            System.out.println(i + " " + memory[i]);
         }
     }
 }

@@ -33,7 +33,11 @@ public class NegativeExpNode extends ExpNode {
 
     @Override
     public String codeGeneration() {
-        return null;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(exp.codeGeneration());
+        buffer.append("multi $a0 $a0 -1\n");
+
+        return buffer.toString();
     }
 
     @Override
