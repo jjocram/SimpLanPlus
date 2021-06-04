@@ -130,10 +130,10 @@ public class SVMInterpreter {
     }
 
     public void run() {
-        /*
+
         debugCPU();
         System.out.println("---------------------------");
-        */
+
         while (true) {
             if (hp() >= sp()) {
                 System.err.println("Error: out of memory");
@@ -258,7 +258,7 @@ public class SVMInterpreter {
                     $ip = readRegister(arg1);
                     break;
                 case "del":
-                    freeMemory(Integer.parseInt(arg1));
+                    freeMemory(readRegister(arg1));
                     break;
                 case "print":
                     System.out.println(readRegister(arg1));
@@ -269,11 +269,10 @@ public class SVMInterpreter {
                     System.err.println("Error: unrecognized SVMInstruction");
                     return;
             }
-            /*
             System.out.println(instruction);
             debugCPU();
             System.out.println("---------------------------");
-            */
+
         }
     }
 

@@ -3,6 +3,7 @@ package it.azzalinferrati;
 import it.azzalinferrati.ast.SimpLanPlusVisitor;
 import it.azzalinferrati.ast.SimpLanPlusVisitorImpl;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.statement.BlockNode;
 import it.azzalinferrati.lexer.SimpLanPlusLexer;
 import it.azzalinferrati.parser.SimpLanPlusParser;
 import it.azzalinferrati.parser.VerboseListener;
@@ -48,7 +49,8 @@ public class App {
         parser.addErrorListener(new VerboseListener());
         SimpLanPlusVisitor<Node> visitor = new SimpLanPlusVisitorImpl();
 
-        Node AST = visitor.visit(parser.block());
+        BlockNode AST = (BlockNode) visitor.visit(parser.block());
+        AST.setMainBlock(true);
 
         if (parser.getNumberOfSyntaxErrors() > 0){
             System.err.println("There was syntax errors in the file, look above.");
@@ -71,9 +73,9 @@ public class App {
             System.exit(1);
         }
 
-        String generatedCode = AST.codeGeneration() + "halt";
+        String generatedCode = AST.codeGeneration();
 
-        //System.out.println(generatedCode);
+        System.out.println(generatedCode);
 
 
         CharStream SVMcharStream = CharStreams.fromString(generatedCode);
@@ -95,6 +97,7 @@ public class App {
         SVMVisitorImpl SVMvisitor = new SVMVisitorImpl();
         SVMvisitor.visit(SVMparser.assembly());
 
+        //System.out.println("Instructions:\n" + SVMvisitor.getCode());
         SVMInterpreter interpreter = new SVMInterpreter(1000, 11, SVMvisitor.getCode());
         interpreter.run();
 

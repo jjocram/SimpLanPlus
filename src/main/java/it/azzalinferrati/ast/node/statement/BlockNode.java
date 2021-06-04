@@ -22,11 +22,13 @@ public class BlockNode implements Node {
     final private List<StatementNode> statements;
 
     private boolean allowScopeCreation;
+    private boolean isMainBlock;
 
     public BlockNode(final List<DeclarationNode> declarations, final List<StatementNode> statements) {
         this.declarations = declarations;
         this.statements = statements;
         allowScopeCreation = true;
+        isMainBlock = false;
     }
 
     public void allowScopeCreation() {
@@ -35,6 +37,14 @@ public class BlockNode implements Node {
 
     public void disallowScopeCreation() {
         allowScopeCreation = false;
+    }
+
+    public boolean isMainBlock() {
+        return isMainBlock;
+    }
+
+    public void setMainBlock(boolean mainBlock) {
+        isMainBlock = mainBlock;
     }
 
     @Override
@@ -99,6 +109,10 @@ public class BlockNode implements Node {
                 .forEach(varDec -> buffer.append(varDec.codeGeneration()));
 
         statements.forEach(stm -> buffer.append(stm.codeGeneration()));
+
+        if (isMainBlock) {
+            buffer.append("halt\n");
+        }
 
         declarations.stream()
                 .filter(dec -> dec instanceof DeclarateFunNode)

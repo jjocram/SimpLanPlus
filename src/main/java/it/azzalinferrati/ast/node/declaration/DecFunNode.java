@@ -57,14 +57,13 @@ public class DecFunNode implements Node {
     public String codeGeneration() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(id.getId()).append(":\n");
-        buffer.append("mv $fp $sp\n");
+        //buffer.append("mv $fp $sp\n");
         buffer.append("push $ra\n");
         buffer.append(block.codeGeneration());
-        buffer.append("lw $t1 0($sp)\n");
-        buffer.append("mv $ra $t1\n");
-        buffer.append("addi $sp $sp ").append(args.size() + 2).append("\n");
-        buffer.append("lw $t1 0($sp)\n");
-        buffer.append("mv $fp $t1\n");
+        buffer.append("lw $ra 0($sp)\n");
+        buffer.append("pop\n"); //pop $ra
+        buffer.append("addi $sp $sp ").append(args.size()).append("\n"); // pop arguments
+        buffer.append("lw $fp 0($sp)\n");
         buffer.append("pop\n");
         buffer.append("jr $ra\n");
 

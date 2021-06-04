@@ -273,7 +273,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg2(ctx.input2.getText())
                 .arg3(ctx.LABEL().getText())
                 .build());
-        labelReferences.put(code.size()-1, ctx.LABEL().getText());
+        labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
     }
 
@@ -285,7 +285,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg2(ctx.input2.getText())
                 .arg3(ctx.LABEL().getText())
                 .build());
-        labelReferences.put(code.size()-1, ctx.LABEL().getText());
+        labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
     }
 
@@ -295,7 +295,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .instruction("b")
                 .arg1(ctx.LABEL().getText())
                 .build());
-        labelReferences.put(code.size()-1, ctx.LABEL().getText());
+        labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
     }
 
@@ -312,7 +312,7 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .instruction("jal")
                 .arg1(ctx.LABEL().getText())
                 .build());
-        labelReferences.put(code.size(), ctx.LABEL().getText());
+        labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
     }
 
