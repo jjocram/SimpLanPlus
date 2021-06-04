@@ -1,11 +1,14 @@
 package it.azzalinferrati.svm.instruction;
 
+import it.azzalinferrati.svm.SVMInterpreter;
+
 public class SVMInstructionBuilder {
     private String instruction = null;
     private String arg1 = null;
     private int offset = 0;
     private String arg2 = null;
     private String arg3 = null;
+    private FunctionToExecute<SVMInterpreter, String, Integer, String, String> functionToExecute = null;
 
     public SVMInstructionBuilder instruction(String instruction) {
         this.instruction = instruction;
@@ -32,13 +35,20 @@ public class SVMInstructionBuilder {
         return this;
     }
 
+    public SVMInstructionBuilder functionToExecute(FunctionToExecute<SVMInterpreter, String, Integer, String, String> functionToExecute) {
+        this.functionToExecute = functionToExecute;
+        return this;
+    }
+
     public SVMInstruction build() {
         return new SVMInstruction(
                 instruction,
                 arg1,
                 offset,
                 arg2,
-                arg3
+                arg3,
+                functionToExecute
         );
     }
+
 }

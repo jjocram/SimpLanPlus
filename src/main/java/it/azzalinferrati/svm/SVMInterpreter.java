@@ -71,11 +71,11 @@ public class SVMInterpreter {
         registers.put("$t1", null);
     }
 
-    private int sp() {
+    public int sp() {
         return registers.get("$sp");
     }
 
-    private int hp() {
+    public int hp() {
         //return registers.get("$hp");
         var firstFreeMemoryCell = Arrays.stream(memory).filter(MemoryCell::isFree).findFirst();
         if (firstFreeMemoryCell.isPresent()) {
@@ -87,6 +87,10 @@ public class SVMInterpreter {
         }
 
         return memorySize; // reach the end of memory nothing is free
+    }
+
+    public void setIP(int address) {
+        $ip = address;
     }
 
     private int fp() {
@@ -109,23 +113,23 @@ public class SVMInterpreter {
         return registers.get("$t1");
     }
 
-    private void updateRegister(String register, int value) {
+    public void updateRegister(String register, int value) {
         registers.put(register, value);
     }
 
-    private int readRegister(String register) {
+    public int readRegister(String register) {
         return registers.get(register);
     }
 
-    private void writeOnMemory(int address, int data) {
+    public void writeOnMemory(int address, int data) {
         memory[address].setData(data);
     }
 
-    private int readFromMemory(int address) {
+    public int readFromMemory(int address) {
         return memory[address].getData();
     }
 
-    private void freeMemory(int address) {
+    public void freeMemory(int address) {
         memory[address].freeCell();
     }
 
@@ -142,134 +146,9 @@ public class SVMInterpreter {
 
             SVMInstruction instruction = code.get($ip);
             $ip += 1;
-            String arg1 = instruction.getArg1();
-            String arg2 = instruction.getArg2();
-            String arg3 = instruction.getArg3();
-            int offset = instruction.getOffset();
 
-            switch (instruction.getInstruction()) {
-                case "push":
-                    updateRegister("$sp", sp() - 1); // sp -= 1
-                    writeOnMemory(sp(), readRegister(arg1));
-                    break;
-                case "pop":
-                    updateRegister("$sp", sp() + 1); // sp += 1
-                    break;
-                case "lw":
-                    // "memory address -> memory ind
-                    updateRegister(arg1, readFromMemory(readRegister(arg2) + offset));
-                    break;
-                case "sw":
-                    // "memory address -> memory index"
-                    if (arg2.equals("$hp")) {
-                        int heapAddress = hp();
-                        writeOnMemory(heapAddress, readRegister(arg1));
-                        updateRegister("$a0", heapAddress);
-                    } else {
-                        writeOnMemory(readRegister(arg2), readRegister(arg1));
-                    }
-                    break;
-                case "li":
-                    updateRegister(arg1, Integer.parseInt(arg2));
-                    break;
-                case "add":
-                    updateRegister(arg1, readRegister(arg2) + readRegister(arg3));
-                    break;
-                case "sub":
-                    updateRegister(arg1, readRegister(arg2) - readRegister(arg3));
-                    break;
-                case "mult":
-                    updateRegister(arg1, readRegister(arg2) * readRegister(arg3));
-                    break;
-                case "div":
-                    updateRegister(arg1, readRegister(arg2) / readRegister(arg3));
-                    break;
-                case "addi":
-                    updateRegister(arg1, readRegister(arg2) + Integer.parseInt(arg3));
-                    break;
-                case "subi":
-                    updateRegister(arg1, readRegister(arg2) - Integer.parseInt(arg3));
-                    break;
-                case "multi":
-                    updateRegister(arg1, readRegister(arg2) * Integer.parseInt(arg3));
-                    break;
-                case "divi":
-                    updateRegister(arg1, readRegister(arg2) / Integer.parseInt(arg3));
-                    break;
-                case "and": {
-                    boolean input1 = readRegister(arg2) == 1;
-                    boolean input2 = readRegister(arg3) == 1;
-                    int result = input1 && input2 ? 1 : 0;
-                    updateRegister(arg1, result);
-                    break;
-                }
-                case "or": {
-                    boolean input1 = readRegister(arg2) == 1;
-                    boolean input2 = readRegister(arg3) == 1;
-                    int result = input1 || input2 ? 1 : 0;
-                    updateRegister(arg1, result);
-                    break;
-                }
-                case "not": {
-                    int result = readRegister(arg2) == 1 ? 0 : 1;
-                    updateRegister(arg1, result);
-                    break;
-                }
-                case "andb": {
-                    boolean input1 = readRegister(arg2) == 1;
-                    boolean input2 = arg3.equals("1");
-                    int result = input1 && input2 ? 1 : 0;
-                    updateRegister(arg1, result);
-                    break;
-                }
-                case "orb": {
-                    boolean input1 = readRegister(arg2) == 1;
-                    boolean input2 = arg3.equals("1");
-                    int result = input1 || input2 ? 1 : 0;
-                    updateRegister(arg1, result);
-                    break;
-                }
-                case "notb": {
-                    int result = arg2.equals("1") ? 0 : 1;
-                    updateRegister(arg1, result);
-                    break;
-                }
-                case "mv":
-                    updateRegister(arg1, readRegister(arg2));
-                    break;
-                case "beq":
-                    if (readRegister(arg1) == readRegister(arg2)) {
-                        $ip = Integer.parseInt(arg3);
-                    }
-                    break;
-                case "bleq":
-                    if (readRegister(arg1) <= readRegister(arg2)) {
-                        $ip = Integer.parseInt(arg3);
-                    }
-                    break;
-                case "b":
-                    $ip = Integer.parseInt(arg1);
-                    break;
-                case "jal":
-                    updateRegister("$ra", $ip);
-                    $ip = Integer.parseInt(arg1);
-                    break;
-                case "jr":
-                    $ip = readRegister(arg1);
-                    break;
-                case "del":
-                    freeMemory(readRegister(arg1));
-                    break;
-                case "print":
-                    System.out.println(readRegister(arg1));
-                    break;
-                case "halt":
-                    return;
-                default:
-                    System.err.println("Error: unrecognized SVMInstruction");
-                    return;
-            }
             System.out.println(instruction);
+            instruction.execute(this);
             debugCPU();
             System.out.println("---------------------------");
 

@@ -59,7 +59,12 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
         code.add(new SVMInstructionBuilder()
                 .instruction("push")
                 .arg1(ctx.REGISTER().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister("$sp", cpu.sp() - 1); // sp -= 1
+                    cpu.writeOnMemory(cpu.sp(), cpu.readRegister(arg1));
+                })
                 .build());
+
         return null;
     }
 
@@ -67,6 +72,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
     public Void visitPop(SVMParser.PopContext ctx) {
         code.add(new SVMInstructionBuilder()
                 .instruction("pop")
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister("$sp", cpu.sp() + 1); // sp += 1
+                })
                 .build());
         return null;
     }
@@ -78,6 +86,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .offset(Integer.parseInt(ctx.NUMBER().getText()))
                 .arg2(ctx.input.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readFromMemory(cpu.readRegister(arg2) + offset));
+                })
                 .build());
         return null;
     }
@@ -89,6 +100,16 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .offset(Integer.parseInt(ctx.NUMBER().getText()))
                 .arg2(ctx.input.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    // "memory address -> memory index"
+                    if (arg2.equals("$hp")) {
+                        int heapAddress = cpu.hp();
+                        cpu.writeOnMemory(heapAddress, cpu.readRegister(arg1));
+                        cpu.updateRegister("$a0", heapAddress);
+                    } else {
+                        cpu.writeOnMemory(cpu.readRegister(arg2), cpu.readRegister(arg1));
+                    }
+                })
                 .build());
         return null;
     }
@@ -99,6 +120,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .instruction("li")
                 .arg1(ctx.REGISTER().getText())
                 .arg2(ctx.NUMBER().getText()) // Interpreter will need to cast to integer
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, Integer.parseInt(arg2));
+                })
                 .build());
         return null;
     }
@@ -110,6 +134,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input1.getText())
                 .arg3(ctx.input2.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2) + cpu.readRegister(arg3));
+                })
                 .build());
         return null;
     }
@@ -121,6 +148,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input1.getText())
                 .arg3(ctx.input2.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2) - cpu.readRegister(arg3));
+                })
                 .build());
         return null;
     }
@@ -132,6 +162,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input1.getText())
                 .arg3(ctx.input2.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2) * cpu.readRegister(arg3));
+                })
                 .build());
         return null;
     }
@@ -143,6 +176,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input1.getText())
                 .arg3(ctx.input2.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2) / cpu.readRegister(arg3));
+                })
                 .build());
         return null;
     }
@@ -154,6 +190,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input.getText())
                 .arg3(ctx.NUMBER().getText()) // Interpreter will need to cast to integer
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2) + Integer.parseInt(arg3));
+                })
                 .build());
         return null;
     }
@@ -165,6 +204,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input.getText())
                 .arg3(ctx.NUMBER().getText()) // Interpreter will need to cast to integer
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2) - Integer.parseInt(arg3));
+                })
                 .build());
         return null;
     }
@@ -176,6 +218,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input.getText())
                 .arg3(ctx.NUMBER().getText()) // Interpreter will need to cast to integer
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2) * Integer.parseInt(arg3));
+                })
                 .build());
         return null;
     }
@@ -187,6 +232,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input.getText())
                 .arg3(ctx.NUMBER().getText()) // Interpreter will need to cast to integer
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2) / Integer.parseInt(arg3));
+                })
                 .build());
         return null;
     }
@@ -198,6 +246,12 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input1.getText())
                 .arg3(ctx.input2.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    boolean input1 = cpu.readRegister(arg2) == 1;
+                    boolean input2 = cpu.readRegister(arg3) == 1;
+                    int result = input1 && input2 ? 1 : 0;
+                    cpu.updateRegister(arg1, result);
+                })
                 .build());
         return null;
     }
@@ -209,6 +263,12 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input1.getText())
                 .arg3(ctx.input2.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    boolean input1 = cpu.readRegister(arg2) == 1;
+                    boolean input2 = cpu.readRegister(arg3) == 1;
+                    int result = input1 || input2 ? 1 : 0;
+                    cpu.updateRegister(arg1, result);
+                })
                 .build());
         return null;
     }
@@ -219,6 +279,10 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .instruction("not")
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    int result = cpu.readRegister(arg2) == 1 ? 0 : 1;
+                    cpu.updateRegister(arg1, result);
+                })
                 .build());
         return null;
     }
@@ -230,6 +294,12 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input.getText())
                 .arg3(ctx.BOOL().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    boolean input1 = cpu.readRegister(arg2) == 1;
+                    boolean input2 = arg3.equals("1");
+                    int result = input1 && input2 ? 1 : 0;
+                    cpu.updateRegister(arg1, result);
+                })
                 .build());
         return null;
     }
@@ -241,6 +311,12 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input.getText())
                 .arg3(ctx.BOOL().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    boolean input1 = cpu.readRegister(arg2) == 1;
+                    boolean input2 = arg3.equals("1");
+                    int result = input1 || input2 ? 1 : 0;
+                    cpu.updateRegister(arg1, result);
+                })
                 .build());
         return null;
     }
@@ -251,6 +327,10 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .instruction("notb")
                 .arg1(ctx.output.getText())
                 .arg3(ctx.BOOL().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    int result = arg2.equals("1") ? 0 : 1;
+                    cpu.updateRegister(arg1, result);
+                })
                 .build());
         return null;
     }
@@ -261,6 +341,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .instruction("mv")
                 .arg1(ctx.output.getText())
                 .arg2(ctx.input.getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister(arg1, cpu.readRegister(arg2));
+                })
                 .build());
         return null;
     }
@@ -272,6 +355,11 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.input1.getText())
                 .arg2(ctx.input2.getText())
                 .arg3(ctx.LABEL().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    if (cpu.readRegister(arg1) == cpu.readRegister(arg2)) {
+                        cpu.setIP(Integer.parseInt(arg3));
+                    }
+                })
                 .build());
         labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
@@ -284,6 +372,11 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                 .arg1(ctx.input1.getText())
                 .arg2(ctx.input2.getText())
                 .arg3(ctx.LABEL().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    if (cpu.readRegister(arg1) <= cpu.readRegister(arg2)) {
+                        cpu.setIP(Integer.parseInt(arg3));
+                    }
+                })
                 .build());
         labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
@@ -294,6 +387,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
         code.add(new SVMInstructionBuilder()
                 .instruction("b")
                 .arg1(ctx.LABEL().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.setIP(Integer.parseInt(arg1));
+                })
                 .build());
         labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
@@ -308,10 +404,13 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 
     @Override
     public Void visitJumpToFunction(SVMParser.JumpToFunctionContext ctx) {
-        code.add(new SVMInstructionBuilder()
+        System.out.println("JAL");
+        SVMInstruction instruction = new SVMInstructionBuilder()
                 .instruction("jal")
                 .arg1(ctx.LABEL().getText())
-                .build());
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> cpu.setIP(Integer.parseInt(arg1)))
+                .build();
+        code.add(instruction);
         labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
     }
@@ -321,6 +420,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
         code.add(new SVMInstructionBuilder()
                 .instruction("jr")
                 .arg1(ctx.REGISTER().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.setIP(cpu.readRegister(arg1));
+                })
                 .build());
         return null;
     }
@@ -330,6 +432,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
         code.add(new SVMInstructionBuilder()
                 .instruction("del")
                 .arg1(ctx.REGISTER().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.freeMemory(cpu.readRegister(arg1));
+                })
                 .build());
         return null;
     }
@@ -339,6 +444,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
         code.add(new SVMInstructionBuilder()
                 .instruction("print")
                 .arg1(ctx.REGISTER().getText())
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    System.out.println(cpu.readRegister(arg1));
+                })
                 .build());
         return null;
     }
@@ -347,6 +455,9 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
     public Void visitHalt(SVMParser.HaltContext ctx) {
         code.add(new SVMInstructionBuilder()
                 .instruction("halt")
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    System.exit(0);
+                })
                 .build());
         return null;
     }
