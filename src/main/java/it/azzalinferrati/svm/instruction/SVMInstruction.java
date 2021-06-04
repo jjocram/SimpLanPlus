@@ -39,8 +39,11 @@ public class SVMInstruction {
         return arg3;
     }
 
+    public FunctionToExecute<SVMInterpreter, String, Integer, String, String> getFunctionToExecute() {
+        return functionToExecute;
+    }
+
     public void execute(SVMInterpreter cpu) {
-        System.out.println(functionToExecute);
         functionToExecute.apply(cpu, arg1, offset, arg2, arg3);
     }
 

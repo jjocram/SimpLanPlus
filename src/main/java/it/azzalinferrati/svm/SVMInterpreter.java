@@ -93,6 +93,10 @@ public class SVMInterpreter {
         $ip = address;
     }
 
+    public int getIP() {
+        return $ip;
+    }
+
     private int fp() {
         return registers.get("$fp");
     }
@@ -135,8 +139,8 @@ public class SVMInterpreter {
 
     public void run() {
 
-        debugCPU();
-        System.out.println("---------------------------");
+        //debugCPU();
+        //System.out.println("---------------------------");
 
         while (true) {
             if (hp() >= sp()) {
@@ -149,7 +153,7 @@ public class SVMInterpreter {
 
             System.out.println(instruction);
             instruction.execute(this);
-            debugCPU();
+            //debugCPU();
             System.out.println("---------------------------");
 
         }

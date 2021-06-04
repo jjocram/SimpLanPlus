@@ -41,12 +41,14 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
                         .arg1(instructionToModify.getArg1())
                         .arg2(instructionToModify.getArg2())
                         .arg3(lineToJump.toString())
+                        .functionToExecute(instructionToModify.getFunctionToExecute())
                         .build());
             } else {
                 // b and jal instructions
                 code.set(codeLine, new SVMInstructionBuilder()
                         .instruction(instructionToModify.getInstruction())
                         .arg1(lineToJump.toString())
+                        .functionToExecute(instructionToModify.getFunctionToExecute())
                         .build());
             }
         }
@@ -404,13 +406,14 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 
     @Override
     public Void visitJumpToFunction(SVMParser.JumpToFunctionContext ctx) {
-        System.out.println("JAL");
-        SVMInstruction instruction = new SVMInstructionBuilder()
+        code.add(new SVMInstructionBuilder()
                 .instruction("jal")
                 .arg1(ctx.LABEL().getText())
-                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> cpu.setIP(Integer.parseInt(arg1)))
-                .build();
-        code.add(instruction);
+                .functionToExecute((cpu, arg1, offset, arg2, arg3) -> {
+                    cpu.updateRegister("$ra", cpu.getIP());
+                    cpu.setIP(Integer.parseInt(arg1));
+                })
+                .build());
         labelReferences.put(code.size() - 1, ctx.LABEL().getText());
         return null;
     }
