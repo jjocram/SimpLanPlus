@@ -41,7 +41,7 @@ instruction:
 	| LABEL COL														# label
 	| 'jal' LABEL													# jumpToFunction
 	| 'jr' REGISTER													# jumpToRegister
-	| 'del' NUMBER '(' REGISTER ')'									# delete
+	| 'del' REGISTER									            # delete
 	| 'print' REGISTER												# print
 	| 'halt'														# halt;
 

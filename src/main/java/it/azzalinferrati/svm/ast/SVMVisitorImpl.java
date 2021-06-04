@@ -330,7 +330,6 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
         code.add(new SVMInstructionBuilder()
                 .instruction("del")
                 .arg1(ctx.REGISTER().getText())
-                .offset(Integer.parseInt(ctx.NUMBER().getText()))
                 .build());
         return null;
     }

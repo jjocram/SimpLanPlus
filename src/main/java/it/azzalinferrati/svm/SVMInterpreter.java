@@ -64,7 +64,7 @@ public class SVMInterpreter {
         registers = new HashMap<>();
         registers.put("$sp", memorySize);
         //registers.put("$hp", -1);
-        registers.put("$fp", memorySize-1);
+        registers.put("$fp", memorySize - 1);
         registers.put("$ra", null);
         registers.put("$al", null);
         registers.put("$a0", null);
@@ -109,6 +109,26 @@ public class SVMInterpreter {
         return registers.get("$t1");
     }
 
+    private void updateRegister(String register, int value) {
+        registers.put(register, value);
+    }
+
+    private int readRegister(String register) {
+        return registers.get(register);
+    }
+
+    private void writeOnMemory(int address, int data) {
+        memory[address].setData(data);
+    }
+
+    private int readFromMemory(int address) {
+        return memory[address].getData();
+    }
+
+    private void freeMemory(int address) {
+        memory[address].freeCell();
+    }
+
     public void run() {
         /*
         debugCPU();
@@ -129,101 +149,101 @@ public class SVMInterpreter {
 
             switch (instruction.getInstruction()) {
                 case "push":
-                    registers.put("$sp", sp() - 1); // sp -= 1
-                    memory[sp()].setData(registers.get(arg1));
+                    updateRegister("$sp", sp() - 1); // sp -= 1
+                    writeOnMemory(sp(), readRegister(arg1));
                     break;
                 case "pop":
-                    registers.put("$sp", sp() + 1); // sp += 1
+                    updateRegister("$sp", sp() + 1); // sp += 1
                     break;
                 case "lw":
                     // "memory address -> memory ind
-                    registers.put(arg1, memory[registers.get(arg2) + offset].getData());
+                    updateRegister(arg1, readFromMemory(readRegister(arg2) + offset));
                     break;
                 case "sw":
                     // "memory address -> memory index"
                     if (arg2.equals("$hp")) {
                         int heapAddress = hp();
-                        memory[heapAddress].setData(registers.get(arg1));
-                        registers.put("$a0", heapAddress);
+                        writeOnMemory(heapAddress, readRegister(arg1));
+                        updateRegister("$a0", heapAddress);
                     } else {
-                        memory[registers.get(arg2) + offset].setData(registers.get(arg1));
+                        writeOnMemory(readRegister(arg2), readRegister(arg1));
                     }
                     break;
                 case "li":
-                    registers.put(arg1, Integer.parseInt(arg2));
+                    updateRegister(arg1, Integer.parseInt(arg2));
                     break;
                 case "add":
-                    registers.put(arg1, registers.get(arg2) + registers.get(arg3));
+                    updateRegister(arg1, readRegister(arg2) + readRegister(arg3));
                     break;
                 case "sub":
-                    registers.put(arg1, registers.get(arg2) - registers.get(arg3));
+                    updateRegister(arg1, readRegister(arg2) - readRegister(arg3));
                     break;
                 case "mult":
-                    registers.put(arg1, registers.get(arg2) * registers.get(arg3));
+                    updateRegister(arg1, readRegister(arg2) * readRegister(arg3));
                     break;
                 case "div":
-                    registers.put(arg1, registers.get(arg2) / registers.get(arg3));
+                    updateRegister(arg1, readRegister(arg2) / readRegister(arg3));
                     break;
                 case "addi":
-                    registers.put(arg1, registers.get(arg2) + Integer.parseInt(arg3));
+                    updateRegister(arg1, readRegister(arg2) + Integer.parseInt(arg3));
                     break;
                 case "subi":
-                    registers.put(arg1, registers.get(arg2) - Integer.parseInt(arg3));
+                    updateRegister(arg1, readRegister(arg2) - Integer.parseInt(arg3));
                     break;
                 case "multi":
-                    registers.put(arg1, registers.get(arg2) * Integer.parseInt(arg3));
+                    updateRegister(arg1, readRegister(arg2) * Integer.parseInt(arg3));
                     break;
                 case "divi":
-                    registers.put(arg1, registers.get(arg2) / Integer.parseInt(arg3));
+                    updateRegister(arg1, readRegister(arg2) / Integer.parseInt(arg3));
                     break;
                 case "and": {
-                    boolean input1 = registers.get(arg2) == 1;
-                    boolean input2 = registers.get(arg3) == 1;
+                    boolean input1 = readRegister(arg2) == 1;
+                    boolean input2 = readRegister(arg3) == 1;
                     int result = input1 && input2 ? 1 : 0;
-                    registers.put(arg1, result);
+                    updateRegister(arg1, result);
                     break;
                 }
                 case "or": {
-                    boolean input1 = registers.get(arg2) == 1;
-                    boolean input2 = registers.get(arg3) == 1;
+                    boolean input1 = readRegister(arg2) == 1;
+                    boolean input2 = readRegister(arg3) == 1;
                     int result = input1 || input2 ? 1 : 0;
-                    registers.put(arg1, result);
+                    updateRegister(arg1, result);
                     break;
                 }
                 case "not": {
-                    int result = registers.get(arg2) == 1 ? 0 : 1;
-                    registers.put(arg1, result);
+                    int result = readRegister(arg2) == 1 ? 0 : 1;
+                    updateRegister(arg1, result);
                     break;
                 }
                 case "andb": {
-                    boolean input1 = registers.get(arg2) == 1;
+                    boolean input1 = readRegister(arg2) == 1;
                     boolean input2 = arg3.equals("1");
                     int result = input1 && input2 ? 1 : 0;
-                    registers.put(arg1, result);
+                    updateRegister(arg1, result);
                     break;
                 }
                 case "orb": {
-                    boolean input1 = registers.get(arg2) == 1;
+                    boolean input1 = readRegister(arg2) == 1;
                     boolean input2 = arg3.equals("1");
                     int result = input1 || input2 ? 1 : 0;
-                    registers.put(arg1, result);
+                    updateRegister(arg1, result);
                     break;
                 }
                 case "notb": {
                     int result = arg2.equals("1") ? 0 : 1;
-                    registers.put(arg1, result);
+                    updateRegister(arg1, result);
                     break;
                 }
                 case "mv":
-                    registers.put(arg1, registers.get(arg2));
+                    updateRegister(arg1, readRegister(arg2));
                     break;
                 case "beq":
-                    if (registers.get(arg1).equals(registers.get(arg2))) {
+                    if (readRegister(arg1) == readRegister(arg2)) {
                         $ip = Integer.parseInt(arg3);
                     }
                     break;
                 case "bleq":
-                    if (registers.get(arg1) <= registers.get(arg2)) {
+                    if (readRegister(arg1) <= readRegister(arg2)) {
                         $ip = Integer.parseInt(arg3);
                     }
                     break;
@@ -231,17 +251,17 @@ public class SVMInterpreter {
                     $ip = Integer.parseInt(arg1);
                     break;
                 case "jal":
-                    registers.put("$ra", $ip);
+                    updateRegister("$ra", $ip);
                     $ip = Integer.parseInt(arg1);
                     break;
                 case "jr":
-                    $ip = registers.get(arg1);
+                    $ip = readRegister(arg1);
                     break;
                 case "del":
-                    memory[offset + hp()].freeCell();
+                    freeMemory(Integer.parseInt(arg1));
                     break;
                 case "print":
-                    System.out.println(registers.get(arg1));
+                    System.out.println(readRegister(arg1));
                     break;
                 case "halt":
                     return;
