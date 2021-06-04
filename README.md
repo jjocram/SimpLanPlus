@@ -28,8 +28,7 @@ Available registers:
 ## Activation Record structure
 | Activation Record           |
 |-----------------------------|
-| RA (Return Address)         |
-| AL (Access Link)            |
+| RA (Return Address)         | $sp
 | Par 1                       |
 | ...                         |
 | Par N-1                     |
@@ -37,5 +36,5 @@ Available registers:
 | Dec 1                       |
 | ...                         |
 | Dec M-1                     |
-| Dec M                       |
+| Dec M                       | $fp
 | Previous FP (Frame Pointer) |
