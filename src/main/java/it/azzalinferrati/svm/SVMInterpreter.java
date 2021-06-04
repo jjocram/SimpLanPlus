@@ -1,5 +1,6 @@
 package it.azzalinferrati.svm;
 
+import it.azzalinferrati.svm.exception.CodeSizeTooSmallException;
 import it.azzalinferrati.svm.instruction.SVMInstruction;
 
 import java.util.Arrays;
@@ -40,7 +41,6 @@ class MemoryCell {
 }
 
 public class SVMInterpreter {
-    private final int codeSize; //Max num of instructions
     private final int memorySize; //Max size of the memory (heap + stack)
 
     private List<SVMInstruction> code;
@@ -49,10 +49,13 @@ public class SVMInterpreter {
     private Map<String, Integer> registers;
     private int $ip; //Program Counter (not available in code generation)
 
-    public SVMInterpreter(int codeSize, int memorySize, List<SVMInstruction> code) {
-        this.codeSize = codeSize;
+    public SVMInterpreter(int codeSize, int memorySize, List<SVMInstruction> code) throws CodeSizeTooSmallException {
         this.memorySize = memorySize;
         this.code = code;
+
+        if(codeSize < code.size()) {
+            throw new CodeSizeTooSmallException("Requested code area size: " + codeSize + ", number of instructions given: " + code.size() + ".");
+        }
 
         memory = new MemoryCell[memorySize];
         for (int i = 0; i < memorySize; i++) {
@@ -129,14 +132,16 @@ public class SVMInterpreter {
         memory[address].freeCell();
     }
 
-    public void run() {
+    public void run(boolean activeDebug) {
 
-        debugCPU();
-        System.out.println("---------------------------");
+        if(activeDebug) {
+            debugCPU();
+            System.out.println("---------------------------");
+        }
 
         while (true) {
             if (hp() >= sp()) {
-                System.err.println("Error: out of memory");
+                System.err.println("ERROR: Out of memory.");
                 return;
             }
 
@@ -266,12 +271,15 @@ public class SVMInterpreter {
                 case "halt":
                     return;
                 default:
-                    System.err.println("Error: unrecognized SVMInstruction");
+                    System.err.println("ERROR: Unrecognized Assembly instruction.");
                     return;
             }
-            System.out.println(instruction);
-            debugCPU();
-            System.out.println("---------------------------");
+
+            if(activeDebug) {
+                System.out.println(instruction);
+                debugCPU();
+                System.out.println("---------------------------");
+            }
 
         }
     }

@@ -34,8 +34,8 @@ public class Environment {
         this.offset = offset;
     }
 
-    public Environment(List<Map<String, STEntry>> symTable) {
-        this(symTable, -1, 0);
+    public Environment() {
+        this(new ArrayList<>(), -1, 0);
     }
 
     public Environment(Environment e) {

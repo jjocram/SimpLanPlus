@@ -52,7 +52,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <mainClass>it.azzalinferrati.App</mainClass>
+                                <mainClass>it.azzalinferrati.SimpLanPlus</mainClass>
                             </manifest>
                         </archive>
                     </configuration>
@@ -63,13 +63,13 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <mainClass>it.azzalinferrati.App</mainClass>
+                                <mainClass>it.azzalinferrati.SimpLanPlus</mainClass>
                             </manifest>
                         </archive>
                         <descriptorRefs>
                             <descriptorRef>jar-with-dependencies</descriptorRef>
                         </descriptorRefs>
-                        <finalName>SimpLanPlusCompiler</finalName>
+                        <finalName>SimpLanPlus</finalName>
                         <appendAssemblyId>false</appendAssemblyId>
                     </configuration>
                     <executions>
