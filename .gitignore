@@ -1,3 +1,4 @@
+*.asm
 .idea/
 SimPlanPlus.iml
 .vscode/
