@@ -285,6 +285,7 @@ public class SVMInterpreter {
     }
 
     private void debugCPU() {
+        System.out.println("$ip" + ": " +$ip);
         registers.keySet().forEach(key -> {
             System.out.println(key + ": " + registers.get(key));
         });

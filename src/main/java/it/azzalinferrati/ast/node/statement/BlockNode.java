@@ -97,16 +97,29 @@ public class BlockNode implements Node {
     public String codeGeneration() {
         StringBuffer buffer = new StringBuffer();
 
+        if(allowScopeCreation) {
+            buffer.append("push $fp\n"); // push old $fp
+
+            buffer.append("mv $al $fp\n");
+        }
+
         /*
         declarations.stream()
                 .filter(dec -> dec instanceof DeclarateVarNode)
                 .collect(Collectors.toCollection(LinkedList::new))
                 .descendingIterator()
                 .forEachRemaining(dec -> buffer.append(dec.codeGeneration()));
-*/
-        declarations.stream()
-                .filter(dec -> dec instanceof DeclarateVarNode)
-                .forEach(varDec -> buffer.append(varDec.codeGeneration()));
+*/  
+        var varDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateVarNode).collect(Collectors.toList());
+        var funDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateFunNode).collect(Collectors.toList());
+
+        varDeclarations.forEach(varDec -> buffer.append(varDec.codeGeneration()));
+        
+        if(allowScopeCreation) {
+            // $fp = $sp - 1
+            buffer.append("mv $fp $sp\n");
+            buffer.append("addi $fp $fp ").append(varDeclarations.size() - 1).append("\n");
+        }
 
         statements.forEach(stm -> buffer.append(stm.codeGeneration()));
 
@@ -114,9 +127,13 @@ public class BlockNode implements Node {
             buffer.append("halt\n");
         }
 
-        declarations.stream()
-                .filter(dec -> dec instanceof DeclarateFunNode)
-                .forEach(funDec -> buffer.append(funDec.codeGeneration()));
+        if(allowScopeCreation) {
+            buffer.append("addi $sp $sp ").append(varDeclarations.size()).append("\n"); // pop var declarations
+            buffer.append("lw $fp 0($sp)\n");
+            buffer.append("pop\n");
+        }
+
+        funDeclarations.forEach(funDec -> buffer.append(funDec.codeGeneration()));
 
         return buffer.toString();
     }

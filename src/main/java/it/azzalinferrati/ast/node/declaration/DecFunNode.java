@@ -88,7 +88,7 @@ public class DecFunNode implements Node {
 
             block.disallowScopeCreation();
             errors.addAll(block.checkSemantics(env));
-            block.allowScopeCreation();
+            // block.allowScopeCreation();
 
             env.popScope();
         } catch (MultipleDeclarationException exception) {

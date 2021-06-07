@@ -47,8 +47,8 @@ public class IteNode implements Node {
         StringBuffer buffer = new StringBuffer();
 
         String thenBranchLabel = LabelManager.getInstance().freshLabel("thenBranch");
-        String endIfLabel = LabelManager.getInstance().freshLabel("endIf");
-
+        String endIfLabel = "endIf" + thenBranchLabel;
+        
         buffer.append(condition.codeGeneration());
         buffer.append("li $t1 1\n");
         buffer.append("beq $a0 $t1 ").append(thenBranchLabel).append("\n");

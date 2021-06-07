@@ -95,7 +95,7 @@ public class BinaryExpNode extends ExpNode{
         switch (operator) {
             case "==": {
                 String trueBranchLabel = labelManager.freshLabel("equalTrueBranch");
-                String endCheckLabel = labelManager.freshLabel("endEqualCheck");
+                String endCheckLabel = "end" + trueBranchLabel;
 
                 buffer.append("beq $t1 $a0 ").append(trueBranchLabel).append("\n");
                 //False branch
@@ -108,7 +108,7 @@ public class BinaryExpNode extends ExpNode{
             }
             case "!=": {
                 String trueBranchLabel = labelManager.freshLabel("unequalTrueBranch");
-                String endCheckLabel = labelManager.freshLabel("endUnequalCheck");
+                String endCheckLabel = "end" + trueBranchLabel;
 
                 buffer.append("beq $t1 $a0 ").append(trueBranchLabel).append("\n");
                 //False branch
@@ -137,9 +137,9 @@ public class BinaryExpNode extends ExpNode{
             }
             case "<": {
                 String equalTrueBranch = labelManager.freshLabel("equalTrueBranch");
-                String endEqualCheck = labelManager.freshLabel("endEqualCheck");
+                String endEqualCheck = "end" + equalTrueBranch;
                 String lesseqTrueBranch = labelManager.freshLabel("lesseqTrueBranch");
-                String endLesseqCheck = labelManager.freshLabel("endLesseqCheck");
+                String endLesseqCheck = "end" + lesseqTrueBranch;
 
                 buffer.append("beq $t1 $a0 ").append(equalTrueBranch).append("\n");
                 //False branch => e1 != e2
@@ -159,7 +159,7 @@ public class BinaryExpNode extends ExpNode{
             }
             case "<=": {
                 String trueBranchLabel = labelManager.freshLabel("lesseqTrueBranch");
-                String endCheckLabel = labelManager.freshLabel("endLesseqCheck");
+                String endCheckLabel = "end" + trueBranchLabel;
 
                 buffer.append("bleq $t1 $a0 \n").append(trueBranchLabel).append("\n");
                 //False branch
@@ -172,7 +172,7 @@ public class BinaryExpNode extends ExpNode{
             }
             case ">": {
                 String trueBranchLabel = labelManager.freshLabel("greaterTrueBranch");
-                String endCheckLabel = labelManager.freshLabel("endGreaterCheck");
+                String endCheckLabel = "end" + trueBranchLabel;
 
                 buffer.append("bleq $t1 $a0 \n").append(trueBranchLabel).append("\n");
                 //False branch
@@ -185,9 +185,9 @@ public class BinaryExpNode extends ExpNode{
             }
             case ">=": {
                 String equalTrueBranch = labelManager.freshLabel("equalTrueBranch");
-                String endEqualCheck = labelManager.freshLabel("endEqualCheck");
+                String endEqualCheck = "end" + equalTrueBranch;
                 String lesseqTrueBranch = labelManager.freshLabel("lesseqTrueBranch");
-                String endLesseqCheck = labelManager.freshLabel("endLesseqCheck");
+                String endLesseqCheck = "end" + lesseqTrueBranch;
 
                 buffer.append("beq $t1 $a0 ").append(equalTrueBranch).append("\n");
                 //False branch => e1 != e2
