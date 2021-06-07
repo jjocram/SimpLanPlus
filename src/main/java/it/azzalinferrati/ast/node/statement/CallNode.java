@@ -67,8 +67,9 @@ public class CallNode implements Node {
     @Override
     public String codeGeneration() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("push $fp\n"); // push old $fp
+        buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
 
+        //TODO: serve?
         buffer.append("mv $al $fp\n");
         for (int i=0; i < (currentNestingLevel - id.getNestingLevel()); i++) {
             buffer.append("lw $al 0($al)\n");
@@ -77,14 +78,14 @@ public class CallNode implements Node {
 
         params.forEach(param -> {
             buffer.append(param.codeGeneration());
-            buffer.append("push $a0\n");
+            buffer.append("push $a0 ;push of ").append(param.toPrint("")).append("\n");
         });
 
         // $fp = $sp - 1
-        buffer.append("mv $fp $sp\n");
-        buffer.append("addi $fp $fp ").append(params.size()-1).append("\n");
+        buffer.append("mv $fp $sp ;update $fp\n");
+        buffer.append("addi $fp $fp ").append(params.size()-1).append(" ;fix $fp position to the bottom of the new frame\n");
 
-        buffer.append("jal ").append(id.getId()).append("\n");
+        buffer.append("jal ").append(id.getId()).append(" ;jump to function (this automatically set $ra to the next instruction)\n");
 
         return buffer.toString();
     }

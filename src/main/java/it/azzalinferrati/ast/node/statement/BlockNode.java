@@ -97,28 +97,20 @@ public class BlockNode implements Node {
     public String codeGeneration() {
         StringBuffer buffer = new StringBuffer();
 
-        if(allowScopeCreation) {
-            buffer.append("push $fp\n"); // push old $fp
-
-            buffer.append("mv $al $fp\n");
+        if(allowScopeCreation && !isMainBlock) {
+            buffer.append("push $fp ;push old fp\n"); // push old $fp
+            buffer.append("mv $al $fp\n"); //TODO: serve a qualcosa?
         }
 
-        /*
-        declarations.stream()
-                .filter(dec -> dec instanceof DeclarateVarNode)
-                .collect(Collectors.toCollection(LinkedList::new))
-                .descendingIterator()
-                .forEachRemaining(dec -> buffer.append(dec.codeGeneration()));
-*/  
         var varDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateVarNode).collect(Collectors.toList());
         var funDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateFunNode).collect(Collectors.toList());
 
         varDeclarations.forEach(varDec -> buffer.append(varDec.codeGeneration()));
         
-        if(allowScopeCreation) {
+        if(allowScopeCreation && !isMainBlock) {
             // $fp = $sp - 1
             buffer.append("mv $fp $sp\n");
-            buffer.append("addi $fp $fp ").append(varDeclarations.size() - 1).append("\n");
+            buffer.append("addi $fp $fp ").append(varDeclarations.size() - 1).append(" ;update $fp to the beginning of the frame\n");
         }
 
         statements.forEach(stm -> buffer.append(stm.codeGeneration()));
@@ -127,10 +119,10 @@ public class BlockNode implements Node {
             buffer.append("halt\n");
         }
 
-        if(allowScopeCreation) {
-            buffer.append("addi $sp $sp ").append(varDeclarations.size()).append("\n"); // pop var declarations
-            buffer.append("lw $fp 0($sp)\n");
-            buffer.append("pop\n");
+        if(allowScopeCreation && !isMainBlock) {
+            buffer.append("addi $sp $sp ").append(varDeclarations.size()).append(" ;pop var declarations\n"); // pop var declarations
+            buffer.append("lw $fp 0($sp) ;restore old $fp\n");
+            buffer.append("pop ;pop old $fp\n");
         }
 
         funDeclarations.forEach(funDec -> buffer.append(funDec.codeGeneration()));

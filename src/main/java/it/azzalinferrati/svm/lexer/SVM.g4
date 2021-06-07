@@ -75,6 +75,7 @@ BOOL: '0' | '1';
 
 // ESCAPE SEQUENCES
 WS: ( '\t' | ' ' | '\r' | '\n')+ -> channel(HIDDEN);
+LINECOMMENTS 	: ';' (~('\n'|'\r'))* -> skip;
 
 ERR: . { errors.add("Invalid character: "+ getText()); } -> channel(HIDDEN);
 

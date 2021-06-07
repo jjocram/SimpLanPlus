@@ -47,7 +47,7 @@ public class AssignmentNode implements Node {
         buffer.append(lhs.codeGenerationGetAddress());
         buffer.append("lw $t1 0($sp)\n");
         buffer.append("pop\n");
-        buffer.append("sw $t1 0($a0)\n");
+        buffer.append("sw $t1 0($a0) ; store at $a0 dereferenced the value stored in $t1\n");
 
         return buffer.toString();
     }

@@ -1,4 +1,6 @@
 {
+    ^int a = new int;
+    ^int b = new int;
     void h(^int x, ^int y) {
         if (y^ == 0) 
             delete x;
@@ -7,4 +9,7 @@
             h(y,x);
         }
     }
+    a^ = 1;
+    b^ = 1;
+    h(a, b);
 }
