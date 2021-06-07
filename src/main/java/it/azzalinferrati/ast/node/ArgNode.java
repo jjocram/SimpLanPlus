@@ -37,7 +37,7 @@ public class ArgNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return "addi $sp $sp 1";
+        return "addi $sp $sp 1 ;allocates space on the stack for the argument";
     }
 
     @Override

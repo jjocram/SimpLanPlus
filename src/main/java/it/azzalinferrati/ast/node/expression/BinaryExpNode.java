@@ -80,10 +80,10 @@ public class BinaryExpNode extends ExpNode{
         LabelManager labelManager = LabelManager.getInstance();
 
         buffer.append(leftExpression.codeGeneration());
-        buffer.append("push $a0\n");
+        buffer.append("push $a0 ; push on the stack e1\n");
         buffer.append(rightExpression.codeGeneration());
-        buffer.append("lw $t1 0($sp)\n");
-        buffer.append("pop\n");
+        buffer.append("lw $t1 0($sp) ;$t1 = e1, $a0 = e2\n");
+        buffer.append("pop ;pop e1 from the stack\n");
 
 
         /*
@@ -99,10 +99,10 @@ public class BinaryExpNode extends ExpNode{
 
                 buffer.append("beq $t1 $a0 ").append(trueBranchLabel).append("\n");
                 //False branch
-                buffer.append("li $a0 0\n");
+                buffer.append("li $a0 0 ;e1 != e2\n");
                 buffer.append("b ").append(endCheckLabel).append("\n");
                 buffer.append(trueBranchLabel).append(":\n");
-                buffer.append("li $a0 1\n");
+                buffer.append("li $a0 1 ;e1 == e2\n");
                 buffer.append(endCheckLabel).append(":\n");
                 break;
             }
@@ -112,10 +112,10 @@ public class BinaryExpNode extends ExpNode{
 
                 buffer.append("beq $t1 $a0 ").append(trueBranchLabel).append("\n");
                 //False branch
-                buffer.append("li $a0 1\n");
+                buffer.append("li $a0 1 ;e1 != e2\n");
                 buffer.append("b ").append(endCheckLabel).append("\n");
                 buffer.append(trueBranchLabel).append(":\n");
-                buffer.append("li $a0 0\n");
+                buffer.append("li $a0 0 ;e1 == e2\n");
                 buffer.append(endCheckLabel).append(":\n");
                 break;
             }

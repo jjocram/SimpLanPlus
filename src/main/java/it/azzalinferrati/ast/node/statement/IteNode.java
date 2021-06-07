@@ -50,10 +50,10 @@ public class IteNode implements Node {
         String endIfLabel = "endIf" + thenBranchLabel;
         
         buffer.append(condition.codeGeneration());
-        buffer.append("li $t1 1\n");
-        buffer.append("beq $a0 $t1 ").append(thenBranchLabel).append("\n");
+        buffer.append("li $t1 1 ; load in $t1 the value TRUE\n");
+        buffer.append("beq $a0 $t1 ").append(thenBranchLabel).append(" ; compare what is in $a0 (the expression) with TRUE ($t1)\n");
         buffer.append(elseBranch.codeGeneration());
-        buffer.append("b ").append(endIfLabel).append("\n");
+        buffer.append("b ").append(endIfLabel).append(" ;if the condition was false skip to the end of if-then-else\n");
         buffer.append(thenBranchLabel).append(":\n");
         buffer.append(thenBranch.codeGeneration());
         buffer.append(endIfLabel).append(":\n");

@@ -31,7 +31,7 @@ public class BoolNode extends ExpNode {
     @Override
     public String codeGeneration() {
         int intValue = value ? 1 : 0;
-        return "li $a0 " + intValue + "\n";
+        return "li $a0 " + intValue + " ; load in $a0 the value: " + value + "\n";
     }
 
     @Override

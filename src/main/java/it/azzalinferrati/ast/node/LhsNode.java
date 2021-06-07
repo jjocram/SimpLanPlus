@@ -70,7 +70,7 @@ public class LhsNode implements Node {
 
         LhsNode current = lhs;
         while (current != null) {
-            buffer.append("lw $a0 0($a0)\n");
+            buffer.append("lw $a0 0($a0) ;").append(id.getId()).append("is a pointer, dereferencing it \n");
             current = current.lhs;
         }
 
@@ -79,16 +79,16 @@ public class LhsNode implements Node {
 
     public String codeGenerationGetAddress() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("mv $al $fp\n");
+        buffer.append("mv $al $fp ; [get address of an LHS node pt1] i want the memory address of ").append(id.getId()).append("\n");
         for (int i = 0; i < (id.getCurrentNestingLevel() - id.getNestingLevel()); i++) {
             buffer.append("lw $al 0($al)\n");
         }
 
-        buffer.append("addi $a0 $al ").append(-id.getOffset()).append("\n");
+        buffer.append("addi $a0 $al ").append(-id.getOffset()).append(" ;[get address of an LHS node pt2] get the address and put in $a0\n");
 
         LhsNode current = lhs;
         while (current != null) {
-            buffer.append("lw $a0 0($a0)\n");
+            buffer.append("lw $a0 0($a0) ;[get address of an LHS node pt3] dereferncig the address the number of times required\n");
             current = current.lhs;
         }
 
