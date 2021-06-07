@@ -104,13 +104,13 @@ public class BlockNode implements Node {
 
         var varDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateVarNode).collect(Collectors.toList());
         var funDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateFunNode).collect(Collectors.toList());
+        int offsetForFramePointer = varDeclarations.size() == 0 ? 0 : varDeclarations.size() - 1;
 
         varDeclarations.forEach(varDec -> buffer.append(varDec.codeGeneration()));
-        
         if(allowScopeCreation && !isMainBlock) {
             // $fp = $sp - 1
             buffer.append("mv $fp $sp\n");
-            buffer.append("addi $fp $fp ").append(varDeclarations.size() - 1).append(" ;update $fp to the beginning of the frame\n");
+            buffer.append("addi $fp $fp ").append(offsetForFramePointer).append(" ;update $fp to the beginning of the frame, number of declaration in this block: ").append(varDeclarations.size()).append("\n");
         }
 
         statements.forEach(stm -> buffer.append(stm.codeGeneration()));
