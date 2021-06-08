@@ -169,29 +169,29 @@ final class Flags {
     private int memsize;
 
     public Flags(final String[] args) throws WrongArgumentsException {
-        if (args.length < 1 || Arrays.stream(args).allMatch(arg -> arg.startsWith("-"))) {
+        if (args.length < 1 || Arrays.stream(args).allMatch(arg -> arg.startsWith("--"))) {
             throw new WrongArgumentsException("ERROR: You must specify a file to compile or run!");
         }
 
         List<String> arguments = Arrays.asList(args);
 
-        ast = arguments.contains("-ast");
+        ast = arguments.contains("--ast");
 
-        debugcpu = arguments.contains("-debugcpu");
+        debugcpu = arguments.contains("--debugcpu");
 
-        if (arguments.contains("-mode=compile")) {
+        if (arguments.contains("--mode=compile")) {
             mode = "compile";
-        } else if (arguments.contains("-mode=run")) {
+        } else if (arguments.contains("--mode=run")) {
             mode = "run";
-        } else if (arguments.contains("-mode=all")) {
+        } else if (arguments.contains("--mode=all")) {
             mode = "all";
-        } else if (arguments.contains("-mode=")) { // Argument starts with "-mode=" but the remaining part is not expected.
+        } else if (arguments.contains("--mode=")) { // Argument starts with "-mode=" but the remaining part is not expected.
             throw new WrongArgumentsException("Unrecognized mode. These are the available modes: compile, run, all.");
         } else { // There is no "mode" argument.
             mode = "all";
         }
 
-        Optional<String> optCodeSize = arguments.stream().filter(a -> a.startsWith("-codesize=")).findFirst();
+        Optional<String> optCodeSize = arguments.stream().filter(a -> a.startsWith("--codesize=")).findFirst();
         if (optCodeSize.isPresent()) {
             try {
                 codesize = Integer.parseInt(optCodeSize.get().split("=")[1]);
@@ -207,7 +207,7 @@ final class Flags {
             codesize = 1000;
         }
 
-        Optional<String> optMemSize = arguments.stream().filter(a -> a.startsWith("-memsize=")).findFirst();
+        Optional<String> optMemSize = arguments.stream().filter(a -> a.startsWith("--memsize=")).findFirst();
         if (optMemSize.isPresent()) {
             try {
                 memsize = Integer.parseInt(optMemSize.get().split("=")[1]);

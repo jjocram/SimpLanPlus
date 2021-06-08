@@ -17,13 +17,13 @@ The file name cannot start with a dash (`-`).
 ### Additional arguments
 One might add different arguments to print out additional information or change the behaviour of the program while compiling or interpreting:
 
-- `-ast` prints out the information available in the nodes of the **Abstract Syntax Tree (AST)** after the semantic and type checks. This will be skipped if argument `-mode=run` is present;
-- `-mode=compile` only compiles the code and saves it in a file named ```fileName.asm```;
-- `-mode=run` only runs the Assembly code for the **SimpLanPlus Virtual Machine (SVM)** which is present in the file given as parameter;
-- `-mode=all` compiles the code and runs it;
-- `-debugcpu` shows the content of the memory and registers of the SVM at each instruction available in the compiled (or read) Assembly code. This will be skipped if argument `-mode=compile` is present;
-- `-codesize=c` requires the memory size for hosting the code to be of size *c* (i.e. *c* Assembly instructions can be processed). *c* must be a positive integer otherwise 1000 is set. This will be skipped if argument `-mode=compile` is present;
-- `-memsize=m` requires the memory size for executing the program to be of size *m* (both stack and heap). *m* must be a positive integer otherwise 1000 is set. This will be skipped if argument `-mode=compile` is present;
+- `--ast` prints out the information available in the nodes of the **Abstract Syntax Tree (AST)** after the semantic and type checks. This will be skipped if argument `-mode=run` is present;
+- `--mode=compile` only compiles the code and saves it in a file named ```fileName.asm```;
+- `--mode=run` only runs the Assembly code for the **SimpLanPlus Virtual Machine (SVM)** which is present in the file given as parameter;
+- `--mode=all` compiles the code and runs it;
+- `--debugcpu` shows the content of the memory and registers of the SVM at each instruction available in the compiled (or read) Assembly code. This will be skipped if argument `-mode=compile` is present;
+- `--codesize=c` requires the memory size for hosting the code to be of size *c* (i.e. *c* Assembly instructions can be processed). *c* must be a positive integer otherwise 1000 is set. This will be skipped if argument `-mode=compile` is present;
+- `--memsize=m` requires the memory size for executing the program to be of size *m* (both stack and heap). *m* must be a positive integer otherwise 1000 is set. This will be skipped if argument `-mode=compile` is present;
 
 By default:
 
