@@ -62,9 +62,8 @@ public class DecFunNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(id.getId()).append(":\n");
-        //buffer.append("mv $fp $sp\n");
         buffer.append("push $ra\n");
         buffer.append(block.codeGeneration());
         buffer.append("lw $ra 0($sp)\n");

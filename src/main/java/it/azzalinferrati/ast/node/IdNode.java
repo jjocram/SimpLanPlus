@@ -12,7 +12,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
  * <p>Represents an identifier of a variable, pointer or function in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: type available in the Symbol Table.</p>
  * <p><strong>Semantic analysis</strong>: checks if available in the Symbol Table, otherwise returns an error.</p>
  * <p><strong>Code generation</strong>: Goes through the static chain to get the offset of the identifier from the Access Link and in the end loads the value in $a0.</p>
@@ -70,14 +70,13 @@ public class IdNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         if (getNestingLevel() == getCurrentNestingLevel()) {
-            buffer.append("mv $al $fp ; the variable ").append(id).append(" is declared in the same scope where it is used\n");
+            buffer.append("mv $al $fp ;the variable ").append(id).append(" is declared in the same scope where it is used\n");
         }
         else {
-            buffer.append("lw $al 0($fp) ; goes back in the static chain to get the right variable\n");
-            //buffer.append("addi $al $al 1 ;access link is in the memory cell below the $fp\n");
+            buffer.append("lw $al 0($fp);goes back in the static chain to get the right variable\n");
             for (int i = 0; i < (currentNestingLevel - getNestingLevel()) - 1; i++) {
                 buffer.append("lw $al 0($al)\n");
             }

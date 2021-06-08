@@ -103,14 +103,10 @@ public class BlockNode implements Node {
             }
             buffer.append("mv $al $fp\n");
             buffer.append("push $al ;it's equal to the old $fp\n");
-            //if (isMainBlock) {
-            //    buffer.append("subi $fp $fp 1\n");
-            //}
         }
 
         var varDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateVarNode).collect(Collectors.toList());
         var funDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateFunNode).collect(Collectors.toList());
-        int offsetForFramePointer = varDeclarations.size() == 0 ? 0 : varDeclarations.size() - 1;
 
         varDeclarations.forEach(varDec -> buffer.append(varDec.codeGeneration()));
         if (allowScopeCreation && !isMainBlock) {
