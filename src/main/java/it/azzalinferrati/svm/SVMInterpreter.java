@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 class MemoryCell {
-    private int data;
+    private Integer data;
     private boolean isUsed;
 
     public MemoryCell(int data, boolean isUsed) {
@@ -17,11 +17,16 @@ class MemoryCell {
         this.isUsed = isUsed;
     }
 
+    public MemoryCell() {
+        data = null;
+        isUsed = false;
+    }
+
     public int getData() {
         return data;
     }
 
-    public void setData(int data) {
+    public void setData(Integer data) {
         this.data = data;
         this.isUsed = true;
     }
@@ -36,7 +41,7 @@ class MemoryCell {
 
     @Override
     public String toString() {
-        return "| " + (data >= 0 ? " " : "") + data + "\t|";
+        return "| " + (data != null && data >= 0 ? " " : "") + data + "\t|";
     }
 }
 
@@ -64,7 +69,7 @@ public class SVMInterpreter {
 
         memory = new MemoryCell[memorySize];
         for (int i = 0; i < memorySize; i++) {
-            memory[i] = new MemoryCell(-1, false);
+            memory[i] = new MemoryCell();
         }
 
         $ip = 0;
@@ -137,6 +142,12 @@ public class SVMInterpreter {
         lastUpdatedRegister = "";
     }
 
+    private void resetCell(int address) {
+        memory[address].setData(null);
+        lastUpdatedMemoryCell = address;
+        lastUpdatedRegister = "";
+    }
+
     private int readFromMemory(int address) {
         return memory[address].getData();
     }
@@ -148,6 +159,7 @@ public class SVMInterpreter {
     public void run(boolean activeDebug) {
 
         if(activeDebug) {
+            System.out.println("Initial state of the SVM");
             debugCPU();
             System.out.println("---------------------------");
         }
@@ -171,7 +183,7 @@ public class SVMInterpreter {
                     writeOnMemory(sp(), readRegister(arg1));
                     break;
                 case "pop":
-                    writeOnMemory(sp(), -1);
+                    resetCell(sp()); // It is actually not needed, but it is easier for debugging purposes.
                     updateRegister("$sp", sp() + 1); // sp += 1
                     break;
                 case "lw":
@@ -290,7 +302,7 @@ public class SVMInterpreter {
             }
 
             if(activeDebug) {
-                System.out.println("Instruction #" + globalCounter + " - " + instruction);
+                System.out.println("Instruction #" + globalCounter + " - " + instruction + "\n");
                 debugCPU();
                 System.out.println("---------------------------");
             }
@@ -301,15 +313,19 @@ public class SVMInterpreter {
 
     private void debugCPU() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("$ip: ").append($ip).append("\n");
+        buffer.append("| $ip: ").append($ip).append(" | ");
         registers.keySet().forEach(key -> {
-            buffer.append(key).append(": ").append(registers.get(key)).append(lastUpdatedRegister.equals(key) ? " (*)\n" : "\n");
+            buffer.append(key).append(": ").append(registers.get(key)).append(lastUpdatedRegister.equals(key) ? " (*) | " : " | ");
         });
 
-        buffer.append("\n");
+        buffer.append("\n\n");
 
         for (int i = 0; i < memorySize; i++) {
-            buffer.append(i).append("\t").append(memory[i]).append(lastUpdatedMemoryCell == i ? " (*)\n" : "\n");
+            buffer
+                .append(i).append("\t").append(memory[i])
+                .append(i == fp() ? " <- $fp" : "")
+                .append(i == sp() ? " <- $sp" : "")
+                .append(lastUpdatedMemoryCell == i ? " (*)\n" : "\n");
         }
 
         System.out.println(buffer.toString());
