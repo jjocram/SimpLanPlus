@@ -10,8 +10,14 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.MissingDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
+/**
+ * <p>Represents an identifier of a variable, pointer or function in the AST.</p>
+ * 
+ * <p><strong>Type checking</strong>: type available in the Symbol Table.</p>
+ * <p><strong>Semantic analysis</strong>: checks if available in the Symbol Table, otherwise returns an error.</p>
+ * <p><strong>Code generation</strong>: Goes through the static chain to get the offset of the identifier from the Access Link and in the end loads the value in $a0.</p>
+ */
 public class IdNode implements Node {
-    //TODO: extends
     private final String id;
     private STEntry entry;
     private int currentNestingLevel;
@@ -65,11 +71,11 @@ public class IdNode implements Node {
     @Override
     public String codeGeneration() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("mv $al $fp ;go bakck in the static chain to get the right variable\n");
+        buffer.append("mv $al $fp ; goes back in the static chain to get the right variable\n");
         for (int i = 0; i < (currentNestingLevel - getNestingLevel()); i++) {
             buffer.append("lw $al 0($al)\n");
         }
-        buffer.append("lw $a0 ").append(-getOffset()).append("($al) ;load in $a0 the value in ").append(id).append("\n");
+        buffer.append("lw $a0 ").append(-getOffset()).append("($al) ; loads in $a0 the value of variable ").append(id).append("\n");
 
         return buffer.toString();
     }

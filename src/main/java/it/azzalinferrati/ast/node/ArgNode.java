@@ -7,6 +7,13 @@ import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
+/**
+ * <p>Represents an argument (variable or pointer) of a function declaration in the AST.</p>
+ * 
+ * <p><strong>Type checking</strong>: null (it has no type).</p>
+ * <p><strong>Semantic analysis</strong>: empty (it cannot return semantic errors).</p>
+ * <p><strong>Code generation</strong>: Increments $sp by 1.</p>
+ */
 public class ArgNode implements Node {
 
     final private TypeNode type;
@@ -37,7 +44,7 @@ public class ArgNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return "addi $sp $sp 1 ;allocates space on the stack for the argument";
+        return "addi $sp $sp 1 ; allocates space on the stack for the argument " + id.toPrint("") + "\n";
     }
 
     @Override

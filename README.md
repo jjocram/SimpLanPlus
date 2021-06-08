@@ -55,5 +55,6 @@ Available registers in the SVM:
 | Dec 1                       |
 | ...                         |
 | Dec M-1                     |
-| Dec M                       | $fp
+| Dec M                       | 
+| AL (Access Link)            | $fp
 | Previous FP (Frame Pointer) |
