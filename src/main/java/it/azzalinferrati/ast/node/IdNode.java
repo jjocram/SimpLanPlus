@@ -65,7 +65,7 @@ public class IdNode implements Node {
     @Override
     public String codeGeneration() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("mv $al $fp ;go bakck in the static chain to get the right variable\n");
+        buffer.append("mv $al $fp ;go back in the static chain to get the right variable\n");
         for (int i = 0; i < (currentNestingLevel - getNestingLevel()); i++) {
             buffer.append("lw $al 0($al)\n");
         }
