@@ -70,12 +70,11 @@ public class CallNode implements Node {
         int offsetNumberOfParams = params.size() == 0 ? 0 : params.size() - 1;
         buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
 
-        //TODO: serve?
-        buffer.append("mv $al $fp\n");
+        buffer.append("lw $al 0($fp)\n");
         for (int i=0; i < (currentNestingLevel - id.getNestingLevel()); i++) {
             buffer.append("lw $al 0($al)\n");
         }
-        //buffer.append("push $al\n");
+        buffer.append("push $al\n");
 
         params.forEach(param -> {
             buffer.append(param.codeGeneration());
@@ -84,7 +83,7 @@ public class CallNode implements Node {
 
         // $fp = $sp - 1
         buffer.append("mv $fp $sp ;update $fp\n");
-        buffer.append("addi $fp $fp ").append(offsetNumberOfParams).append(" ;fix $fp position to the bottom of the new frame\n");
+        buffer.append("addi $fp $fp ").append(params.size()).append(" ;fix $fp position to the bottom of the new frame\n");
 
         buffer.append("jal ").append(id.getId()).append(" ;jump to function (this automatically set $ra to the next instruction)\n");
 
