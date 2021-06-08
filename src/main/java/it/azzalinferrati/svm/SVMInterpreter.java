@@ -36,18 +36,23 @@ class MemoryCell {
 
     @Override
     public String toString() {
-        return "|" + data + "|";
+        return "| " + (data >= 0 ? " " : "") + data + "\t|";
     }
 }
 
 public class SVMInterpreter {
-    private final int memorySize; //Max size of the memory (heap + stack)
+    private final int memorySize; // Max size of the memory (heap + stack)
 
     private List<SVMInstruction> code;
     private MemoryCell[] memory;
 
     private Map<String, Integer> registers;
-    private int $ip; //Program Counter (not available in code generation)
+    private int $ip; // Program Counter (not available in code generation)
+
+    private String lastUpdatedRegister;
+    private int lastUpdatedMemoryCell;
+
+    private int globalCounter; // Tracks the total number of run instructions ($ip is not monotone, globalCounter is)
 
     public SVMInterpreter(int codeSize, int memorySize, List<SVMInstruction> code) throws CodeSizeTooSmallException {
         this.memorySize = memorySize;
@@ -63,6 +68,7 @@ public class SVMInterpreter {
         }
 
         $ip = 0;
+        globalCounter = 0;
 
         registers = new HashMap<>();
         registers.put("$sp", memorySize);
@@ -72,6 +78,9 @@ public class SVMInterpreter {
         registers.put("$al", null);
         registers.put("$a0", null);
         registers.put("$t1", null);
+
+        lastUpdatedRegister = "";
+        lastUpdatedMemoryCell = memorySize;
     }
 
     private int sp() {
@@ -114,6 +123,8 @@ public class SVMInterpreter {
 
     private void updateRegister(String register, int value) {
         registers.put(register, value);
+        lastUpdatedRegister = register;
+        lastUpdatedMemoryCell = memorySize;
     }
 
     private int readRegister(String register) {
@@ -122,6 +133,8 @@ public class SVMInterpreter {
 
     private void writeOnMemory(int address, int data) {
         memory[address].setData(data);
+        lastUpdatedMemoryCell = address;
+        lastUpdatedRegister = "";
     }
 
     private int readFromMemory(int address) {
@@ -158,6 +171,7 @@ public class SVMInterpreter {
                     writeOnMemory(sp(), readRegister(arg1));
                     break;
                 case "pop":
+                    writeOnMemory(sp(), -1);
                     updateRegister("$sp", sp() + 1); // sp += 1
                     break;
                 case "lw":
@@ -266,7 +280,7 @@ public class SVMInterpreter {
                     freeMemory(readRegister(arg1));
                     break;
                 case "print":
-                    System.out.println(readRegister(arg1));
+                    System.out.println((activeDebug ? "[PROGRAM OUTPUT] " : "") + readRegister(arg1));
                     break;
                 case "halt":
                     return;
@@ -276,22 +290,28 @@ public class SVMInterpreter {
             }
 
             if(activeDebug) {
-                System.out.println(instruction);
+                System.out.println("Instruction #" + globalCounter + " - " + instruction);
                 debugCPU();
                 System.out.println("---------------------------");
             }
 
+            globalCounter += 1;
         }
     }
 
     private void debugCPU() {
-        System.out.println("$ip" + ": " +$ip);
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("$ip: ").append($ip).append("\n");
         registers.keySet().forEach(key -> {
-            System.out.println(key + ": " + registers.get(key));
+            buffer.append(key).append(": ").append(registers.get(key)).append(lastUpdatedRegister.equals(key) ? " (*)\n" : "\n");
         });
 
+        buffer.append("\n");
+
         for (int i = 0; i < memorySize; i++) {
-            System.out.println(i + " " + memory[i]);
+            buffer.append(i).append("\t").append(memory[i]).append(lastUpdatedMemoryCell == i ? " (*)\n" : "\n");
         }
+
+        System.out.println(buffer.toString());
     }
 }
