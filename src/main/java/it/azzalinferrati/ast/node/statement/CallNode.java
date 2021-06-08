@@ -2,11 +2,15 @@ package it.azzalinferrati.ast.node.statement;
 
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.expression.DereferenceExpNode;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
+import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
+import it.azzalinferrati.semanticanalysis.exception.MissingDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
@@ -97,6 +101,43 @@ public class CallNode implements Node {
         errors.addAll(id.checkSemantics(env));
         params.stream().forEach((p) -> errors.addAll(p.checkSemantics(env)));
         currentNestingLevel = env.getNestingLevel();
+
+        // Checking that parameters inside the function do not result in error statuses.
+        // TODO Would it would be sufficient to check only non pointer expressions?
+        List<Effect> effects = ((FunTypeNode) id.getSTEntry().getType()).getEffects();
+        for (int i = 0; i < effects.size(); i++) {
+            if(effects.get(i).equals(Effect.ERROR)) {
+                errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId()));
+            }
+        }
+
+        // Setting  all variables inside expressions to be read/write.
+        Environment e1 = new Environment(env);
+
+        List<IdNode> varsInExpressions = params.stream().flatMap(exp -> exp.variables().stream()).collect(Collectors.toList());
+        
+        for(var variable: varsInExpressions) {
+            try {
+                var entryInE1 = e1.lookup(variable.getId());
+                entryInE1.setStatus(Effect.seq(entryInE1.getStatus(), Effect.READ_WRITE));
+                variable.setStatus(entryInE1.getStatus());
+            } catch (MissingDeclarationException e) {
+                // TODO It does not happen, but if it happens...
+            }
+        }
+
+        List<IdNode> pointers = params.stream().filter(p -> p instanceof DereferenceExpNode).flatMap(der -> der.variables().stream()).collect(Collectors.toList());
+        
+        // for(int i = 0, m = pointers.size(); i < m; i++) {
+        //     try {
+        //         var entryInE = env.lookup(pointers.get(i));
+        //         var entryInE1 = env.lookup(id)
+        //     }
+        //     Effect.seq(pointers.get(i)
+        // }
+
+
+
         return errors;
     }
 

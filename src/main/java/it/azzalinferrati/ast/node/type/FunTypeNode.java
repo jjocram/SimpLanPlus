@@ -1,6 +1,7 @@
 package it.azzalinferrati.ast.node.type;
 
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -13,9 +14,15 @@ public class FunTypeNode extends TypeNode {
     final private List<TypeNode> params;
     final private TypeNode returned;
 
-    public FunTypeNode(List<TypeNode> params, TypeNode returned) {
+    final private List<Effect> effects;
+
+    public FunTypeNode(final List<TypeNode> params, final TypeNode returned) {
         this.params = params;
         this.returned = returned;
+        this.effects = new ArrayList<>();
+        for(int i = 0; i < params.size(); i++) {
+            this.effects.add(new Effect(Effect.INITIALIZED));
+        }
     }
 
     public List<TypeNode> getParams() {
@@ -24,6 +31,14 @@ public class FunTypeNode extends TypeNode {
 
     public TypeNode getReturned() {
         return returned;
+    }
+
+    public void setParamEffect(int paramIndex, Effect effect) {
+        effects.set(paramIndex, new Effect(effect));
+    }
+
+    public List<Effect> getEffects() {
+        return effects;
     }
 
     @Override

@@ -46,6 +46,10 @@ public class IdNode implements Node {
         return entry.getNestingLevel();
     }
 
+    public STEntry getSTEntry() {
+        return entry;
+    }
+
     public int getCurrentNestingLevel() {
         return currentNestingLevel;
     }

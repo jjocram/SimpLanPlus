@@ -97,6 +97,11 @@ public class DecFunNode implements Node {
             errors.addAll(block.checkSemantics(env));
             // block.allowScopeCreation();
 
+            for(int i = 0; i < args.size(); i++) {
+                var arg = args.get(i);
+                funType.setParamEffect(i, arg.getId().getStatus()); 
+            }
+
             env.popScope();
         } catch (MultipleDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
