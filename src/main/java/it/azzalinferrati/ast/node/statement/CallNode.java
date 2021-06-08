@@ -67,6 +67,7 @@ public class CallNode implements Node {
     @Override
     public String codeGeneration() {
         StringBuffer buffer = new StringBuffer();
+        int offsetNumberOfParams = params.size() == 0 ? 0 : params.size() - 1;
         buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
 
         //TODO: serve?
@@ -83,7 +84,7 @@ public class CallNode implements Node {
 
         // $fp = $sp - 1
         buffer.append("mv $fp $sp ;update $fp\n");
-        buffer.append("addi $fp $fp ").append(params.size()-1).append(" ;fix $fp position to the bottom of the new frame\n");
+        buffer.append("addi $fp $fp ").append(offsetNumberOfParams).append(" ;fix $fp position to the bottom of the new frame\n");
 
         buffer.append("jal ").append(id.getId()).append(" ;jump to function (this automatically set $ra to the next instruction)\n");
 
