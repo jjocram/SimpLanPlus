@@ -70,6 +70,7 @@ public class DecFunNode implements Node {
         buffer.append("lw $ra 0($sp)\n");
         buffer.append("pop\n"); //pop $ra
         buffer.append("addi $sp $sp ").append(args.size()).append("\n"); // pop arguments
+        buffer.append("pop ;pop $al");
         buffer.append("lw $fp 0($sp)\n");
         buffer.append("pop\n");
         buffer.append("jr $ra\n");

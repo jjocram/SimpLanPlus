@@ -71,11 +71,19 @@ public class IdNode implements Node {
     @Override
     public String codeGeneration() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("mv $al $fp ; goes back in the static chain to get the right variable\n");
-        for (int i = 0; i < (currentNestingLevel - getNestingLevel()); i++) {
-            buffer.append("lw $al 0($al)\n");
+
+        if (getNestingLevel() == getCurrentNestingLevel()) {
+            buffer.append("mv $al $fp ; the variable ").append(id).append(" is declared in the same scope where it is used\n");
         }
-        buffer.append("lw $a0 ").append(-getOffset()).append("($al) ; loads in $a0 the value of variable ").append(id).append("\n");
+        else {
+            buffer.append("lw $al 0($fp) ; goes back in the static chain to get the right variable\n");
+            //buffer.append("addi $al $al 1 ;access link is in the memory cell below the $fp\n");
+            for (int i = 0; i < (currentNestingLevel - getNestingLevel()) - 1; i++) {
+                buffer.append("lw $al 0($al)\n");
+            }
+        }
+        int offsetWithAL = -(getOffset() + 1);
+        buffer.append("lw $a0 ").append(offsetWithAL).append("($al) ; loads in $a0 the value in ").append(id).append("\n");
 
         return buffer.toString();
     }
