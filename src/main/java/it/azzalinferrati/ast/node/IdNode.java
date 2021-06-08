@@ -76,7 +76,7 @@ public class IdNode implements Node {
                 buffer.append("lw $al 0($al)\n");
             }
         }
-        int offsetWithAL = -getOffset() - 1;
+        int offsetWithAL = -(getOffset() + 1);
         buffer.append("lw $a0 ").append(offsetWithAL).append("($al) ;load in $a0 the value in ").append(id).append("\n");
 
         return buffer.toString();

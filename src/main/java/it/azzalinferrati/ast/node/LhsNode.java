@@ -91,7 +91,7 @@ public class LhsNode implements Node {
             }
         }
 
-        int offsetWithAL = -id.getOffset() - 1;
+        int offsetWithAL = -(id.getOffset() + 1);
         buffer.append("addi $a0 $al ").append(offsetWithAL).append(" ;[get address of an LHS node pt2] get the address and put in $a0\n");
 
         LhsNode current = lhs;
