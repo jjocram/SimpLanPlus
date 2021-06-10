@@ -9,13 +9,17 @@ import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
+import it.azzalinferrati.semanticanalysis.STEntry;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.MissingDeclarationException;
+import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CallNode implements Node {
     final private IdNode id;
@@ -26,7 +30,7 @@ public class CallNode implements Node {
         this.id = id;
         this.params = params;
     }
-    
+
     public IdNode getId() {
         return id;
     }
@@ -42,7 +46,7 @@ public class CallNode implements Node {
     public TypeNode typeCheck() throws TypeCheckingException {
         TypeNode idType = id.typeCheck();
 
-        if(!(idType instanceof FunTypeNode)) {
+        if (!(idType instanceof FunTypeNode)) {
             throw new TypeCheckingException("ID " + id.toPrint("") + " is not a function identifier");
         }
 
@@ -50,17 +54,17 @@ public class CallNode implements Node {
 
         List<TypeNode> formalFunArgTypes = funType.getParams();
         List<TypeNode> actualFunArgTypes = new ArrayList<>();
-        
+
         for (ExpNode exp : params) {
             actualFunArgTypes.add(exp.typeCheck());
         }
 
-        if(formalFunArgTypes.size() != actualFunArgTypes.size()) {
+        if (formalFunArgTypes.size() != actualFunArgTypes.size()) {
             throw new TypeCheckingException("The number of actual parameters do not match that of the formal parameters of function " + id.toPrint(""));
         }
 
-        for(int i = 0, size = formalFunArgTypes.size() ; i < size; i++) {
-            if(!Node.isSubtype(formalFunArgTypes.get(i), actualFunArgTypes.get(i))) {
+        for (int i = 0, size = formalFunArgTypes.size(); i < size; i++) {
+            if (!Node.isSubtype(formalFunArgTypes.get(i), actualFunArgTypes.get(i))) {
                 throw new TypeCheckingException("In function " + id.toPrint("") + " expected argument of type " + formalFunArgTypes.get(i).toPrint("") + ", got " + actualFunArgTypes.get(i).toPrint(""));
             }
         }
@@ -75,7 +79,7 @@ public class CallNode implements Node {
         buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
 
         buffer.append("lw $al 0($fp)\n");
-        for (int i=0; i < (currentNestingLevel - id.getNestingLevel()); i++) {
+        for (int i = 0; i < (currentNestingLevel - id.getNestingLevel()); i++) {
             buffer.append("lw $al 0($al)\n");
         }
         buffer.append("push $al\n");
@@ -96,47 +100,83 @@ public class CallNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
+        /*
+        \gamma |- id : id.getSTEntry().getType() DONE(errors.addAll(id.checkSemantics(env));)
+        \sigma(id) = \sigma_0 -> \sigma_1 DONE
+        \sigma_1(y_i) != ERROR per ogni parmetro passato per valore DONE
+
+        \sigma'  = \sigma[z_i |-> z_i.effectInSigma |> RW per ogni variabile utilizzato nei parametri passati per valore] DONE
+        \sigma'' = \par[u_i |-> u_i.effectInSigma |> x_i.effectInSigma_1 per ogni variabile passata per riferimento] TBD
+        ---------------------------------------------------
+         \sigma |- id(params) : update(\sigma', \sigma'') TBD
+        */
+
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(id.checkSemantics(env));
-        params.stream().forEach((p) -> errors.addAll(p.checkSemantics(env)));
+        Environment finalEnv = env;
+        params.stream().forEach((p) -> errors.addAll(p.checkSemantics(finalEnv)));
         currentNestingLevel = env.getNestingLevel();
 
         // Checking that parameters inside the function do not result in error statuses.
-        // TODO Would it would be sufficient to check only non pointer expressions?
+        List<Integer> indexes = IntStream
+                .range(0, params.size())
+                .filter(i -> !(params.get(i) instanceof DereferenceExpNode))
+                .boxed()
+                .collect(Collectors.toList());
         List<Effect> effects = ((FunTypeNode) id.getSTEntry().getType()).getEffects();
-        for (int i = 0; i < effects.size(); i++) {
-            if(effects.get(i).equals(Effect.ERROR)) {
+        for (int i : indexes) {
+            if (effects.get(i).equals(Effect.ERROR)) {
                 errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId()));
             }
         }
 
         // Setting  all variables inside expressions to be read/write.
-        Environment e1 = new Environment(env);
+        Environment e1 = new Environment(env); // Creating a copy of the environment
 
-        List<IdNode> varsInExpressions = params.stream().flatMap(exp -> exp.variables().stream()).collect(Collectors.toList());
-        
-        for(var variable: varsInExpressions) {
-            try {
-                var entryInE1 = e1.lookup(variable.getId());
-                entryInE1.setStatus(Effect.seq(entryInE1.getStatus(), Effect.READ_WRITE));
-                variable.setStatus(entryInE1.getStatus());
-            } catch (MissingDeclarationException e) {
-                // TODO It does not happen, but if it happens...
-            }
+        List<IdNode> varsInExpressions = params.stream()
+                .filter(param -> !(param instanceof DereferenceExpNode))
+                .flatMap(param -> param.variables().stream())
+                .collect(Collectors.toList());
+
+        for (var variable : varsInExpressions) {
+            var entryInE1 = e1.safeLookup(variable.getId());
+            entryInE1.setStatus(Effect.seq(entryInE1.getStatus(), Effect.READ_WRITE));
+            //variable.setStatus(entryInE1.getStatus()); //TBD with update function
         }
 
-        List<IdNode> pointers = params.stream().filter(p -> p instanceof DereferenceExpNode).flatMap(der -> der.variables().stream()).collect(Collectors.toList());
-        
-        // for(int i = 0, m = pointers.size(); i < m; i++) {
-        //     try {
-        //         var entryInE = env.lookup(pointers.get(i));
-        //         var entryInE1 = env.lookup(id)
-        //     }
-        //     Effect.seq(pointers.get(i)
-        // }
+        Environment e2 = new Environment();
+        List<IdNode> pointers = params.stream()
+                .filter(param -> param instanceof DereferenceExpNode)
+                .flatMap(der -> der.variables().stream()) // It will be lists with only one element
+                .collect(Collectors.toList());
+        List<Environment> resultingEnvironments = new ArrayList<>();
+
+        for(int i = 0, m = pointers.size(); i < m; i++) {
+            // [u1 |-> seq] par [u2 |-> seq] par ... par [um |-> seq]
+            // {[u1 |-> seq], [u2 |-> seq], ..., [um |-> seq]}
+            Environment tmpEnv = new Environment();
+            tmpEnv.pushNewScope();
+
+            IdNode pointer = pointers.get(i);
+            Effect u_iEffect = env.safeLookup(pointer.getId()).getStatus();
+            Effect x_iEffect = effects.get(i);
+            Effect seq = Effect.seq(u_iEffect, x_iEffect);
+
+            STEntry entry = tmpEnv.addUniqueNewDeclaration(pointer.getId(), pointer.getSTEntry().getType());
+            entry.setStatus(seq);
+
+            resultingEnvironments.add(tmpEnv);
+        }
+
+        //TODO: ce ne e' almeno uno
+        e2 = resultingEnvironments.get(0);
+        for (int i = 1; i < resultingEnvironments.size(); i++) {
+            e2 = Environment.par(e2, resultingEnvironments.get(i));
+        }
 
 
+        env = Environment.update(e1, e2);
 
         return errors;
     }

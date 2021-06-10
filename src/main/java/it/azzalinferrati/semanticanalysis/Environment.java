@@ -66,7 +66,13 @@ public class Environment {
      */
     public void pushNewScope() {
         symbolTable.add(new HashMap<>());
-        nestingLevel++;
+        nestingLevel += 1;
+        offset = 0;
+    }
+
+    private void pushNewScope(Map<String, STEntry> scope) {
+        symbolTable.add(scope);
+        nestingLevel += 1;
         offset = 0;
     }
 
@@ -95,6 +101,26 @@ public class Environment {
     }
 
     /**
+     * Adds a new variable named [id] of type [type] into the current scope.
+     * The offset of functions will be set to -1, the offset of variables will be set to the current offset and later incremented.
+     *
+     * @param id the identifer of the variable or function.
+     * @param type the type of the variable or function.
+     */
+    public STEntry addUniqueNewDeclaration(final String id, final TypeNode type) {
+        STEntry stEntry;
+        if(type instanceof FunTypeNode) {
+            stEntry = new STEntry(nestingLevel, type, -1); // -1 is correct since after pop() is called the offset for the following variable will be set to 0.
+        } else {
+            stEntry = new STEntry(nestingLevel, type, offset);
+            offset += 1; // 1 = 4 Byte, for integers, boolean (1/0), pointers to boolean/integers.
+        }
+        STEntry declaration = currentScope().put(id, stEntry);
+
+        return stEntry;
+    }
+
+    /**
      * Searches [id] in the Symbol Table and returns its entry, if present.
      * 
      * @param id the identifer of the variable or function.
@@ -111,6 +137,23 @@ public class Environment {
         }
         
         throw new MissingDeclarationException("Missing declaration for ID: " + id);
+    }
+
+    /**
+     * Searches [id] in the Symbol Table and returns its entry. It must be present!.
+     *
+     * @param id the identifer of the variable or function.
+     * @return the entry in the symbol table of the variable or function with that identifier.
+     */
+    public STEntry safeLookup(final String id) {
+        for(int i = nestingLevel; i >= 0; i--) {
+            var ithScope = symbolTable.get(i);
+            var stEntry = ithScope.get(id);
+            if(stEntry != null) {
+                return stEntry;
+            }
+        }
+        return null; // Does not happen if precondition is true
     }
 
     /**
@@ -154,6 +197,82 @@ public class Environment {
             maxEnv.symbolTable.add(maxHashMap);
         }
         return maxEnv;
+    }
+
+    public static Environment par(final Environment env1, final Environment env2) {
+        Environment resultingEnvironment = new Environment();
+        resultingEnvironment.pushNewScope();
+
+        Map<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size() - 1);
+        Map<String, STEntry> scope2 = env2.symbolTable.get(env2.symbolTable.size() - 1);
+
+        for (var xInE1: scope1.entrySet()) {
+            if (!scope2.containsKey(xInE1.getKey())) {
+                STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(), xInE1.getValue().getType());
+                entry.setStatus(xInE1.getValue().getStatus());
+            }
+        }
+
+        for (var xInE2: scope2.entrySet()) {
+            if (!scope1.containsKey(xInE2.getKey())) {
+                STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE2.getKey(), xInE2.getValue().getType());
+                entry.setStatus(xInE2.getValue().getStatus());
+            }
+        }
+
+        for (var xInE1: scope1.entrySet()) {
+            for (var xInE2: scope2.entrySet()) {
+                if (xInE1.getKey().equals(xInE2.getKey())) {
+                    STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(), xInE1.getValue().getType());
+                    Effect parResult = Effect.par(xInE1.getValue().getStatus(), xInE2.getValue().getStatus());
+                    entry.setStatus(parResult);
+                }
+            }
+        }
+
+        return resultingEnvironment;
+    }
+
+    public static Environment update(Environment env1, Environment env2) {
+        Map<String, STEntry> headScope1 = env1.symbolTable.get(env1.symbolTable.size() - 1);
+        Map<String, STEntry> headScope2 = env2.symbolTable.get(env2.symbolTable.size() - 1);
+
+        if (headScope2.keySet().isEmpty()) {
+            // \sigma' = \emptySet
+            return env1;
+        }
+
+        for (var u: headScope2.entrySet()) {
+            env2.removeFirstIdentifier(u.getKey());
+
+            if (headScope1.containsKey(u.getKey())) {
+                headScope1.put(u.getKey(), u.getValue()); //TODO: check if update env1
+
+                env1 = update(env1, env2);
+            } else {
+                Environment envWithOnlyU = new Environment();
+                envWithOnlyU.pushNewScope();
+                STEntry tmpEntry = envWithOnlyU.addUniqueNewDeclaration(u.getKey(), u.getValue().getType());
+                tmpEntry.setStatus(u.getValue().getStatus());
+
+                env1.popScope();
+                Environment tmpEnv = update(env1, envWithOnlyU);
+                tmpEnv.pushNewScope(headScope1);
+
+                env1 = update(tmpEnv, env2);
+            }
+        }
+
+        return env1;
+    }
+
+    private void removeFirstIdentifier(String id){
+        for (int i = symbolTable.size()-1; i >= 0 ; i--) {
+            if (symbolTable.get(i).containsKey(id)) {
+                symbolTable.get(i).remove(id);
+                return;
+            }
+        }
     }
 
     /**
