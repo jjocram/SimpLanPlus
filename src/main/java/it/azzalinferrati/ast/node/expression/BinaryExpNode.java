@@ -194,11 +194,11 @@ public class BinaryExpNode extends ExpNode{
                 buffer.append("bleq $t1 $a0 ").append(lesseqTrueBranch).append("\n");
                 //InnerFalse branch => e1 > e2
                 buffer.append("li $a0 1\n");
-                buffer.append("b ").append(endLesseqCheck);
+                buffer.append("b ").append(endLesseqCheck).append("\n");
                 buffer.append(lesseqTrueBranch).append(":\n");
                 buffer.append("li $a0 0\n"); // e1 < e2
                 buffer.append(endLesseqCheck).append(":\n");
-                buffer.append("b ").append(endEqualCheck);
+                buffer.append("b ").append(endEqualCheck).append("\n");
                 buffer.append(equalTrueBranch).append(":\n");
                 buffer.append("li $a0 1\n"); // e1 == e2
                 buffer.append(endEqualCheck).append(":\n");

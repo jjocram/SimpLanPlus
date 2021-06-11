@@ -157,7 +157,6 @@ public class SVMInterpreter {
     }
 
     public void run(boolean activeDebug) {
-
         if(activeDebug) {
             System.out.println("Initial state of the SVM");
             debugCPU();

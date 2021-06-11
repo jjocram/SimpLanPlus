@@ -145,6 +145,7 @@ public class SimpLanPlus {
 
         SVMVisitorImpl svmVisitor = new SVMVisitorImpl();
         svmVisitor.visit(svmParser.assembly());
+        System.out.println("Bau1");
 
         try {
             SVMInterpreter svmInterpreter = new SVMInterpreter(flags.codesize(), flags.memsize(), svmVisitor.getCode());
