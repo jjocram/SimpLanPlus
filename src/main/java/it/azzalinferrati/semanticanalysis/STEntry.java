@@ -73,6 +73,11 @@ public class STEntry {
     }
 
     public String toPrint(String s) {
-        return s + "STentry: (nesting level: " + nestingLevel + ", type: " + type.toPrint("") + ", offset: " + offset + ")";
+        return s + "STentry: (nesting level: " + nestingLevel + ", type: " + type.toPrint("") + ", offset: " + offset + ", status: " + status + ")";
+    }
+
+    @Override
+    public String toString() {
+        return "(nesting level: " + nestingLevel + ", type: " + type.toPrint("") + ", offset: " + offset + ", status: " + status + ")";
     }
 }

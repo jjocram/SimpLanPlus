@@ -11,6 +11,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.statement.BlockNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
@@ -94,12 +95,14 @@ public class DecFunNode implements Node {
             env.addNewDeclaration(id.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
 
             block.disallowScopeCreation();
+            System.out.println(env);
             errors.addAll(block.checkSemantics(env));
+            System.out.println(env);
             // block.allowScopeCreation();
 
             for(int i = 0; i < args.size(); i++) {
                 var arg = args.get(i);
-                funType.setParamEffect(i, arg.getId().getStatus()); 
+                funType.setParamEffect(i, arg.getId().getStatus());
             }
 
             env.popScope();

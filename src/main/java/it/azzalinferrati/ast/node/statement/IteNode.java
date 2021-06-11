@@ -85,7 +85,7 @@ public class IteNode implements Node {
             var elseBranchEnv = new Environment(env);
             errors.addAll(elseBranch.checkSemantics(elseBranchEnv)); // env0 |- elseBranch : env2
 
-            env = Environment.max(thenBranchEnv, elseBranchEnv);
+            env.replace(Environment.max(thenBranchEnv, elseBranchEnv));
         }
 
         return errors;

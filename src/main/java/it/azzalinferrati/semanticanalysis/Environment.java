@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
@@ -34,6 +35,9 @@ public class Environment {
         this.offset = offset;
     }
 
+    /**
+     * Creates an empty environment with no scopes.
+     */
     public Environment() {
         this(new ArrayList<>(), -1, 0);
     }
@@ -51,10 +55,16 @@ public class Environment {
 
     }
 
+    /**
+     * @return the current nesting level.
+     */
     public int getNestingLevel() {
         return nestingLevel;
     }
 
+    /**
+     * @return the current active scope.
+     */
     private Map<String, STEntry> currentScope() {
         return symbolTable.get(nestingLevel);
     }
@@ -70,6 +80,10 @@ public class Environment {
         offset = 0;
     }
 
+    /**
+     * Adds a new scope to the environment.
+     * @param scope the scope to add to the Symbol Table stack
+     */
     private void pushNewScope(Map<String, STEntry> scope) {
         symbolTable.add(scope);
         nestingLevel += 1;
@@ -102,6 +116,7 @@ public class Environment {
 
     /**
      * Adds a new variable named [id] of type [type] into the current scope.
+     * The caller is sure that [id] does not exist in the current scope: if it does, then unexpected behavior could occur.
      * The offset of functions will be set to -1, the offset of variables will be set to the current offset and later incremented.
      *
      * @param id the identifer of the variable or function.
@@ -116,6 +131,9 @@ public class Environment {
             offset += 1; // 1 = 4 Byte, for integers, boolean (1/0), pointers to boolean/integers.
         }
         STEntry declaration = currentScope().put(id, stEntry);
+        if(declaration != null) {
+            System.err.println("Unexpected multiple assignment for ID: " + id + ". It was previously defined of type: " + declaration.getType().toPrint("") + ".");
+        }
 
         return stEntry;
     }
@@ -153,7 +171,10 @@ public class Environment {
                 return stEntry;
             }
         }
-        return null; // Does not happen if precondition is true
+        
+        System.err.println("Unexpected absence of ID " + id + " in the Symbol Table.");
+
+        return null; // Does not happen if preconditions are met.
     }
 
     /**
@@ -172,35 +193,68 @@ public class Environment {
 
     /**
      * Returning a new environment which has, for each identifie, the maximum effect
-     * set in the two environments. Assumes env1 and env2 are identical, except for
-     * the identifiers' statuses.
+     * set in the two environments. Assumes dom(env2) is a subset of dom(env1).
      * 
      * @param env1 first environment
      * @param env2 second environment
      * @return the maximum environment of the two
      */
     public static Environment max(final Environment env1, final Environment env2) {
-        var maxEnv = new Environment(new ArrayList<>(), env1.nestingLevel, env1.offset);
-        for (int i = 0, size = env1.symbolTable.size(); i < size; i++) {
+        return operateOnEnvironments(env1, env2, Effect::max);
+    }
+
+    /**
+     * Returning a new environment which has, for each identifie, the sequence effect
+     * set in the two environments. Assumes dom(env2) is a subset of dom(env1).
+     * 
+     * @param env1 first environment
+     * @param env2 second environment
+     * @return the sequence environment of the two
+     */
+    public static Environment seq(final Environment env1, final Environment env2) {
+        return operateOnEnvironments(env1, env2, Effect::seq);
+    }
+
+    /**
+     * Returning a new environment which has, for each identifie, the operation applied effect
+     * set in the two environments. Assumes dom(env2) is a subset of dom(env1).
+     * 
+     * @param env1 first environment
+     * @param env2 second environment
+     * @return the operation applied environment of the two
+     */
+    private static Environment operateOnEnvironments(final Environment env1, final Environment env2, final BiFunction<Effect, Effect, Effect> operation) {
+        var opEnv = new Environment(new ArrayList<>(), env1.nestingLevel, env1.offset);
+        for (int i = 0, size = env1.symbolTable.size(); i < size; i++) { // for each scope in the Symbol Table
             var ithScope1 = env1.symbolTable.get(i);
             var ithScope2 = env2.symbolTable.get(i);
-            final HashMap<String, STEntry> maxHashMap = new HashMap<>();
+            final HashMap<String, STEntry> opHashMap = new HashMap<>();
             for (var id : ithScope1.keySet()) {
                 var entry1 = ithScope1.get(id);
                 var entry2 = ithScope2.get(id);
 
-                var maxEntry = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
-                maxEntry.setStatus(Effect.max(entry1.getStatus(), entry2.getStatus()));
-
-                maxHashMap.put(id, maxEntry);
+                if(entry2 == null) {
+                    opHashMap.put(id, entry1);
+                } else {
+                    var opEntry = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
+                    opEntry.setStatus(operation.apply(entry1.getStatus(), entry2.getStatus()));
+    
+                    opHashMap.put(id, opEntry);
+                }
             }
-            maxEnv.symbolTable.add(maxHashMap);
+            opEnv.symbolTable.add(opHashMap);
         }
-        return maxEnv;
+        return opEnv;
     }
 
+    /**
+     * Returns the par environment applied to the head of [env1] and [env2].
+     * @param env1
+     * @param env2
+     * @return
+     */
     public static Environment par(final Environment env1, final Environment env2) {
-        Environment resultingEnvironment = new Environment();
+        Environment resultingEnvironment = new Environment(new ArrayList<>(), env1.nestingLevel, env1.offset);
         resultingEnvironment.pushNewScope();
 
         Map<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size() - 1);
@@ -301,5 +355,40 @@ public class Environment {
         }
 
         return errors;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("Environment {\n");
+
+        for(int i = 0; i < symbolTable.size(); i++) {
+            buffer.append("\tScope ").append(i).append(" {\n");
+            
+            for(var entry: symbolTable.get(i).entrySet()) {
+                buffer.append("\t\t").append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n");                
+            }
+
+            buffer.append("\t}\n");
+        }
+
+        buffer.append("}\n");
+
+        return buffer.toString();
+    }
+
+    public void replace(final Environment environment) {
+        symbolTable.clear();
+        nestingLevel = environment.nestingLevel;
+        offset = environment.offset;
+
+        for (var scope : environment.symbolTable) {
+            final Map<String, STEntry> copiedScope = new HashMap<>();
+            for (var id : scope.keySet()) {
+                copiedScope.put(id, new STEntry(scope.get(id)));
+            }
+            symbolTable.add(copiedScope);
+        }
     }
 }

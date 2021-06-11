@@ -5,5 +5,5 @@
         delete y;
     } 
     //  cosa accade in {^int x = new int; f(x,x) ;}
-    f(x, x);
+    // f(x, x);
 }

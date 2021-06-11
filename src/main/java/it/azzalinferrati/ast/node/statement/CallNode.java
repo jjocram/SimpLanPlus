@@ -119,20 +119,20 @@ public class CallNode implements Node {
         currentNestingLevel = env.getNestingLevel();
 
         // Checking that parameters inside the function do not result in error statuses.
-        List<Integer> indexes = IntStream
+        List<Integer> indexesOfNotPointers = IntStream
                 .range(0, params.size())
                 .filter(i -> !(params.get(i) instanceof DereferenceExpNode))
                 .boxed()
                 .collect(Collectors.toList());
         List<Effect> effects = ((FunTypeNode) id.getSTEntry().getType()).getEffects();
-        for (int i : indexes) {
+        for (int i : indexesOfNotPointers) {
             if (effects.get(i).equals(Effect.ERROR)) {
                 errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId()));
             }
         }
 
-        // Setting  all variables inside expressions to be read/write.
-        Environment e1 = new Environment(env); // Creating a copy of the environment
+        // Setting all variables inside expressions to be read/write.
+        Environment e1 = new Environment(env); // Creating a copy of the environment.
 
         List<IdNode> varsInExpressions = params.stream()
                 .filter(param -> !(param instanceof DereferenceExpNode))
@@ -155,28 +155,30 @@ public class CallNode implements Node {
         for(int i = 0, m = pointers.size(); i < m; i++) {
             // [u1 |-> seq] par [u2 |-> seq] par ... par [um |-> seq]
             // {[u1 |-> seq], [u2 |-> seq], ..., [um |-> seq]}
-            Environment tmpEnv = new Environment();
-            tmpEnv.pushNewScope();
+            Environment mthEnv = new Environment();
+            mthEnv.pushNewScope();
 
             IdNode pointer = pointers.get(i);
             Effect u_iEffect = env.safeLookup(pointer.getId()).getStatus();
             Effect x_iEffect = effects.get(i);
             Effect seq = Effect.seq(u_iEffect, x_iEffect);
 
-            STEntry entry = tmpEnv.addUniqueNewDeclaration(pointer.getId(), pointer.getSTEntry().getType());
+            STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId(), pointer.getSTEntry().getType());
             entry.setStatus(seq);
 
-            resultingEnvironments.add(tmpEnv);
+            resultingEnvironments.add(mthEnv);
         }
-
-        //TODO: ce ne e' almeno uno
-        e2 = resultingEnvironments.get(0);
-        for (int i = 1; i < resultingEnvironments.size(); i++) {
-            e2 = Environment.par(e2, resultingEnvironments.get(i));
+        
+        if(resultingEnvironments.size() > 0) {
+            //TODO: ce ne e' almeno uno
+            e2 = resultingEnvironments.get(0);
+            for (int i = 1; i < resultingEnvironments.size(); i++) {
+                e2 = Environment.par(e2, resultingEnvironments.get(i));
+            }
         }
-
-
-        env = Environment.update(e1, e2);
+        
+        // TODO Does it really work?
+        env.replace(Environment.update(e1, e2));
 
         return errors;
     }
