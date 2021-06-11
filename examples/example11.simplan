@@ -1,0 +1,14 @@
+{
+    ^int x = new int;
+    ^^bool b = new ^bool;
+
+    // La prossima assegnazione non deve tipare.
+    // x = 1;
+    x^ = 56;
+
+    b^ = new bool;
+    b^^ = true;
+
+    print x^;
+    print b^^;
+}
