@@ -23,7 +23,7 @@ import it.azzalinferrati.parser.SimpLanPlusParser.ExpContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
-
+    
     @Override
     public BlockNode visitBlock(SimpLanPlusParser.BlockContext ctx) {
         List<DeclarationNode> declarations = new ArrayList<>();
@@ -141,7 +141,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override
     public AssignmentNode visitAssignment(SimpLanPlusParser.AssignmentContext ctx) {
         LhsNode lhs = visitLhs(ctx.lhs());
-        ExpNode exp = (ExpNode) visit(ctx.exp()); // FIXME: This exp could be and ExpNode, a BoolNode or a NumberNode
+        ExpNode exp = (ExpNode) visit(ctx.exp());
 
         return new AssignmentNode(lhs, exp);
     }

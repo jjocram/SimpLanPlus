@@ -301,7 +301,6 @@ public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
 
     @Override
     public Void visitLabel(SVMParser.LabelContext ctx) {
-        // TODO: check if code.size() is correct or missing +1
         labelPositions.put(ctx.LABEL().getText(), code.size());
         return null;
     }
