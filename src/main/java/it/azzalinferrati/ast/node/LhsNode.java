@@ -110,4 +110,8 @@ public class LhsNode implements Node {
 
         return lhs.checkSemantics(env);
     }
+
+    public boolean isPointer() {
+        return id.getSTEntry().getType() instanceof PointerTypeNode;
+    }
 }

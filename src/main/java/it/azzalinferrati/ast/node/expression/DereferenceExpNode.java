@@ -52,4 +52,8 @@ public class DereferenceExpNode extends ExpNode{
 
         return variable;
     }
+
+    public boolean isPointerType() {
+        return lhs.isPointer();
+    }
 }

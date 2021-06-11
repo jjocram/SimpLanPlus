@@ -95,9 +95,7 @@ public class DecFunNode implements Node {
             env.addNewDeclaration(id.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
 
             block.disallowScopeCreation();
-            System.out.println(env);
             errors.addAll(block.checkSemantics(env));
-            System.out.println(env);
             // block.allowScopeCreation();
 
             for(int i = 0; i < args.size(); i++) {

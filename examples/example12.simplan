@@ -1,0 +1,12 @@
+{
+    void f(^int x){
+        x^ = 5;
+    }
+    ^int y = new int;
+    f(y);
+    print(y^);
+    /* y will be used after deletion -> this is correctly notified
+    delete  y;
+    f(y);
+    */
+}

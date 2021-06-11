@@ -1,0 +1,11 @@
+{
+    ^int x = new int;
+    ^int y = new int;
+    int w = 1;
+    void f(^int a, int b, ^int c){
+        delete a;
+        delete c;
+        print b;
+    }
+    f(x, w, x);
+}

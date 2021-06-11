@@ -254,7 +254,7 @@ public class Environment {
      * @return
      */
     public static Environment par(final Environment env1, final Environment env2) {
-        Environment resultingEnvironment = new Environment(new ArrayList<>(), env1.nestingLevel, env1.offset);
+        Environment resultingEnvironment = new Environment();
         resultingEnvironment.pushNewScope();
 
         Map<String, STEntry> scope1 = env1.symbolTable.get(env1.symbolTable.size() - 1);
@@ -288,36 +288,42 @@ public class Environment {
     }
 
     public static Environment update(Environment env1, Environment env2) {
+        Environment returnedEnvironment;
+
+        if (env2.symbolTable.size() == 0 || env1.symbolTable.size() == 0) {
+            return new Environment(env1);
+        }
+
         Map<String, STEntry> headScope1 = env1.symbolTable.get(env1.symbolTable.size() - 1);
         Map<String, STEntry> headScope2 = env2.symbolTable.get(env2.symbolTable.size() - 1);
 
         if (headScope2.keySet().isEmpty()) {
             // \sigma' = \emptySet
-            return env1;
+            return new Environment(env1);
         }
 
-        for (var u: headScope2.entrySet()) {
-            env2.removeFirstIdentifier(u.getKey());
+        var u = headScope2.entrySet().stream().findFirst().get();
+        env2.removeFirstIdentifier(u.getKey());
 
-            if (headScope1.containsKey(u.getKey())) {
-                headScope1.put(u.getKey(), u.getValue()); //TODO: check if update env1
+        if (headScope1.containsKey(u.getKey())) {
+            headScope1.put(u.getKey(), u.getValue());
 
-                env1 = update(env1, env2);
-            } else {
-                Environment envWithOnlyU = new Environment();
-                envWithOnlyU.pushNewScope();
-                STEntry tmpEntry = envWithOnlyU.addUniqueNewDeclaration(u.getKey(), u.getValue().getType());
-                tmpEntry.setStatus(u.getValue().getStatus());
+            returnedEnvironment = update(env1, env2);
+        } else {
+            Environment envWithOnlyU = new Environment();
+            envWithOnlyU.pushNewScope();
+            STEntry tmpEntry = envWithOnlyU.addUniqueNewDeclaration(u.getKey(), u.getValue().getType());
+            tmpEntry.setStatus(u.getValue().getStatus());
 
-                env1.popScope();
-                Environment tmpEnv = update(env1, envWithOnlyU);
-                tmpEnv.pushNewScope(headScope1);
+            env1.popScope();
+            Environment tmpEnv = update(env1, envWithOnlyU);
+            tmpEnv.pushNewScope(headScope1);
 
-                env1 = update(tmpEnv, env2);
-            }
+            returnedEnvironment = update(tmpEnv, env2);
         }
 
-        return env1;
+
+        return returnedEnvironment;
     }
 
     private void removeFirstIdentifier(String id){
@@ -348,10 +354,23 @@ public class Environment {
             variable.setStatus(status);
 
             if (status.equals(Effect.ERROR)) {
-                errors.add(new SemanticError(variable.getId() +  " is used after deletion"));
+                errors.add(new SemanticError("Variable " + variable.getId() +  " is used after deletion"));
             }
         } catch (MissingDeclarationException exception) {
             errors.add(new SemanticError("Cannot perform effect analysis on " + variable.getId() + " since it is not declared."));
+        }
+
+        return errors;
+    }
+
+    public ArrayList<SemanticError> getEffectErrors() {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+        for (var scope : symbolTable) {
+            for (var entry : scope.entrySet()) {
+                if (entry.getValue().getStatus().equals(Effect.ERROR)) {
+                    errors.add(new SemanticError("Variable " + entry.getKey() +  " is used after deletion"));
+                }
+            }
         }
 
         return errors;

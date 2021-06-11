@@ -114,10 +114,8 @@ public class CallNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(id.checkSemantics(env));
-        Environment finalEnv = env;
-        params.stream().forEach((p) -> errors.addAll(p.checkSemantics(finalEnv)));
+        params.stream().forEach((p) -> errors.addAll(p.checkSemantics(env)));
         currentNestingLevel = env.getNestingLevel();
-
         // Checking that parameters inside the function do not result in error statuses.
         List<Integer> indexesOfNotPointers = IntStream
                 .range(0, params.size())
@@ -135,7 +133,7 @@ public class CallNode implements Node {
         Environment e1 = new Environment(env); // Creating a copy of the environment.
 
         List<IdNode> varsInExpressions = params.stream()
-                .filter(param -> !(param instanceof DereferenceExpNode))
+                .filter(param -> !((param instanceof DereferenceExpNode) && ((DereferenceExpNode) param).isPointerType()))
                 .flatMap(param -> param.variables().stream())
                 .collect(Collectors.toList());
 
@@ -146,19 +144,21 @@ public class CallNode implements Node {
         }
 
         Environment e2 = new Environment();
-        List<IdNode> pointers = params.stream()
-                .filter(param -> param instanceof DereferenceExpNode)
-                .flatMap(der -> der.variables().stream()) // It will be lists with only one element
+        List<Integer> indexesOfPointers = IntStream
+                .range(0, params.size())
+                .filter(i -> (params.get(i) instanceof DereferenceExpNode) && ((DereferenceExpNode) params.get(i)).isPointerType())
+                .boxed()
                 .collect(Collectors.toList());
         List<Environment> resultingEnvironments = new ArrayList<>();
 
-        for(int i = 0, m = pointers.size(); i < m; i++) {
+        for(var i : indexesOfPointers) {
             // [u1 |-> seq] par [u2 |-> seq] par ... par [um |-> seq]
             // {[u1 |-> seq], [u2 |-> seq], ..., [um |-> seq]}
             Environment mthEnv = new Environment();
             mthEnv.pushNewScope();
 
-            IdNode pointer = pointers.get(i);
+            IdNode pointer = params.get(i).variables().stream().findFirst().get(); //always exists only once pointer in the list of variables of this parameter
+
             Effect u_iEffect = env.safeLookup(pointer.getId()).getStatus();
             Effect x_iEffect = effects.get(i);
             Effect seq = Effect.seq(u_iEffect, x_iEffect);
@@ -168,18 +168,17 @@ public class CallNode implements Node {
 
             resultingEnvironments.add(mthEnv);
         }
-        
+
         if(resultingEnvironments.size() > 0) {
-            //TODO: ce ne e' almeno uno
             e2 = resultingEnvironments.get(0);
             for (int i = 1; i < resultingEnvironments.size(); i++) {
                 e2 = Environment.par(e2, resultingEnvironments.get(i));
             }
         }
-        
-        // TODO Does it really work?
-        env.replace(Environment.update(e1, e2));
 
+        Environment updatedEnv = Environment.update(e1, e2);
+        env.replace(updatedEnv);
+        errors.addAll(env.getEffectErrors());
         return errors;
     }
 

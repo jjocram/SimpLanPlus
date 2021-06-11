@@ -73,9 +73,9 @@ public class SimpLanPlus {
 
         slpLexer.removeErrorListeners();
         slpLexer.addErrorListener(new VerboseListener());
-
         // Checking for lexical errors.
         if (slpLexer.errorCount() > 0) {
+            System.err.println("Lexical analysis:");
             System.err.println("There are lexical errors in the file. It cannot compile.");
             System.exit(1);
         }
@@ -95,6 +95,7 @@ public class SimpLanPlus {
 
         // Checking for syntactical errors.
         if (slpParser.getNumberOfSyntaxErrors() > 0) {
+            System.err.println("Syntactic analysis:");
             System.err.println("There are syntactical errors in the file, look above.");
             System.exit(1);
         }
@@ -106,6 +107,7 @@ public class SimpLanPlus {
         // Checking for syntactical errors.
         ArrayList<SemanticError> semanticErrors = AST.checkSemantics(env);
         if (!semanticErrors.isEmpty()) {
+            System.err.println("Semantic analysis:");
             semanticErrors.forEach(System.err::println);
             System.exit(1);
         }
@@ -114,6 +116,7 @@ public class SimpLanPlus {
         try {
             AST.typeCheck();
         } catch (TypeCheckingException typeCheckingException) {
+            System.out.println("Type checking:");
             System.err.println(typeCheckingException.getMessage());
             System.exit(1);
         }
@@ -145,7 +148,6 @@ public class SimpLanPlus {
 
         SVMVisitorImpl svmVisitor = new SVMVisitorImpl();
         svmVisitor.visit(svmParser.assembly());
-        System.out.println("Bau1");
 
         try {
             SVMInterpreter svmInterpreter = new SVMInterpreter(flags.codesize(), flags.memsize(), svmVisitor.getCode());
