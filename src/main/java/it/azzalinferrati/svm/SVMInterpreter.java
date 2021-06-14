@@ -1,6 +1,7 @@
 package it.azzalinferrati.svm;
 
 import it.azzalinferrati.svm.exception.CodeSizeTooSmallException;
+import it.azzalinferrati.svm.exception.MemoryAccessException;
 import it.azzalinferrati.svm.instruction.SVMInstruction;
 
 import java.util.Arrays;
@@ -63,7 +64,7 @@ public class SVMInterpreter {
         this.memorySize = memorySize;
         this.code = code;
 
-        if(codeSize < code.size()) {
+        if (codeSize < code.size()) {
             throw new CodeSizeTooSmallException("Requested code area size: " + codeSize + ", number of instructions given: " + code.size() + ".");
         }
 
@@ -136,28 +137,44 @@ public class SVMInterpreter {
         return registers.get(register);
     }
 
-    private void writeOnMemory(int address, int data) {
+    private void writeOnMemory(int address, int data) throws MemoryAccessException {
+        try {
         memory[address].setData(data);
         lastUpdatedMemoryCell = address;
         lastUpdatedRegister = "";
+        } catch (IndexOutOfBoundsException e) {
+            throw new MemoryAccessException("Address " + address + " cannot be accessed");
+        }
     }
 
-    private void resetCell(int address) {
+    private void resetCell(int address) throws MemoryAccessException {
+        try {
         memory[address].setData(null);
         lastUpdatedMemoryCell = address;
         lastUpdatedRegister = "";
+        } catch (IndexOutOfBoundsException e) {
+            throw new MemoryAccessException("Address " + address + " cannot be accessed");
+        }
     }
 
-    private int readFromMemory(int address) {
+    private int readFromMemory(int address) throws MemoryAccessException {
+        try {
         return memory[address].getData();
+        } catch (IndexOutOfBoundsException e) {
+            throw new MemoryAccessException("Address " + address + " cannot be accessed");
+        }
     }
 
-    private void freeMemory(int address) {
-        memory[address].freeCell();
+    private void freeMemory(int address) throws MemoryAccessException {
+        try {
+            memory[address].freeCell();
+        } catch (IndexOutOfBoundsException e) {
+            throw new MemoryAccessException("Address " + address + " cannot be accessed");
+        }
     }
 
-    public void run(boolean activeDebug) {
-        if(activeDebug) {
+    public void run(boolean activeDebug) throws MemoryAccessException{
+        if (activeDebug) {
             System.out.println("Initial state of the SVM");
             debugCPU();
             System.out.println("---------------------------");
@@ -300,7 +317,7 @@ public class SVMInterpreter {
                     return;
             }
 
-            if(activeDebug) {
+            if (activeDebug) {
                 System.out.println("Instruction #" + globalCounter + " - " + instruction + "\n");
                 debugCPU();
                 System.out.println("---------------------------");
@@ -321,10 +338,10 @@ public class SVMInterpreter {
 
         for (int i = 0; i < memorySize; i++) {
             buffer
-                .append(i).append("\t").append(memory[i])
-                .append(i == fp() ? " <- $fp" : "")
-                .append(i == sp() ? " <- $sp" : "")
-                .append(lastUpdatedMemoryCell == i ? " (*)\n" : "\n");
+                    .append(i).append("\t").append(memory[i])
+                    .append(i == fp() ? " <- $fp" : "")
+                    .append(i == sp() ? " <- $sp" : "")
+                    .append(lastUpdatedMemoryCell == i ? " (*)\n" : "\n");
         }
 
         System.out.println(buffer.toString());

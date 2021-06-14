@@ -1,0 +1,13 @@
+{
+    //mutual recursion
+    void f() {
+        print 1;
+        g();
+    }
+    void g() {
+        print 2;
+        f();
+    }
+
+    f();
+}

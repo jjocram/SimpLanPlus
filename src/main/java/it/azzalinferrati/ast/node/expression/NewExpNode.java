@@ -35,7 +35,7 @@ public class NewExpNode extends ExpNode{
 
     @Override
     public String codeGeneration() {
-        return "li $t1 0\nsw $t1 0($hp) ;saves in the first free position of the heap the value 0 (automatically set the address used in $a0)\n";
+        return "li $t1 -1\nsw $t1 0($hp) ;saves in the first free position of the heap the value 0 (automatically set the address used in $a0)\n";
     }
 
     @Override

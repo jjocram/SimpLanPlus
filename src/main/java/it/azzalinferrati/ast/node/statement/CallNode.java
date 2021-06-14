@@ -116,6 +116,11 @@ public class CallNode implements Node {
         errors.addAll(id.checkSemantics(env));
         params.stream().forEach((p) -> errors.addAll(p.checkSemantics(env)));
         currentNestingLevel = env.getNestingLevel();
+
+        if (!errors.isEmpty()) {
+            return errors;
+        }
+
         // Checking that parameters inside the function do not result in error statuses.
         List<Integer> indexesOfNotPointers = IntStream
                 .range(0, params.size())

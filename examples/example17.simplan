@@ -1,0 +1,8 @@
+{
+    ^int b = new int;
+    ^^int a = new ^int;
+    b^ = 10;
+    print b^;
+    print a^^;
+
+}
