@@ -139,9 +139,9 @@ public class SVMInterpreter {
 
     private void writeOnMemory(int address, int data) throws MemoryAccessException {
         try {
-        memory[address].setData(data);
-        lastUpdatedMemoryCell = address;
-        lastUpdatedRegister = "";
+            memory[address].setData(data);
+            lastUpdatedMemoryCell = address;
+            lastUpdatedRegister = "";
         } catch (IndexOutOfBoundsException e) {
             throw new MemoryAccessException("Address " + address + " cannot be accessed");
         }
@@ -149,9 +149,9 @@ public class SVMInterpreter {
 
     private void resetCell(int address) throws MemoryAccessException {
         try {
-        memory[address].setData(null);
-        lastUpdatedMemoryCell = address;
-        lastUpdatedRegister = "";
+            memory[address].setData(null);
+            lastUpdatedMemoryCell = address;
+            lastUpdatedRegister = "";
         } catch (IndexOutOfBoundsException e) {
             throw new MemoryAccessException("Address " + address + " cannot be accessed");
         }
@@ -159,7 +159,7 @@ public class SVMInterpreter {
 
     private int readFromMemory(int address) throws MemoryAccessException {
         try {
-        return memory[address].getData();
+            return memory[address].getData();
         } catch (IndexOutOfBoundsException e) {
             throw new MemoryAccessException("Address " + address + " cannot be accessed");
         }
@@ -173,7 +173,7 @@ public class SVMInterpreter {
         }
     }
 
-    public void run(boolean activeDebug) throws MemoryAccessException{
+    public void run(boolean activeDebug) throws MemoryAccessException {
         if (activeDebug) {
             System.out.println("Initial state of the SVM");
             debugCPU();
@@ -182,8 +182,7 @@ public class SVMInterpreter {
 
         while (true) {
             if (hp() >= sp()) {
-                System.err.println("ERROR: Out of memory.");
-                return;
+                throw new MemoryAccessException("Reached max memory limit");
             }
 
             SVMInstruction instruction = code.get($ip);
@@ -313,7 +312,7 @@ public class SVMInterpreter {
                 case "halt":
                     return;
                 default:
-                    System.err.println("ERROR: Unrecognized Assembly instruction.");
+                    System.err.println("ERROR: Unrecognized Assembly instruction: " + instruction + ".");
                     return;
             }
 
@@ -329,6 +328,7 @@ public class SVMInterpreter {
 
     private void debugCPU() {
         StringBuffer buffer = new StringBuffer();
+
         buffer.append("| $ip: ").append($ip).append(" | ");
         registers.keySet().forEach(key -> {
             buffer.append(key).append(": ").append(registers.get(key)).append(lastUpdatedRegister.equals(key) ? " (*) | " : " | ");
