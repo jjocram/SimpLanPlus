@@ -1,9 +1,18 @@
 {
+    /*
+    This example shows the problems arising with aliasing.
+    While f is perfectly correct, if we were to declare a pointer like this:
+      ^int x = new int;
+    and use it in the following statement:
+      f(x, x);
+    then the program should display:
+      - "Variable x is used after deletion."
+    */
     ^int x = new int;
     void f(^int x, ^int y) {
         delete x;
         delete y;
-    } 
-    //  cosa accade in {^int x = new int; f(x,x) ;}
-    // f(x, x);
+    }
+
+    f(x,x);
 }

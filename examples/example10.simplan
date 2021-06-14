@@ -1,4 +1,9 @@
 {
+    /*
+    This example shows the use of an if-then-else statement.
+    The condition can be changed to output other stuff.
+    With a set to 10, the program should output 10.
+    */
     int a = 10;
     if (a >= 0)
         print a;

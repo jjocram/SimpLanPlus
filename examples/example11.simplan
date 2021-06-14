@@ -1,8 +1,17 @@
 {
+    /*
+    This example shows some variable declarations but most importantly it shows:
+      - that Boolean values are represented as integers inside the memory, hence "true" becomes 1 and "false" 0
+      - that even if pointers are variable containing memory addresses, integers do not cast to memory addresses in this language
+    The program should output 56 followed by 1 in the following row.
+    If one were to uncomment the statement:
+      x = 1;
+    then the program would not compile since 1 cannot cast to an integer pointer.
+    */
     ^int x = new int;
     ^^bool b = new ^bool;
 
-    // La prossima assegnazione non deve tipare.
+    // The following assignment should not pass the type checking.
     // x = 1;
     x^ = 56;
 

@@ -1,12 +1,18 @@
 {
+    /*
+    This example shows the incorrect use of pointers.
+    There are two calls to function f:
+      - the first one is placed right after the declaration of pointer y and it is correctly used
+      - the other one is place right after the deletion of the memory area pointed by y and therefore it should display the following error:
+        - "Variable y is used after deletion."
+    */
     void f(^int x){
         x^ = 5;
     }
     ^int y = new int;
     f(y);
     print(y^);
-    /* y will be used after deletion -> this is correctly notified
+    // y will be used after deletion -> this is correctly notified
     delete  y;
     f(y);
-    */
 }

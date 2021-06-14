@@ -1,5 +1,8 @@
 {
-    // NON SCRITTO DAL PROF
+    /*
+    This example shows all the possible types of declarations.
+    It is well formed and should not output anything.
+    */
     int a = 5;
     bool b = false;
     ^int c;

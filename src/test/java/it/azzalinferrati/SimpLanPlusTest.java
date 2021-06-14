@@ -20,6 +20,8 @@ public class SimpLanPlusTest {
 
         List<String> filesWithErrors = new ArrayList<>();
         filesWithErrors.add("example2.simplan");
+        filesWithErrors.add("example3.simplan");
+        filesWithErrors.add("example12.simplan");
         filesWithErrors.add("example13.simplan");
         filesWithErrors.add("example14.simplan");
         filesWithErrors.add("example16.simplan");
@@ -45,7 +47,7 @@ public class SimpLanPlusTest {
     public void testExample() throws Exception {
         int systemExit;
         try {
-            systemExit = catchSystemExit(() -> SimpLanPlus.main(new String[]{"examples/" + exampleFile, "-memsize=20"}));
+            systemExit = catchSystemExit(() -> SimpLanPlus.main(new String[]{"examples/" + exampleFile, "--memsize=20"}));
         } catch (AssertionError error) {
             systemExit = 0;
         }

@@ -1,4 +1,8 @@
 {
+    /*
+    This example shows the correct use of pointers in SimpLanPlus.
+    The program is well formed and should output 1.
+    */
     ^^int x;
     ^int y = new int;
     y^ = 1;

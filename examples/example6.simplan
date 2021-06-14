@@ -1,5 +1,9 @@
 
 {
+    /*
+    This example shows the correct use of recursive functions.
+    The program is well formed and should output 1.
+    */
     int x = 1;
     void f(int y) {
         if (y == 0)

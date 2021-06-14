@@ -1,6 +1,12 @@
 
 {
-    //int u = 1 ;
+    /*
+    This example shows the correct use of recursive functions and pointers.
+    The variable u is a pointer and after returning from:
+      f(u,1);
+    it is deleted.
+    The program is well formed and should output 1.
+    */
     ^int u = new int;
     void f(^int x, int n) { 
         if (n == 0) {
