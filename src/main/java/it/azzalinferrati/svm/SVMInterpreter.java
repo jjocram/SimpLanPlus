@@ -94,7 +94,6 @@ public class SVMInterpreter {
     }
 
     private int hp() {
-        //return registers.get("$hp");
         var firstFreeMemoryCell = Arrays.stream(memory).filter(MemoryCell::isFree).findFirst();
         if (firstFreeMemoryCell.isPresent()) {
             for (int i = 0; i < memorySize; i++) {
@@ -109,22 +108,6 @@ public class SVMInterpreter {
 
     private int fp() {
         return registers.get("$fp");
-    }
-
-    private int ra() {
-        return registers.get("$ra");
-    }
-
-    private int al() {
-        return registers.get("$al");
-    }
-
-    private int a0() {
-        return registers.get("$a0");
-    }
-
-    private int t1() {
-        return registers.get("$t1");
     }
 
     private void updateRegister(String register, int value) {
