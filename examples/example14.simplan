@@ -1,7 +1,11 @@
 {
-    ^int a =  new int;
+    /*
+    This example shows the impossibility to delete the content of the memory area pointed by a pointer after having already deleted it.
+    This program should output:
+      - "Variable a was already deleted." 
+    */
+    ^int a = new int;
     int b;
     delete a;
     delete a;
-
 }

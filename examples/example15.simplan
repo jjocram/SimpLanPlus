@@ -1,10 +1,15 @@
 {
+    /*
+    This example shows the incorrect use of pointers.
+    The SimpLanPlus programmer is accessing the heap area pointed by y without having it initialized.
+    Therefore the program should output 1 followed by -1 (default value for allocated space in the heap).
+    */
     void f(int a, ^int b){
         print a;
         print b^;
     }
     int x = 1;
-    ^int y = new int; // y^ non e' inizializzato, colpa dello sviluppatore SimpLanPlus
+    ^int y = new int;
     //y^ = 2;
 
     f(x, y);

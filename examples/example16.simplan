@@ -1,5 +1,10 @@
 {
-    //mutual recursion
+    /*
+    This example shows the use of mutual recursion, which is not supported by SimpLanPlus.
+    The fact that if it was supported it would display an out of memory error does not mean anything.
+    The program should output:
+      - "Missing declaration for ID: g."
+    */
     void f() {
         print 1;
         g();

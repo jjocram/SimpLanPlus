@@ -1,8 +1,19 @@
 {
+    /*
+    This example shows the incorrect use of double (triple, quadruple, etc. follow the same idea) pointers.
+    When declaring pointer a, the programmer should allocate space in the heap for all the pointers.
+    Therefore the correct use of a would be:
+      ^^int a = new ^int;
+      a^ = new int;
+      a^^ = ...;
+      ...
+      print a^^;
+    The program should output 10 and then display:
+      - "Address -1 cannot be accessed."
+    */
     ^int b = new int;
     ^^int a = new ^int;
     b^ = 10;
     print b^;
     print a^^;
-
 }
