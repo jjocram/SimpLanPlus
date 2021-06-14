@@ -1,0 +1,43 @@
+\documentclass[11pt]{report}
+
+
+\usepackage{configuration/style}
+
+\title{Alma Mater Studiorum - Università di Bologna \\ LM Informatica \\ \textbf{Compilatori e Interpreti - Report progetto}}
+\author{Marco Ferrati, Tommaso Azzalin}
+\date{A.A. 2020/2021}
+
+\begin{document}
+
+\maketitle
+
+\subfile{chapters/abstract}
+
+\clearpage
+
+{
+    \setcounter{tocdepth}{2}
+    \tableofcontents
+}
+
+\subfile{chapters/introduzione}
+
+\subfile{chapters/grammatica}
+
+\subfile{chapters/anaslisisemantica}
+
+\subfile{chapters/analisieffetti}
+
+\subfile{chapters/typechecking}
+
+\subfile{chapters/interprete}
+
+\subfile{chapters/strutturasimplanplus}
+
+\subfile{chapters/esempi}
+
+%Appendice
+\cleardoublepage
+\appendix
+\include{chapters/appendix}
+\end{document}
