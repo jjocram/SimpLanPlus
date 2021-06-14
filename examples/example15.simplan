@@ -1,0 +1,11 @@
+{
+    void f(int a, ^int b){
+        print a;
+        print b^;
+    }
+    int x = 1;
+    ^int y = new int; // y^ non e' inizializzato, colpa dello sviluppatore SimpLanPlus
+    //y^ = 2;
+
+    f(x, y);
+}

@@ -108,7 +108,7 @@ public class SimpLanPlus {
         ArrayList<SemanticError> semanticErrors = AST.checkSemantics(env);
         if (!semanticErrors.isEmpty()) {
             System.err.println("Semantic analysis:");
-            semanticErrors.forEach(System.err::println);
+            semanticErrors.stream().filter(DistinctByKey.distinctByKey(SemanticError::toString)).forEach(System.err::println);
             System.exit(1);
         }
 

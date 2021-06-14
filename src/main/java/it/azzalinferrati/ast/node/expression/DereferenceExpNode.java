@@ -39,6 +39,10 @@ public class DereferenceExpNode extends ExpNode{
 
         errors.addAll(lhs.checkSemantics(env));
 
+        if (lhs.getId().getStatus().equals(Effect.INITIALIZED)) {
+            errors.add(new SemanticError("Variable " + lhs.getId().getId() + " was used prior to initialization"));
+        }
+
         errors.addAll(env.checkVariableStatus(lhs.getId(), Effect::seq, Effect.READ_WRITE));
 
         return errors;

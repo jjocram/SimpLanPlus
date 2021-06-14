@@ -29,7 +29,7 @@ public abstract class ExpNode implements Node {
     protected ArrayList<SemanticError> checkVariablesStatus(Environment env) {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
-        variables().stream().forEach(var -> errors.addAll(env.checkVariableStatus(var, Effect::seq, Effect.READ_WRITE)));
+        variables().forEach(var -> errors.addAll(env.checkVariableStatus(var, Effect::seq, Effect.READ_WRITE)));
 
         return errors;
     }

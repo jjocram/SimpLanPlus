@@ -1,0 +1,7 @@
+{
+    ^int a =  new int;
+    int b;
+    delete a;
+    delete a;
+
+}

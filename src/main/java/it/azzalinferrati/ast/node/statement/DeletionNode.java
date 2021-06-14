@@ -49,8 +49,11 @@ public class DeletionNode implements Node {
 
         errors.addAll(id.checkSemantics(env));
 
-        errors.addAll(env.checkVariableStatus(id, Effect::seq, Effect.DELETE));
-
+        if (id.getStatus().equals(Effect.DELETE) || id.getStatus().equals(Effect.ERROR)) {
+            errors.add(new SemanticError("Variable " + id.getId() + " was already deleted"));
+        } else {
+            errors.addAll(env.checkVariableStatus(id, Effect::seq, Effect.DELETE));
+        }
         return errors;
     }
 }
