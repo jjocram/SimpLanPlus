@@ -1,0 +1,76 @@
+\ProvidesPackage{configuration/style}
+\usepackage{hyperref}
+\usepackage[left=2cm, right=2cm, top=3cm, bottom=3cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{fancyvrb}
+\usepackage{colorprofiles}
+\usepackage{subfiles}
+\usepackage{flafter}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{eurosym}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{courier}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{tabularx}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+\usepackage[title]{appendix}
+
+\usepackage[tikz]{bclogo}
+
+%\newcommand\monimage{\includegraphics[height = 17 pt]{assets/images/iterate.png}}
+
+%\presetkeys{bclogo}{
+%    ombre=true,
+%    epBord=2,
+%    couleur = blue!10!white,
+%    couleurBord = blue!50!white,
+%    arrondi = 0.2,
+%    logo = \monimage
+%}{}
+
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=blue,      
+    urlcolor=blue,
+    pdftitle={Simulazione di Sistemi - Report progetto},
+    pdfauthor={Marco Ferrati}
+    bookmarks=true,
+    pdfpagemode=FullScreen,
+}
+
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0.4pt} 
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{Compilatori e Interpreti -  Report progetto}
+\fancyfoot[L]{Marco Ferrati, Tommaso Azzalin}
+\fancyfoot[R]{Pagina \thepage\ di \pageref*{LastPage}}
+\setlength{\headheight}{14.5pt}
+
+\setcounter{tocdepth}{4}
+
+\newcommand{\e}[1]{#1 \euro{}}
+
+\graphicspath{{assets/images/}}
+
+\addto\captionsitalian{\renewcommand{\abstractname}{Abstract}}
+
+\newcommand\ytl[2]{
+    \parbox[b]{9em}{\hfill{\color{cyan}\bfseries\sffamily #1}~$\cdots\cdots$~}\makebox[0pt][c]{$\bullet$}\vrule\quad \parbox[c]{10cm}{\vspace{14pt}\color{red!40!black!80}\raggedright\sffamily #2.\\[17pt]}\\[-3pt]}
+
+\DeclareGraphicsExtensions{.png,.jpg}
