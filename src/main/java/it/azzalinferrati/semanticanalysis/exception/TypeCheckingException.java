@@ -1,8 +1,6 @@
 package it.azzalinferrati.semanticanalysis.exception;
 
-public class TypeCheckingException extends Exception{
-    private static final long serialVersionUID = 1L;
-    
+public class TypeCheckingException extends Exception {
     public TypeCheckingException(String message) {
         super(message);
     }

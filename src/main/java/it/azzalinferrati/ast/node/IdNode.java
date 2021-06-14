@@ -68,6 +68,11 @@ public class IdNode implements Node {
     }
 
     @Override
+    public String toString() {
+        return toPrint("");
+    }
+
+    @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         return entry.getType();
     }

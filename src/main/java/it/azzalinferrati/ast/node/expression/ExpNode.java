@@ -33,4 +33,9 @@ public abstract class ExpNode implements Node {
 
         return errors;
     }
+
+    @Override
+    public String toString() {
+        return toPrint("");
+    }
 }

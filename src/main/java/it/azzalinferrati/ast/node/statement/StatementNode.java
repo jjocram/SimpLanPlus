@@ -7,4 +7,9 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 public abstract class StatementNode implements Node {
     @Override
     public abstract TypeNode typeCheck() throws TypeCheckingException;
+
+    @Override
+    public String toString() {
+        return toPrint("");
+    }
 }

@@ -24,6 +24,11 @@ public class BoolNode extends ExpNode {
     }
 
     @Override
+    public String toString() {
+        return toPrint("");
+    }
+
+    @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         return new BoolTypeNode();
     }

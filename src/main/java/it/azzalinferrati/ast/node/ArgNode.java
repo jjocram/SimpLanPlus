@@ -38,6 +38,11 @@ public class ArgNode implements Node {
     }
 
     @Override
+    public String toString() {
+        return toPrint("");
+    }
+
+    @Override
     public Node typeCheck() throws TypeCheckingException {
         return null; // Nothing to return
     }

@@ -32,6 +32,11 @@ public class LhsNode implements Node {
     }
 
     @Override
+    public String toString() {
+        return toPrint("");
+    }
+
+    @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         if(lhs == null){
             // Simple ID

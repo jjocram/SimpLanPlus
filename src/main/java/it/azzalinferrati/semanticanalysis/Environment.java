@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
