@@ -19,9 +19,9 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 /**
  * <p>Represents a function declaration in the AST.</p>
  * 
- * <p><strong>Type checking</strong>: null (it has no type) if the returned type matches the returned type declared in the function definition, otherwise throws an error.</p>
+ * <p><strong>Type checking</strong>: {@code null} (it has no type) if the returned type matches the returned type declared in the function definition, otherwise throws an error.</p>
  * <p><strong>Semantic analysis</strong>: updates the current environment with the function definition (throws an error if already existent), pushes a new scope with the function arguments in it, then disallows the scope creation and finally checks the block for semantic errors.</p>
- * <p><strong>Code generation</strong>: Pushes the $ra, generates the code for the block, gets and removes the $ra from the stack, removes all the arguments from the stack, removes the $al from the stack, loads the old $fp and finally jumps to the instruction pointed by $ra.</p>
+ * <p><strong>Code generation</strong>: Pushes the <strong>$ra</strong>, generates the code for the block, gets and removes the <strong>$ra</strong> from the stack, removes all the arguments from the stack, removes the <strong>$al</strong> from the stack, loads the old <strong>$fp</strong> and finally jumps to the instruction pointed by <strong>$ra</strong>.</p>
  */
 public class DecFunNode implements Node {
     final private TypeNode type;
