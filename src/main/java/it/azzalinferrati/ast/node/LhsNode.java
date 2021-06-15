@@ -81,7 +81,7 @@ public class LhsNode implements Node {
         StringBuilder buffer = new StringBuilder();
 
         if (id.getNestingLevel() == id.getCurrentNestingLevel()) {
-            buffer.append("mv $al $fp ;the variable is declared in the same scope where it is used\n");
+            buffer.append("mv $al $fp ;[get address of an LHS node pt1] the variable is declared in the same scope where it is used\n");
         }
         else {
             buffer.append("lw $al 0($fp) ; [get address of an LHS node pt1] i want the memory address of ").append(id.getId()).append("\n");
