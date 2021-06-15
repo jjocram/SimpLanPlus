@@ -1,7 +1,9 @@
 package it.azzalinferrati.svm.exception;
 
 public class MemoryAccessException extends Exception {
-    public MemoryAccessException(String message) {
+	private static final long serialVersionUID = -4548548839338437218L;
+
+	public MemoryAccessException(String message) {
         super(message);
     }
 }

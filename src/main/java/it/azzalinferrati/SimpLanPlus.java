@@ -259,7 +259,9 @@ final class Flags {
 }
 
 final class WrongArgumentsException extends Exception {
-    public WrongArgumentsException(String message) {
+	private static final long serialVersionUID = 8745799711138778409L;
+
+	public WrongArgumentsException(String message) {
         super(message);
     }
 }

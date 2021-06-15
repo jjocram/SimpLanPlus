@@ -1,7 +1,9 @@
 package it.azzalinferrati.semanticanalysis.exception;
 
 public class ReadWriteAfterDeleteException extends Exception {
-    public ReadWriteAfterDeleteException(String message) {
+	private static final long serialVersionUID = 9003898563787432279L;
+
+	public ReadWriteAfterDeleteException(String message) {
         super(message);
     }
 }

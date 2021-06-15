@@ -10,7 +10,6 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.statement.BlockNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
-import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
