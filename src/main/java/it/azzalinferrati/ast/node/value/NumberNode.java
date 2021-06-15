@@ -11,6 +11,13 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>Represents an integer constant expression in the AST.</p>
+ *
+ * <p><strong>Type checking</strong>: int.</p>
+ * <p><strong>Semantic analysis</strong>: empty</p>
+ * <p><strong>Code generation</strong>: loads the value in <strong>$a0</strong>.</p>
+ */
 public class NumberNode extends ExpNode {
     final private int value;
 

@@ -11,6 +11,13 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>Represents a boolean constant expression in the AST.</p>
+ *
+ * <p><strong>Type checking</strong>: bool.</p>
+ * <p><strong>Semantic analysis</strong>: empty</p>
+ * <p><strong>Code generation</strong>: loads the value in <strong>$a0</strong>.</p>
+ */
 public class BoolNode extends ExpNode {
     final private boolean value;
 
@@ -36,7 +43,7 @@ public class BoolNode extends ExpNode {
     @Override
     public String codeGeneration() {
         int intValue = value ? 1 : 0;
-        return "li $a0 " + intValue + " ; load in $a0 the value: " + value + "\n";
+        return "li $a0 " + intValue + " ; loads in $a0 the value: " + value + " (" + intValue + ")\n";
     }
 
     @Override
