@@ -191,7 +191,7 @@ public class Environment {
     }
 
     /**
-     * Returning a new environment which has, for each identifie, the maximum effect
+     * Returning a new environment which has, for each identifier, the maximum effect
      * set in the two environments. Assumes dom(env2) is a subset of dom(env1).
      * 
      * @param env1 first environment
@@ -203,7 +203,7 @@ public class Environment {
     }
 
     /**
-     * Returning a new environment which has, for each identifie, the sequence effect
+     * Returning a new environment which has, for each identifier, the sequence effect
      * set in the two environments. Assumes dom(env2) is a subset of dom(env1).
      * 
      * @param env1 first environment
@@ -215,7 +215,7 @@ public class Environment {
     }
 
     /**
-     * Returning a new environment which has, for each identifie, the operation applied effect
+     * Returning a new environment which has, for each identifier in {@code env2}, the operation applied effect
      * set in the two environments. Assumes dom(env2) is a subset of dom(env1).
      * 
      * @param env1 first environment
@@ -223,34 +223,34 @@ public class Environment {
      * @return the operation applied environment of the two
      */
     private static Environment operateOnEnvironments(final Environment env1, final Environment env2, final BiFunction<Effect, Effect, Effect> operation) {
-        var opEnv = new Environment(new ArrayList<>(), env1.nestingLevel, env1.offset);
+        var resultEnv = new Environment(new ArrayList<>(), env1.nestingLevel, env1.offset);
         for (int i = 0, size = env1.symbolTable.size(); i < size; i++) { // for each scope in the Symbol Table
             var ithScope1 = env1.symbolTable.get(i);
             var ithScope2 = env2.symbolTable.get(i);
-            final HashMap<String, STEntry> opHashMap = new HashMap<>();
+            final HashMap<String, STEntry> resultEnvScope = new HashMap<>();
             for (var id : ithScope1.keySet()) {
-                var entry1 = ithScope1.get(id);
-                var entry2 = ithScope2.get(id);
+                var entryInScopeEnv1 = ithScope1.get(id);
+                var entryInScopeEnv2 = ithScope2.get(id);
 
-                if(entry2 == null) {
-                    opHashMap.put(id, entry1);
+                if(entryInScopeEnv2 != null) { // ==> id \in dom(env2)
+                    var opEntry = new STEntry(entryInScopeEnv1.getNestingLevel(), entryInScopeEnv1.getType(), entryInScopeEnv1.getOffset());
+                    opEntry.setStatus(operation.apply(entryInScopeEnv1.getStatus(), entryInScopeEnv2.getStatus()));
+                    
+                    resultEnvScope.put(id, opEntry);
                 } else {
-                    var opEntry = new STEntry(entry1.getNestingLevel(), entry1.getType(), entry1.getOffset());
-                    opEntry.setStatus(operation.apply(entry1.getStatus(), entry2.getStatus()));
-    
-                    opHashMap.put(id, opEntry);
+                    resultEnvScope.put(id, entryInScopeEnv1);
                 }
             }
-            opEnv.symbolTable.add(opHashMap);
+            resultEnv.symbolTable.add(resultEnvScope);
         }
-        return opEnv;
+        return resultEnv;
     }
 
     /**
-     * Returns the par environment applied to the head of [env1] and [env2].
-     * @param env1
-     * @param env2
-     * @return
+     * Returns the par environment applied to the head of {@code env1} and {@code env2}.
+     * @param env1 environment which has at least one scope
+     * @param env2 environment which has at least one scope
+     * @return the par environment
      */
     public static Environment par(final Environment env1, final Environment env2) {
         Environment resultingEnvironment = new Environment();
