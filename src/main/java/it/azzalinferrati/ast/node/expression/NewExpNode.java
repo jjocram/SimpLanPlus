@@ -10,7 +10,14 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewExpNode extends ExpNode{
+/**
+ * <p>Represents the new operator in the AST.</p>
+ * 
+ * <p><strong>Type checking</strong>: a pointer type.</p>
+ * <p><strong>Semantic analysis</strong>: empty.</p>
+ * <p><strong>Code generation</strong>: The value {@code -1} is stored inside <strong>$t1</strong> and its content is then stored inside the memory cell addressed by <strong>$hp</strong>.</p>
+ */
+public class NewExpNode extends ExpNode {
     final private TypeNode type;
 
     public NewExpNode(TypeNode type) {
@@ -19,17 +26,11 @@ public class NewExpNode extends ExpNode{
 
     @Override
     public String toPrint(String indent) {
-        return indent + "new";
+        return indent + "new " + type.toPrint("");
     }
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        /*
-            It's wrong just to return type!
-            Example:
-            int a = new int; <-- WRONG
-            ^int a = new int; <-- CORRECT
-         */
         return new PointerTypeNode(type);
     }
 

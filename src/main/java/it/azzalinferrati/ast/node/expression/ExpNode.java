@@ -16,6 +16,10 @@ public abstract class ExpNode implements Node {
     @Override
     public abstract TypeNode typeCheck() throws TypeCheckingException;
 
+    /**
+     * @return all variables (not function identifiers) that are used in the
+     *         expression
+     */
     public abstract List<IdNode> variables();
 
     /**

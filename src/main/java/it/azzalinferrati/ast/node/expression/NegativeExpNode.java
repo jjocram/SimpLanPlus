@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Represents an expression which value is the returned value from the function in the AST.</p>
+ * <p>Represents an expression which value is the returned value of the wrapped expression, negated, in the AST.</p>
  * 
  * <p><strong>Type checking</strong>: the type returned by the expression.</p>
  * <p><strong>Semantic analysis</strong>: list of errors from the wrapped expression.</p>
