@@ -3,7 +3,7 @@
 
 \chapter{Interprete}\label{c:interprete}
 \section{Bytecode}\label{s:bytecode}
-Il bytecode generato dal metodo \verb|codeGeneration| dei nodi dell'AST rispetta le regole della grammatica descritta nel file \verb|svm/lexer/SVM.g4|. Il linguaggio si ispira al set di istruzioni assembly x86. 
+Il bytecode generato dal metodo \verb|codeGeneration| dei nodi dell'AST rispetta le regole della grammatica descritta nel file \verb|svm/lexer/SVM.g4|. Il linguaggio si ispira al set d'istruzioni assembly x86. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{istruzioneCodiceGenerato}
@@ -21,19 +21,33 @@ Un'istruzioni \`e composta da diverse componenti, alcune obbligatorie, altre inv
 \section{CPU e memoria}\label{s:cpu-e-memoria}
 L'interprete emula il comportamento di una CPU e di una memoria.
 \subsection{CPU}
-La CPU esegue le istruzioni passate al costruttore dell'interprete. Il metodo \verb|run| esegue un ciclo finch\'e o la memoria non termina o non ri raggiunge l'istruzione \verb|halt|. Ad ogni iterazione si accede all'istruzione indicata dal registro \verb|$ip| che viene poi incrementato di uno per l'iterazione sucessiva. Il comportamento da seguire dipende dall'istruzione, in particolare dal campo dati \verb|instruction|.
+La CPU esegue le istruzioni passate al costruttore dell'interprete. Il metodo \verb|run| esegue un ciclo finch\'e o la memoria non termina o non si raggiunge l'istruzione \verb|halt|. A ogni iterazione si accede all'istruzione indicata dal registro \verb|$ip| che viene poi incrementato di uno per l'iterazione successiva. Il comportamento da seguire dipende dall'istruzione, in particolare dal campo dati \verb|instruction|.
 
 \subsection{Registri}
 La cpu ha accesso a 8 registri:
 \begin{itemize}
-    \item \textbf{Instruction pointer} (\$ip): indica quale istruzione sar\`a la prossima ad essere eseguita;
+    \item \textbf{Instruction pointer} (\$ip): indica quale istruzione sar\`a la prossima a essere eseguita;
     \item \textbf{Stack pointer} (\$sp): punta alla cima dello stack;
     \item \textbf{Heap pointer} (\$hp): punta alla prima posizione libera dello heap;
-    \item \textbf{Frame pointer} (\$fp): punta all'access link corrente relatico al frame attivo;
+    \item \textbf{Frame pointer} (\$fp): punta all'access link corrente relativo al frame attivo;
     \item \textbf{Access link} (\$al): registro utilizzato per attraversare la catena statica degli scope;
-    \item \textbf{Return address} (\$ra): registro utilizzato per salvare l'indirizzo (numero di istruzione) al quale ritornare una volta usciti da un frame;
+    \item \textbf{Return address} (\$ra): registro utilizzato per salvare l'indirizzo (numero d'istruzione) al quale ritornare una volta usciti da un frame;
     \item \textbf{Accumulatore} (\$a0): registro utilizzato per salvare il valore computato da alcune espressioni;
-    \item \textbf{Registro general purpose} (\$t1): registro generico utilizzabile liberamento all'interno del codice generato.
+    \item \textbf{Registro general purpose} (\$t1): registro generico utilizzabile liberamente all'interno del codice generato.
+\end{itemize}
+Sono state scritte due funzioni per gestire i registri:
+\begin{itemize}
+    \item \textbf{updateRegister} che aggiorna il contenuto del registro passato come parametro con un nuovo valore, anch'esso passato come parametro alla funzione;
+    \item \textbf{readRegister} che ritorna il valore contenuto nel registro passato come parametro.
+\end{itemize}
+
+\subsection{Memoria}
+La memoria \`e gestita come un array d'interi diviso, logicamente, in due parti: lo stack e lo heap. Lo stack si sviluppa dalle ultime posizioni dell'array e `'cresce" verso indici pi\`u piccoli mentre lo heap comincia a indice 0 e si sviluppa verso indici pi\`u grandi. Sono state scritte quattro funzioni per gestire la memoria:
+\begin{itemize}
+    \item \textbf{writeOnMemory} che prende in input due interi: il primo \`e l'indice al quale andare a scrivere e il secondo \`e il dato da scrivere;
+    \item \textbf{resetCell} che resetta, mettendo a \verb|null| il contenuto di una cella, questa funzione \`e comoda in quanto semplifica la visualizzazione della memoria durante il debug;
+    \item \textbf{readFromMemory} che ritorna il contenuto della memoria all'indirizzo passato in input;
+    \item \textbf{freeMemory} che segna come `'libera" una cella di memoria, viene chiamata alla \verb|delete| di un puntatore.
 \end{itemize}
 
 \section{Record di attivazione}\label{s:record-di-attivazione}
