@@ -81,15 +81,11 @@ public class IdNode implements Node {
     public String codeGeneration() {
         StringBuilder buffer = new StringBuilder();
 
-        if (getNestingLevel() == getCurrentNestingLevel()) {
-            buffer.append("mv $al $fp ;the variable ").append(id).append(" is declared in the same scope where it is used\n");
+        buffer.append("mv $al $fp ;[get address of an LHS node pt1] the variable is declared in the same scope where it is used\n");
+        for (int i = 0; i < (getCurrentNestingLevel() - getNestingLevel()); i++) {
+            buffer.append("lw $al 0($al)\n");
         }
-        else {
-            buffer.append("lw $al 0($fp);goes back in the static chain to get the right variable\n");
-            for (int i = 0; i < (currentNestingLevel - getNestingLevel()) - 1; i++) {
-                buffer.append("lw $al 0($al)\n");
-            }
-        }
+
         int offsetWithAL = -(getOffset() + 1);
         buffer.append("lw $a0 ").append(offsetWithAL).append("($al) ; loads in $a0 the value in ").append(id).append("\n");
 

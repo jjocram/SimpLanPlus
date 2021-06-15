@@ -44,7 +44,7 @@ public class AssignmentNode implements Node {
         StringBuffer buffer = new StringBuffer();
         buffer.append(exp.codeGeneration());
         buffer.append("push $a0 ;push the generated expression\n");
-        buffer.append(lhs.codeGenerationGetAddress());
+        buffer.append(lhs.codeGeneration());
         buffer.append("lw $t1 0($sp) ;load the expression from the stack\n");
         buffer.append("pop ;pop the expression from the stack\n");
         buffer.append("sw $t1 0($a0) ; store at $a0 dereferenced the value stored in $t1\n");
