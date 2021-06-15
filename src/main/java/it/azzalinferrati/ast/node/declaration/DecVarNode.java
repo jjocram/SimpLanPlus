@@ -17,7 +17,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
  * 
  * <p><strong>Type checking</strong>: null (it has no type) if the type if the expression matches the type of the variable declared, otherwise throws an error.</p>
  * <p><strong>Semantic analysis</strong>: checks the expression for errors, updates the current environment with the variable definition (throws an error if already existent), updates the current scope and sets the status in the Symbol Table.</p>
- * <p><strong>Code generation</strong>: Generates the code for the expression and saves its content in $a0, pushes $a0 onto the stack. If the expression does not exist then just the stack pointer is moved by 1 position.</p>
+ * <p><strong>Code generation</strong>: Generates the code for the expression and saves its content in <strong>$a0</strong>, pushes <strong>$a0</strong> onto the stack. If the expression does not exist then just the stack pointer is moved by 1 position.</p>
  */
 public class DecVarNode extends DeclarationNode {
 

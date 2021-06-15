@@ -8,6 +8,18 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
 
+/**
+ * <p>Represents a Left-hand-side expression and a node for dereferencing variables and pointers in the AST.</p>
+ *
+ * <p><strong>Type checking</strong>: type available in the Symbol Table if there are no {@code ^} with the identifier {@code id}, otherwise the type pointed by {@code lhs}.</p>
+ * <p><strong>Semantic analysis</strong>: if the node is just a plain identifier, then its error are retrieved, otherwise errors are retrieved from the underlying {@code lhs}.</p>
+ * <p><strong>Code generation</strong>: Two types:
+ * <ul>
+ * <li>Used in a <em>RHS</em>: the code for the identifier is generated and its value can be retrieved from <strong>$a0</strong>, then we dereference once for each symbol {@code ^} present together with the identifier.</li>
+ * <li>Used in a <em>LHS</em>: the static chain is gone through until the scope in which the identifier was defined is found, then the variable value is retrieved and finally dereferenced if needed.</li>
+ * </ul>
+ * </p>
+ */
 public class LhsNode implements Node {
     final private IdNode id;
     // LhsNode is just a plain identifier only when lhs == null.
@@ -45,23 +57,6 @@ public class LhsNode implements Node {
 
         // Dereference
         return ((PointerTypeNode) lhs.typeCheck()).getPointedType();
-        /*
-        ^int y = new int;
-        y^ = 1;
-        */
-
-        /*
-        ^^int y = new ^int;
-        ^int x = new int
-        ^y = x
-        */
-
-        /*
-        int a = 3;
-        int *pa = &a;
-        int **ppa = &&a;
-        int ***pppa = &a; //wrong type
-        */
     }
 
     @Override
