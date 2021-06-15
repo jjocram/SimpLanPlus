@@ -5,18 +5,14 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.DereferenceExpNode;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
-import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.STEntry;
 import it.azzalinferrati.semanticanalysis.SemanticError;
-import it.azzalinferrati.semanticanalysis.exception.MissingDeclarationException;
-import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;

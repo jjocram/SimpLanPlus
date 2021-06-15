@@ -88,7 +88,6 @@ public class DecFunNode implements Node {
 
             for(ArgNode arg: args) {
                 var stEntry = env.addNewDeclaration(arg.getId().getId(), arg.getType());
-                stEntry.setStatus(new Effect(Effect.READ_WRITE)); // TODO: check if correct to set args to RW because when I'll call it they will be RW
                 arg.getId().setEntry(stEntry);
             } // \Sigma_0
 
