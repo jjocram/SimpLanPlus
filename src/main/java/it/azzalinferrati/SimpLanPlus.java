@@ -12,6 +12,7 @@ import it.azzalinferrati.svm.SVMInterpreter;
 import it.azzalinferrati.svm.ast.SVMVisitorImpl;
 import it.azzalinferrati.svm.exception.CodeSizeTooSmallException;
 import it.azzalinferrati.svm.exception.MemoryAccessException;
+import it.azzalinferrati.svm.exception.UninitializedVariableException;
 import it.azzalinferrati.svm.lexer.SVMLexer;
 import it.azzalinferrati.svm.parser.SVMParser;
 import org.antlr.v4.runtime.CharStreams;
@@ -155,8 +156,8 @@ public class SimpLanPlus {
             SVMInterpreter svmInterpreter = new SVMInterpreter(flags.codesize(), flags.memsize(), svmVisitor.getCode());
             System.out.println("Program output (can be empty):");
             svmInterpreter.run(flags.debugcpu());
-        } catch (MemoryAccessException | CodeSizeTooSmallException exc) {
-            System.err.println(exc.getMessage());
+        } catch (MemoryAccessException | CodeSizeTooSmallException | UninitializedVariableException exc) {
+            System.err.println("Error: " + exc.getMessage());
             System.exit(1);
         }
     }

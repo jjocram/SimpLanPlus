@@ -2,6 +2,7 @@ package it.azzalinferrati.svm;
 
 import it.azzalinferrati.svm.exception.CodeSizeTooSmallException;
 import it.azzalinferrati.svm.exception.MemoryAccessException;
+import it.azzalinferrati.svm.exception.UninitializedVariableException;
 import it.azzalinferrati.svm.instruction.SVMInstruction;
 
 import java.util.Arrays;
@@ -23,8 +24,12 @@ class MemoryCell {
         isUsed = false;
     }
 
-    public int getData() {
-        return data;
+    public int getData() throws UninitializedVariableException {
+        if (data == null) {
+            throw new UninitializedVariableException("Access to memory cell which contains uninitialized data");
+        } else {
+            return data;
+        }
     }
 
     public void setData(Integer data) {
@@ -140,7 +145,7 @@ public class SVMInterpreter {
         }
     }
 
-    private int readFromMemory(int address) throws MemoryAccessException {
+    private int readFromMemory(int address) throws MemoryAccessException, UninitializedVariableException {
         try {
             return memory[address].getData();
         } catch (IndexOutOfBoundsException e) {
@@ -156,7 +161,7 @@ public class SVMInterpreter {
         }
     }
 
-    public void run(boolean activeDebug) throws MemoryAccessException {
+    public void run(boolean activeDebug) throws MemoryAccessException, UninitializedVariableException {
         if (activeDebug) {
             System.out.println("Initial state of the SVM");
             debugCPU();
