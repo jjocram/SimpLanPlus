@@ -12,6 +12,13 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 import java.util.ArrayList;
 
+/**
+ * <p>Represents a deletion statement in the AST.</p>
+ * 
+ * <p><strong>Type checking</strong>: {@code void} if the passed identifier is of type {@code PointerTypNode}, throws a type checking exception if it is not.</p>
+ * <p><strong>Semantic analysis</strong>: it verifies the identifier actually exists and that was not previously deleted.</p>
+ * <p><strong>Code generation</strong>: Retrieves the identifier address and marks it for deletion.</p>
+ */
 public class DeletionNode implements Node {
     final private IdNode id;
 

@@ -1,5 +1,9 @@
 package it.azzalinferrati.semanticanalysis;
 
+/**
+ * Represents an effect applied to an identifier of a variable/pointer to be
+ * used in the Effects Analysis.
+ */
 public class Effect {
     // ⊥
     private static final int _INITIALIZED = 0;
@@ -14,35 +18,57 @@ public class Effect {
     private static final int _ERROR = 3;
     public static final Effect ERROR = new Effect(_ERROR);
 
+    // Actual value representing the status of a variable.
     private final int value;
 
     /**
-     * Constructor of Effect.
-     * @param value can be _INITIALIZED, _READ_WRITE, _DELETE, _ERROR.
+     * Constructor of {@code Effect}.
+     * 
+     * @param value can be {@code _INITIALIZED}, {@code _READ_WRITE},
+     *              {@code _DELETE}, {@code _ERROR}.
      */
     private Effect(final int value) {
         this.value = value;
     }
 
     /**
-     * Construct of Effect. Defaults to Effect.INITIALIZED.
+     * Construct of {@code Effect}. Defaults to {@code Effect.INITIALIZED}.
      */
     public Effect() {
         this(_INITIALIZED);
     }
 
     /**
-     * Copy constructor of Effect.
+     * Copy constructor of {@code Effect}.
+     * 
      * @param e effect
      */
     public Effect(final Effect e) {
         this(e.value);
     }
 
+    /**
+     * Returns a new {@code Effect} instance representing the maximum of the two
+     * effects {@code e1} and {@code e2}.
+     * 
+     * @param e1 the first effect
+     * @param e2 the second effect
+     * @return new {@code Effect} instance representing the maximum of the two
+     *         effects {@code e1} and {@code e2}
+     */
     public static Effect max(final Effect e1, final Effect e2) {
         return new Effect(Math.max(e1.value, e2.value));
     }
 
+    /**
+     * Returns a new {@code Effect} instance representing the sequence of the two
+     * effects {@code e1} and {@code e2}.
+     * 
+     * @param e1 the first effect
+     * @param e2 the second effect
+     * @return new {@code Effect} instance representing the sequence of the two
+     *         effects {@code e1} and {@code e2}
+     */
     public static Effect seq(final Effect e1, final Effect e2) {
         if (max(e1, e2).value <= _READ_WRITE) {
             return Effect.max(e1, e2);
@@ -55,13 +81,23 @@ public class Effect {
         return new Effect(_ERROR);
     }
 
+    /**
+     * Returns a new {@code Effect} instance representing the par of the two effects
+     * {@code e1} and {@code e2} (par = maximum of {@code seq(e1, e2)} and
+     * {@code seq(e2, e1)}).
+     * 
+     * @param e1 the first effect
+     * @param e2 the second effect
+     * @return new {@code Effect} instance representing the sequence of the two
+     *         effects {@code e1} and {@code e2}
+     */
     public static Effect par(final Effect e1, final Effect e2) {
         return max(seq(e1, e2), seq(e2, e1));
     }
 
     @Override
     public String toString() {
-        switch(value) {
+        switch (value) {
             case _INITIALIZED:
                 return "INITIALIZED";
             case _READ_WRITE:
@@ -77,8 +113,10 @@ public class Effect {
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) return true;
-        if(obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
         Effect e = (Effect) obj;
         return value == e.value;
     }

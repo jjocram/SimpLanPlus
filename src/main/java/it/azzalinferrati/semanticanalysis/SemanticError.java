@@ -1,8 +1,8 @@
 package it.azzalinferrati.semanticanalysis;
 
 /**
- * Error returned by {@code Node::checkSemantics(Environment env)}.
- * Contains a message to show the user which problems were encountered.
+ * Error returned by {@code Node::checkSemantics(Environment env)}. Contains a
+ * message to show the user which problems were encountered.
  */
 public class SemanticError {
     /**
@@ -12,6 +12,7 @@ public class SemanticError {
 
     /**
      * Constructor for a SemanticError.
+     * 
      * @param msg
      */
     public SemanticError(String msg) {

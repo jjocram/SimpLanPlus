@@ -11,6 +11,10 @@ import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
+/**
+ * <p>Represents a generic expression node in the AST.</p>
+ * <p>It can one of the many nodes in {@code it.azzalinferrati.ast.node.expression}.</p>
+ */
 public abstract class ExpNode implements Node {
 
     @Override

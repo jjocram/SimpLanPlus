@@ -14,6 +14,13 @@ import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
+/**
+ * <p>Represents a block (statement) in the AST.</p>
+ * 
+ * <p><strong>Type checking</strong>: </p>
+ * <p><strong>Semantic analysis</strong>: </p>
+ * <p><strong>Code generation</strong>: </p>
+ */
 public class BlockNode implements Node {
 
     final private List<DeclarationNode> declarations;

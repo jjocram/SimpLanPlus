@@ -3,9 +3,9 @@ package it.azzalinferrati.semanticanalysis;
 import it.azzalinferrati.ast.node.type.TypeNode;
 
 /**
- * STEntry represents an entry of the Symbol Table. The Symbol Table contains
- * information for the semantic analysis, type checking, effect analysis, code
- * generation.
+ * {@code STEntry} represents an entry of the Symbol Table. The Symbol Table
+ * contains information for the semantic analysis, type checking, effect
+ * analysis, code generation.
  */
 public class STEntry {
     // Nesting level.
@@ -41,6 +41,11 @@ public class STEntry {
         this.status = new Effect(s.status);
     }
 
+    /**
+     * Sets the type of the entry.
+     * 
+     * @param type to set
+     */
     public void addType(TypeNode type) {
         this.type = type;
     }
@@ -68,6 +73,7 @@ public class STEntry {
 
     /**
      * Sets the new effect for the entry in the Symbol Table.
+     * 
      * @param status new status for the variable
      */
     public void setStatus(Effect status) {

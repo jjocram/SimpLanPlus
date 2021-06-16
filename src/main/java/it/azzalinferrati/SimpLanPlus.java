@@ -26,6 +26,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Main class for the SimpLanPlus compiler and interpreter
+ */
 public class SimpLanPlus {
     public static void main(String[] args) {
         try {
@@ -69,6 +72,14 @@ public class SimpLanPlus {
 
     }
 
+    /**
+     * Handles the compilation phase.
+     * 
+     * @param flags    for the compilation phase
+     * @param fileName where to find the SimpLanPlus code
+     * @return the generated Assembly code for the SimpLanPlus Virtual Machine (SVM)
+     * @throws IOException if the file {@code fileName} is not found
+     */
     private static String compile(final Flags flags, final String fileName) throws IOException {
         /* SIMPLANPLUS LEXER */
         SimpLanPlusLexer slpLexer = new SimpLanPlusLexer(CharStreams.fromFileName(fileName));
@@ -133,25 +144,36 @@ public class SimpLanPlus {
         return AST.codeGeneration();
     }
 
+    /**
+     * Handles the interpretation phase.
+     * 
+     * @param flags    for the interpretation phase
+     * @param assemblyCode the SVM Assembly code
+     */
     private static void run(final Flags flags, final String assemblyCode) {
+        /* SVM LEXER */
         SVMLexer svmLexer = new SVMLexer(CharStreams.fromString(assemblyCode));
         CommonTokenStream svmLexerTokens = new CommonTokenStream(svmLexer);
 
         svmLexer.removeErrorListeners();
         svmLexer.addErrorListener(new VerboseListener());
 
+        // Checking for lexical errors.
         if (svmLexer.errorCount() > 0) {
             System.err.println("There are lexical errors in the generated Assembly code. It cannot compile.");
             System.exit(1);
         }
 
+        /* SVM PARSER */
         SVMParser svmParser = new SVMParser(svmLexerTokens);
         svmParser.removeErrorListeners();
         svmParser.addErrorListener(new VerboseListener());
 
+        // Visiting the tree and generating the AST.
         SVMVisitorImpl svmVisitor = new SVMVisitorImpl();
         svmVisitor.visit(svmParser.assembly());
 
+        /* SVM INTERPRETER */
         try {
             SVMInterpreter svmInterpreter = new SVMInterpreter(flags.codesize(), flags.memsize(), svmVisitor.getCode());
             System.out.println("Program output (can be empty):");
@@ -163,6 +185,9 @@ public class SimpLanPlus {
     }
 }
 
+/**
+ * Flags for the program execution.
+ */
 final class Flags {
     private boolean ast;
 
@@ -176,6 +201,8 @@ final class Flags {
 
     public Flags(final String[] args) throws WrongArgumentsException {
         if (args.length < 1 || Arrays.stream(args).allMatch(arg -> arg.startsWith("--"))) {
+            System.err.print("Usage: ");
+            System.err.println("java -jar /path/to/SimpLanPlus.jar <sourcefile> [--ast] [--mode=(compile|run|all)] [--debugcpu] [--codesize=<positive_integer>] [--memsize=<positive_integer>]\n");
             throw new WrongArgumentsException("ERROR: You must specify a file to compile or run!");
         }
 
@@ -191,7 +218,8 @@ final class Flags {
             mode = "run";
         } else if (arguments.contains("--mode=all")) {
             mode = "all";
-        } else if (arguments.contains("--mode=")) { // Argument starts with "-mode=" but the remaining part is not expected.
+        } else if (arguments.contains("--mode=")) { // Argument starts with "-mode=" but the remaining part is not
+                                                    // expected.
             throw new WrongArgumentsException("Unrecognized mode. These are the available modes: compile, run, all.");
         } else { // There is no "mode" argument.
             mode = "all";
@@ -259,9 +287,9 @@ final class Flags {
 }
 
 final class WrongArgumentsException extends Exception {
-	private static final long serialVersionUID = 8745799711138778409L;
+    private static final long serialVersionUID = 8745799711138778409L;
 
-	public WrongArgumentsException(String message) {
+    public WrongArgumentsException(String message) {
         super(message);
     }
 }
