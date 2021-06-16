@@ -1,0 +1,26 @@
+{
+    /*
+    This example shows the semantic analysis performing checks on code after the return statements.
+    In a function definition, after a correct return statement cannot be present any other code instruction.
+    */
+    int mult2correct(int a) {
+        return a*2;
+    }
+    /*
+    int mult2wrong(int a) {
+        return a*2;
+        print(13);
+    }
+    */
+    bool returnIte(int a, int b) {
+        if(a >= 5) {
+            return true;
+        } else {
+            return b == 5;
+        }
+    }
+
+    //print mult2wrong(10);
+    print mult2correct(10);
+    print returnIte(2+3, 0) && returnIte(0, 5*2);
+}
