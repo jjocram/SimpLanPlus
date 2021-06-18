@@ -174,7 +174,7 @@ public class SVMInterpreter {
         }
 
         while (true) {
-            if (hp() >= sp()) {
+            if (hp() > sp()) {
                 throw new MemoryAccessException("Reached max memory limit");
             }
 

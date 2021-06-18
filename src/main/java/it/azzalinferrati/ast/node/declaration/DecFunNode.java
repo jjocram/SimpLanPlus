@@ -82,7 +82,7 @@ public class DecFunNode implements Node {
 
         buffer.append("lw $fp 1($bsp)\n");
         buffer.append("lw $sp 0($bsp)\n"); //restore old stack pointer
-        buffer.append("addi $bsp $fp 1\n"); //restore address of old base stack pointer
+        buffer.append("addi $bsp $fp 2\n"); //restore address of old base stack pointer
         //buffer.append("pop\n");
         buffer.append("jr $ra\n");
 

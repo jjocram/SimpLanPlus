@@ -48,11 +48,11 @@ public class SimpLanPlusTest {
     public void testExample() throws Exception {
         int systemExit;
         try {
-            systemExit = catchSystemExit(() -> SimpLanPlus.main(new String[]{"examples/" + exampleFile, "--memsize=20"}));
+            systemExit = catchSystemExit(() -> SimpLanPlus.main(new String[]{"examples/" + exampleFile}));
         } catch (AssertionError error) {
             systemExit = 0;
         }
 
-        assertEquals(expectedStatusCode, systemExit);
+        assertEquals(exampleFile, expectedStatusCode, systemExit);
     }
 }

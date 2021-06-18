@@ -1,11 +1,20 @@
 {
-    int f(int a) {
-        if(a==1){
-            return 1;
-        }
+    int f() {
+        return 1;
+    }
 
+    int g() {
         return 2;
     }
 
-    print f(1);
+    void h(int a) {
+        if (a==1) {
+            print g();
+        }
+        else {
+            print f();
+        }
+    }
+
+    h(1);
 }
