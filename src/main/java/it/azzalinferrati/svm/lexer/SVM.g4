@@ -59,7 +59,9 @@ REGISTER:
 	| // Access Link is used to go through the static chain (i.e. scopes)
 	'$ra'
 	| // Return address stores the return address
-	'$hp'; // Heap pointer points to the top of the heap
+	'$hp' // Heap pointer points to the top of the heap
+	|
+	'$bsp';
 
 // LABELS
 COL: ':';

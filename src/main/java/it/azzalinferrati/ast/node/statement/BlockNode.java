@@ -37,6 +37,11 @@ public class BlockNode implements Node {
         isMainBlock = false;
     }
 
+    public void setEndFunctionLabel(String endFunctionLabel) {
+        for (var stm : statements) {
+            stm.setEndFunctionLabel(endFunctionLabel);
+        }
+    }
     public void allowScopeCreation() {
         allowScopeCreation = true;
     }
@@ -104,11 +109,19 @@ public class BlockNode implements Node {
         StringBuffer buffer = new StringBuffer();
 
         if (allowScopeCreation) {
+            if (isMainBlock) {
+                buffer.append("push $sp\n");
+            }
+
             if (!isMainBlock) {
                 buffer.append("push $fp ;push old fp\n"); // push old $fp
             }
             buffer.append("mv $al $fp\n");
             buffer.append("push $al ;it's equal to the old $fp\n");
+            if (isMainBlock) {
+                buffer.append("subi $fp $fp 1\n");
+                buffer.append("sw $fp 0($fp)\n");
+            }
         }
 
         var varDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateVarNode).collect(Collectors.toList());

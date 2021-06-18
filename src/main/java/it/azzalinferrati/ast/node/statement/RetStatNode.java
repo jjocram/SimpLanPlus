@@ -34,6 +34,7 @@ public class RetStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
+        ret.setEndFunctionLabel(getEndFunctionLabel());
         return ret.codeGeneration();
     }
 

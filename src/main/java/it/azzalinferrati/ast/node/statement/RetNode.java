@@ -19,9 +19,14 @@ import java.util.ArrayList;
  */
 public class RetNode implements Node {
     final private ExpNode exp;
+    private String endFunctionLabel;
 
     public RetNode(ExpNode exp) {
         this.exp = exp;
+    }
+
+    public void setEndFunctionLabel(String endFunctionLabel) {
+        this.endFunctionLabel = endFunctionLabel;
     }
 
     @Override
@@ -40,7 +45,14 @@ public class RetNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return exp == null ? "" : exp.codeGeneration();
+        StringBuilder buffer = new StringBuilder();
+
+        if (exp != null) {
+            buffer.append(exp.codeGeneration());
+        }
+
+        buffer.append("b ").append(endFunctionLabel).append("\n");
+        return buffer.toString();
     }
 
     @Override
