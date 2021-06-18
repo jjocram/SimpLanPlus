@@ -83,6 +83,7 @@ public class SVMInterpreter {
 
         registers = new HashMap<>();
         registers.put("$sp", memorySize);
+        registers.put("$bsp", memorySize);
         //registers.put("$hp", -1);
         registers.put("$fp", memorySize - 1);
         registers.put("$ra", null);
@@ -113,6 +114,10 @@ public class SVMInterpreter {
 
     private int fp() {
         return registers.get("$fp");
+    }
+
+    private int bsp() {
+        return registers.get("$bsp");
     }
 
     private void updateRegister(String register, int value) {
@@ -169,7 +174,7 @@ public class SVMInterpreter {
         }
 
         while (true) {
-            if (hp() >= sp()) {
+            if (hp() > sp()) {
                 throw new MemoryAccessException("Reached max memory limit");
             }
 
@@ -200,7 +205,7 @@ public class SVMInterpreter {
                         writeOnMemory(heapAddress, readRegister(arg1));
                         updateRegister("$a0", heapAddress);
                     } else {
-                        writeOnMemory(readRegister(arg2), readRegister(arg1));
+                        writeOnMemory((readRegister(arg2) + offset), readRegister(arg1));
                     }
                     break;
                 case "li":
@@ -329,6 +334,7 @@ public class SVMInterpreter {
                     .append(i).append("\t").append(memory[i])
                     .append(i == fp() ? " <- $fp" : "")
                     .append(i == sp() ? " <- $sp" : "")
+                    .append(i == bsp() ? " <- $bps" : "")
                     .append(lastUpdatedMemoryCell == i ? " (*)\n" : "\n");
         }
 

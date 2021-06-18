@@ -22,5 +22,5 @@
 
     //print mult2wrong(10);
     print mult2correct(10);
-    print returnIte(2+3, 0) && returnIte(0, 5*2);
+    print returnIte(2+3, 0);
 }

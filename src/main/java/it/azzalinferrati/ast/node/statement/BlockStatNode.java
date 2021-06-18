@@ -27,6 +27,7 @@ public class BlockStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
+        block.setEndFunctionLabel(getEndFunctionLabel());
         return block.codeGeneration();
     }
 

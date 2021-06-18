@@ -80,6 +80,12 @@ public class CallNode implements Node {
         StringBuffer buffer = new StringBuffer();
         int offsetNumberOfParams = params.size() == 0 ? 0 : params.size() - 1;
         buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
+        buffer.append("push $sp\n"); //push old stack pointer
+        buffer.append("mv $bsp $sp\n"); //update base stack pointer to the new place //TODO: look at BlockNode
+        buffer.append("addi $t1 $bsp 2\n");
+        buffer.append("sw $t1 0($bsp)\n");
+
+        buffer.append("subi $sp $sp 1 ;create space for RA\n");
 
         buffer.append("lw $al 0($fp)\n");
         for (int i = 0; i < (currentNestingLevel - id.getNestingLevel()); i++) {

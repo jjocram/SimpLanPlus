@@ -1,0 +1,20 @@
+{
+    int f() {
+        return 1;
+    }
+
+    int g() {
+        return 2;
+    }
+
+    void h(int a) {
+        if (a==1) {
+            print g();
+        }
+        else {
+            print f();
+        }
+    }
+
+    h(1);
+}

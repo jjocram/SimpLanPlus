@@ -9,6 +9,16 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
  * <p>It can one of the many nodes in {@code it.azzalinferrati.ast.node.statement}.</p>
  */
 public abstract class StatementNode implements Node {
+    private String endFunctionLabel;
+
+    protected void setEndFunctionLabel(String endFunctionLabel) {
+        this.endFunctionLabel = endFunctionLabel;
+    }
+
+    public String getEndFunctionLabel() {
+        return endFunctionLabel;
+    }
+
     @Override
     public abstract TypeNode typeCheck() throws TypeCheckingException;
 

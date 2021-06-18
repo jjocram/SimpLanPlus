@@ -62,15 +62,28 @@ public class DecFunNode implements Node {
     @Override
     public String codeGeneration() {
         StringBuilder buffer = new StringBuilder();
-        buffer.append(id.getId()).append(":\n");
-        buffer.append("push $ra\n");
+        String functionLabel = id.getId();
+        String endFunctionLabel = "end" + functionLabel;
+
+        buffer.append(functionLabel).append(":\n");
+
+        buffer.append("sw $ra -1($bsp) ;save in the memory cell above old SP the return address\n");
+
+        block.setEndFunctionLabel(endFunctionLabel);
         buffer.append(block.codeGeneration());
-        buffer.append("lw $ra 0($sp)\n");
-        buffer.append("pop\n"); //pop $ra
-        buffer.append("addi $sp $sp ").append(args.size()).append("\n"); // pop arguments
-        buffer.append("pop ;pop $al");
-        buffer.append("lw $fp 0($sp)\n");
-        buffer.append("pop\n");
+
+        buffer.append(endFunctionLabel).append(":\n");
+        buffer.append("lw $ra -1($bsp); load in $RA the return address saved \n");
+
+        //buffer.append("pop\n"); //pop $ra
+        //buffer.append("addi $sp $sp ").append(args.size()).append("\n"); // pop arguments
+        //buffer.append("pop ;pop $al\n");
+
+
+        buffer.append("lw $fp 1($bsp)\n");
+        buffer.append("lw $sp 0($bsp)\n"); //restore old stack pointer
+        buffer.append("addi $bsp $fp 2\n"); //restore address of old base stack pointer
+        //buffer.append("pop\n");
         buffer.append("jr $ra\n");
 
         return buffer.toString();

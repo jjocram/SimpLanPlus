@@ -29,6 +29,13 @@ public class IteNode implements Node {
         this.elseBranch = elseBranch;
     }
 
+    public void setEndFunctionLabel(String endFunctionLabel) {
+        thenBranch.setEndFunctionLabel(endFunctionLabel);
+        if (elseBranch != null) {
+            elseBranch.setEndFunctionLabel(endFunctionLabel);
+        }
+    }
+
     @Override
     public String toPrint(String indent) {
         return indent + "If cond\t>> " + condition.toPrint("") + "\n" + indent + "Then stmt\t>>\n"
@@ -59,7 +66,9 @@ public class IteNode implements Node {
         buffer.append(condition.codeGeneration());
         buffer.append("li $t1 1 ; load in $t1 the value TRUE\n");
         buffer.append("beq $a0 $t1 ").append(thenBranchLabel).append(" ; compare what is in $a0 (the expression) with TRUE ($t1)\n");
-        buffer.append(elseBranch.codeGeneration());
+        if (elseBranch != null) {
+            buffer.append(elseBranch.codeGeneration());
+        }
         buffer.append("b ").append(endIfLabel).append(" ;if the condition was false skip to the end of if-then-else\n");
         buffer.append(thenBranchLabel).append(":\n");
         buffer.append(thenBranch.codeGeneration());

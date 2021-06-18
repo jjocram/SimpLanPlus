@@ -37,6 +37,11 @@ public class BlockNode implements Node {
         isMainBlock = false;
     }
 
+    public void setEndFunctionLabel(String endFunctionLabel) {
+        for (var stm : statements) {
+            stm.setEndFunctionLabel(endFunctionLabel);
+        }
+    }
     public void allowScopeCreation() {
         allowScopeCreation = true;
     }
@@ -104,11 +109,25 @@ public class BlockNode implements Node {
         StringBuffer buffer = new StringBuffer();
 
         if (allowScopeCreation) {
-            if (!isMainBlock) {
+            if (isMainBlock) {
+                buffer.append("push $sp\n");
+                buffer.append("li $t1 0\n");
+                buffer.append("push $t1\n");
+            } else {
                 buffer.append("push $fp ;push old fp\n"); // push old $fp
+                buffer.append("push $bsp\n"); //remember old bsp
+
+                //push fake RA
+                buffer.append("li $t1 0\n"); //TODO in comune con la parte then dell'if
+                buffer.append("push $t1\n");
             }
+
             buffer.append("mv $al $fp\n");
             buffer.append("push $al ;it's equal to the old $fp\n");
+            if (isMainBlock) {
+                buffer.append("subi $fp $fp 2\n");
+                buffer.append("sw $fp 0($fp)\n");
+            }
         }
 
         var varDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateVarNode).collect(Collectors.toList());
@@ -130,6 +149,9 @@ public class BlockNode implements Node {
         if (allowScopeCreation && !isMainBlock) {
             buffer.append("addi $sp $sp ").append(varDeclarations.size()).append(" ;pop var declarations\n"); // pop var declarations
             buffer.append("pop ;pop $al\n");
+            buffer.append("pop ;pop fake RA\n");
+            buffer.append("lw $bsp 0($sp)\n"); //restore old bsp
+            buffer.append("pop\n"); //pop old bsp
             buffer.append("lw $fp 0($sp) ;restore old $fp\n");
             buffer.append("pop ;pop old $fp\n");
         }

@@ -34,6 +34,7 @@ public class IteStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
+        ite.setEndFunctionLabel(getEndFunctionLabel());
         return ite.codeGeneration();
     }
 
