@@ -1,0 +1,15 @@
+{
+    int f(int a){
+        if(a > 1){
+            if (a > 4) {
+                return 1;
+            }
+        } else {
+            return 2;
+        }
+
+        return 3;
+    }
+
+    print f(2);
+}
