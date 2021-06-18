@@ -168,7 +168,7 @@ public class BinaryExpNode extends ExpNode {
                 String trueBranchLabel = labelManager.freshLabel("lesseqTrueBranch");
                 String endCheckLabel = "end" + trueBranchLabel;
 
-                buffer.append("bleq $t1 $a0 \n").append(trueBranchLabel).append("\n");
+                buffer.append("bleq $t1 $a0").append(trueBranchLabel).append("\n");
                 //False branch
                 buffer.append("li $a0 0\n");
                 buffer.append("b ").append(endCheckLabel).append("\n");
@@ -181,7 +181,7 @@ public class BinaryExpNode extends ExpNode {
                 String trueBranchLabel = labelManager.freshLabel("greaterTrueBranch");
                 String endCheckLabel = "end" + trueBranchLabel;
 
-                buffer.append("bleq $t1 $a0 \n").append(trueBranchLabel).append("\n");
+                buffer.append("bleq $t1 $a0").append(trueBranchLabel).append("\n");
                 //False branch
                 buffer.append("li $a0 1\n");
                 buffer.append("b ").append(endCheckLabel).append("\n");
