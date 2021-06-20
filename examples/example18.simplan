@@ -1,4 +1,7 @@
 {
+    /*
+    This example shows the behaviour of the SimpLanPlus interpreter when dealing with uninitialized variables.
+    */
     int a;
     int b = a;
 }
