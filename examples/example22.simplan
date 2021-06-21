@@ -1,4 +1,8 @@
 {
+    /*
+    This example shows the correct working of function invocations.
+    This program is well formed and should output 2.
+    */
     int f() {
         return 1;
     }
