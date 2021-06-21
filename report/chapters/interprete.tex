@@ -10,7 +10,7 @@ Il bytecode generato dal metodo \verb|codeGeneration| dei nodi dell'AST rispetta
     \caption{Schema istruzioni codice generato.}
     \label{fig:istruzione-codice-generato}
 \end{figure}
-Un'istruzioni \`e composta da diverse componenti, alcune obbligatorie, altre invece, opzionali:
+Un'istruzione \`e composta da diverse componenti, alcune obbligatorie, altre invece, opzionali:
 \begin{itemize}
     \item \textbf{Istruzione}: stringa che permette di differenziare le diverse istruzioni. \`E l'unica componente obbligatoria in ogni istruzione e, nel caso di un'etichetta \`e utilizzata per dare il nome all'etichetta che si sta definendo;
     \item \textbf{Primo argomento}: stringa opzionale che permette in alcune istruzioni di specificare un registro o un numero;
@@ -18,10 +18,11 @@ Un'istruzioni \`e composta da diverse componenti, alcune obbligatorie, altre inv
     \item \textbf{Secondo argomento}: stringa opzionale che permette in alcune istruzioni di specificare un registro o un numero;
     \item \textbf{Terzo argomento}: stringa opzionale che permette in alcune istruzioni di specificare un registro o un numero;
 \end{itemize}
+Per ogni istruzione letta, viene creato un oggetto di tipo \verb|SVMInstruction| la cui classe \`e definita in \verb|svm/instruction/SVMInstruction.java|.
 \section{CPU e memoria}\label{s:cpu-e-memoria}
 L'interprete emula il comportamento di una CPU e di una memoria.
 \subsection{CPU}
-La CPU esegue le istruzioni passate al costruttore dell'interprete. Il metodo \verb|run| esegue un ciclo finch\'e o la memoria non termina o non si raggiunge l'istruzione \verb|halt|. A ogni iterazione si accede all'istruzione indicata dal registro \verb|$ip| che viene poi incrementato di uno per l'iterazione successiva. Il comportamento da seguire dipende dall'istruzione, in particolare dal campo dati \verb|instruction|.
+La CPU esegue le istruzioni passate al costruttore dell'interprete. Il metodo \verb|run| esegue un ciclo finch\'e o la memoria non ha pi\`u celle a disposizione o non si raggiunge l'istruzione \verb|halt|. A ogni iterazione si accede all'istruzione indicata dal registro \verb|$ip| che viene poi incrementato di uno per l'iterazione successiva. Il comportamento da seguire dipende dall'istruzione, in particolare dal campo dati \verb|instruction| degli oggetti \verb|SVMInstruction|.
 
 \subsection{Registri}
 La cpu ha accesso a 8 registri:
@@ -42,12 +43,12 @@ Sono state scritte due funzioni per gestire i registri:
 \end{itemize}
 
 \subsection{Memoria}
-La memoria \`e gestita come un array d'interi diviso, logicamente, in due parti: lo stack e lo heap. Lo stack si sviluppa dalle ultime posizioni dell'array e `'cresce" verso indici pi\`u piccoli mentre lo heap comincia a indice 0 e si sviluppa verso indici pi\`u grandi. Sono state scritte quattro funzioni per gestire la memoria:
+La memoria \`e gestita come un array d'interi diviso, logicamente, in due parti: lo stack e lo heap. Lo stack si sviluppa dalle ultime posizioni dell'array e ``cresce'' verso indici pi\`u piccoli mentre lo heap comincia a indice 0 e si sviluppa verso indici pi\`u grandi. Sono state scritte quattro funzioni per gestire la memoria:
 \begin{itemize}
     \item \textbf{writeOnMemory} che prende in input due interi: il primo \`e l'indice al quale andare a scrivere e il secondo \`e il dato da scrivere;
     \item \textbf{resetCell} che resetta, mettendo a \verb|null| il contenuto di una cella, questa funzione \`e comoda in quanto semplifica la visualizzazione della memoria durante il debug;
     \item \textbf{readFromMemory} che ritorna il contenuto della memoria all'indirizzo passato in input;
-    \item \textbf{freeMemory} che segna come `'libera" una cella di memoria, viene chiamata alla \verb|delete| di un puntatore.
+    \item \textbf{freeMemory} che segna come ``libera'' una cella di memoria, viene chiamata alla \verb|delete| di un puntatore.
 \end{itemize}
 
 \section{Record di attivazione}\label{s:record-di-attivazione}
@@ -55,4 +56,3 @@ La memoria \`e gestita come un array d'interi diviso, logicamente, in due parti:
 \section{Funzionamento dell'interprete}\label{s:funzionamento-interprete}
 
 \end{document}
-

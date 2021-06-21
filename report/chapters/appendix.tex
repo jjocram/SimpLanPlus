@@ -1,1 +1,35 @@
 \chapter{Guida all'installazione}\label{a:intstallazione}
+Per utlizzare il compilatore e l'interprete sviluppato per questo progetto all'interno di Eclipse \`e sufficiente seguire i seguenti passaggi:
+\begin{enumerate}
+    \item Importare la cartella \verb|SimpLanPlus| all'interno del workspace di Eclipse:
+        \begin{enumerate}
+            \item \textit{File $>$ Import};
+            \item Dalla schermata che si apre selezionare \textit{General $>$ Existing Projects into Workspace};
+            \item Clicclare su \textit{Browse} e selezionare la cartella \verb|SimpLanPlus|;
+            \item Cliccare su \textit{Finish}.
+        \end{enumerate}
+    \item Aggiungere le librerie di ANTLR: vi sono due modi per aggiungere le librerie necessarie al funzionamento del progetto:
+        \begin{enumerate}
+            \item Utilizzando Maven:
+                \begin{enumerate}
+                    \item Aprire una finistre del terminale e spostarsi all'interno della cartell \verb|SimpLanPlus|. Pu\`o essere fatto direttamente da Eclipse cliccando su \textit{Open a Terminal} e poi cliccando \textit{Ok};
+                    \item Digitare il seguente comando:
+                        \begin{lstlisting}
+./mvnw compile assembly:single
+                        \end{lstlisting}
+                \end{enumerate}
+            \item Importandole manualmente:
+                \begin{enumerate}
+                    \item Scaricare ANTLR dal seguente link: \url{https://www.antlr.org/download/antlr-4.7.1-complete.jar};
+                    \item Copiare il file scaricato nella cartella \verb|SimpLanPlus|;
+                    \item Cliccare sulla freccia che punta verso il basso affianco al pulsante ``Play'' e premere \textit{Run Configurations};
+                    \item Assicurarsi che sia stata scelta la configuarazione per \textit{Execute};
+                    \item Aprire il tab \textit{Dependecies};
+                    \item Selezionare, dalla lista, la voce \textit{Classpath Entries};
+                    \item Premere \textit{Add JARs};
+                    \item Selezionare il file JAR copiato in precedenza e premere \textit{Ok}.
+                \end{enumerate}
+        \end{enumerate}
+    \item Scrivere e salvare un file \verb|.simplan|. Questo punto \`e opzionale in caso si vogliano usare i file presenti nella cartella \verb|examples|;
+    \item Premere il pulsante ``Play'' di Eclipse. Verr\`a mostrato un prompt nel quale va inserito il path al file \verb|.simplan| scritto al punto precedente. \`E possibile utilizzare uno dei file forniti nella cartella \verb|examples| scrivendo nel prompt \verb|examples/example1.simplan|.
+\end{enumerate}
