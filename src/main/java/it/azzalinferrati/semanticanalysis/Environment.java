@@ -15,7 +15,7 @@ import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException
 
 /**
  * Symbol Table implementation.
- * 
+ * <p>
  * It is implemented as a list of hashmaps and relies on {@code STEntry}.
  */
 public class Environment {
@@ -36,7 +36,7 @@ public class Environment {
 
     /**
      * Constructor for {@code Environment}
-     * 
+     *
      * @param symTable     a list of hashmaps (that can be empty)
      * @param nestingLevel a positive integer generally, a part from -1 that is the
      *                     minimum value that it can assume
@@ -58,7 +58,7 @@ public class Environment {
 
     /**
      * Copy constructor of {@code Environment}
-     * 
+     *
      * @param e environment
      */
     public Environment(Environment e) {
@@ -100,7 +100,7 @@ public class Environment {
 
     /**
      * Adds a new scope to the environment.
-     * 
+     *
      * @param scope the scope to add to the Symbol Table stack
      */
     private void pushNewScope(Map<String, STEntry> scope) {
@@ -113,7 +113,7 @@ public class Environment {
      * Adds a new variable named [id] of type [type] into the current scope. The
      * offset of functions will be set to -1, the offset of variables will be set to
      * the current offset and later incremented.
-     * 
+     *
      * @param id   the identifer of the variable or function.
      * @param type the type of the variable or function.
      * @throws MultipleDeclarationException when [id] is already present in the head
@@ -123,7 +123,7 @@ public class Environment {
         STEntry stEntry;
         if (type instanceof FunTypeNode) {
             stEntry = new STEntry(nestingLevel, type, -1); // -1 is correct since after pop() is called the offset for
-                                                           // the following variable will be set to 0.
+            // the following variable will be set to 0.
         } else {
             stEntry = new STEntry(nestingLevel, type, offset);
             offset += 1; // 1 = 4 Byte, for integers, boolean (1/0), pointers to boolean/integers.
@@ -151,7 +151,7 @@ public class Environment {
         STEntry stEntry;
         if (type instanceof FunTypeNode) {
             stEntry = new STEntry(nestingLevel, type, -1); // -1 is correct since after pop() is called the offset for
-                                                           // the following variable will be set to 0.
+            // the following variable will be set to 0.
         } else {
             stEntry = new STEntry(nestingLevel, type, offset);
             offset += 1; // 1 = 4 Byte, for integers, boolean (1/0), pointers to boolean/integers.
@@ -167,10 +167,10 @@ public class Environment {
 
     /**
      * Searches [id] in the Symbol Table and returns its entry, if present.
-     * 
+     *
      * @param id the identifer of the variable or function.
      * @return the entry in the symbol table of the variable or function with that
-     *         identifier.
+     * identifier.
      * @throws MissingDeclarationException if [id] is not present.
      */
     public STEntry lookup(final String id) throws MissingDeclarationException {
@@ -190,7 +190,7 @@ public class Environment {
      *
      * @param id the identifer of the variable or function.
      * @return the entry in the symbol table of the variable or function with that
-     *         identifier.
+     * identifier.
      */
     public STEntry safeLookup(final String id) {
         for (int i = nestingLevel; i >= 0; i--) {
@@ -224,7 +224,7 @@ public class Environment {
      * Returning a new environment which has, for each identifier, the maximum
      * effect set in the two environments. Assumes dom(env2) is a subset of
      * dom(env1).
-     * 
+     *
      * @param env1 first environment
      * @param env2 second environment
      * @return the maximum environment of the two
@@ -237,7 +237,7 @@ public class Environment {
      * Returning a new environment which has, for each identifier, the sequence
      * effect set in the two environments. Assumes dom(env2) is a subset of
      * dom(env1).
-     * 
+     *
      * @param env1 first environment
      * @param env2 second environment
      * @return the sequence environment of the two
@@ -250,13 +250,13 @@ public class Environment {
      * Returning a new environment which has, for each identifier in {@code env2},
      * the operation applied effect set in the two environments. Assumes dom(env2)
      * is a subset of dom(env1).
-     * 
+     *
      * @param env1 first environment
      * @param env2 second environment
      * @return the operation applied environment of the two
      */
     private static Environment operateOnEnvironments(final Environment env1, final Environment env2,
-            final BiFunction<Effect, Effect, Effect> operation) {
+                                                     final BiFunction<Effect, Effect, Effect> operation) {
         var resultEnv = new Environment(new ArrayList<>(), env1.nestingLevel, env1.offset);
         for (int i = 0, size = env1.symbolTable.size(); i < size; i++) { // for each scope in the Symbol Table
             var ithScope1 = env1.symbolTable.get(i);
@@ -284,7 +284,7 @@ public class Environment {
     /**
      * Returns the par environment applied to the head of {@code env1} and
      * {@code env2}.
-     * 
+     *
      * @param env1 environment which has at least one scope
      * @param env2 environment which has at least one scope
      * @return the par environment
@@ -331,7 +331,7 @@ public class Environment {
      * {@code env2}. <strong>Attention</strong>: consider invoking this function
      * with clones of the environments since this function performs side-effects on
      * the arguments.
-     * 
+     *
      * @param env1 environment to update (multi-scope)
      * @param env2 environment with updates (single-scope=
      * @return the updated environment
@@ -387,12 +387,12 @@ public class Environment {
      * Checks the status of the variable and its status and updates it following the
      * given rule, if the new status is Effect.ERROR then returns a SemanticError
      * wrapped in a ArrayList. The ArrayList is returned just for simplicity.
-     * 
+     *
      * @return a list with errors found while checking the status of each variable
-     *         used in the expression
+     * used in the expression
      */
     public ArrayList<SemanticError> checkVariableStatus(final IdNode variable,
-            final BiFunction<Effect, Effect, Effect> rule, final Effect effectToApply) {
+                                                        final BiFunction<Effect, Effect, Effect> rule, final Effect effectToApply) {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         try {
@@ -450,7 +450,7 @@ public class Environment {
     /**
      * Replaces the whole content of the current instance of {@code Environment}
      * with that passed as argument.
-     * 
+     *
      * @param environment environment to copy
      */
     public void replace(final Environment environment) {
@@ -465,5 +465,44 @@ public class Environment {
             }
             symbolTable.add(copiedScope);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Environment env = (Environment) obj;
+
+        if (nestingLevel != env.nestingLevel) {
+            return false;
+        }
+
+        if (offset != env.offset) {
+            return false;
+        }
+
+        if (symbolTable.size() != env.symbolTable.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < symbolTable.size(); i++) {
+            var ithScope = symbolTable.get(i);
+            var ithScopeEnv = env.symbolTable.get(i);
+
+            if (!ithScopeEnv.keySet().equals(ithScope.keySet())){
+                return false;
+            }
+
+            for (var entry: ithScopeEnv.entrySet()) {
+                var entryEnv = ithScope.get(entry.getKey());
+                if (!entry.getValue().equals(entryEnv)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

@@ -45,5 +45,21 @@ public class PointerTypeNode extends TypeNode {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        PointerTypeNode pointerTypeNode = (PointerTypeNode) obj;
+
+        if (!pointedType.equals(pointerTypeNode.pointedType)) {
+            return false;
+        }
+
+        return true;
+    }
     
 }

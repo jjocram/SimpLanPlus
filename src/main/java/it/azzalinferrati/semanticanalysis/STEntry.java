@@ -96,4 +96,31 @@ public class STEntry {
     public String toString() {
         return toPrint("");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        STEntry entry = (STEntry) obj;
+
+        if (nestingLevel != entry.nestingLevel) {
+            return false;
+        }
+
+        if (offset != entry.offset) {
+            return false;
+        }
+
+        if (!status.equals(entry.status)) {
+            return false;
+        }
+
+        if (!type.equals(entry.type)) {
+            return false;
+        }
+
+        return true;
+    }
 }

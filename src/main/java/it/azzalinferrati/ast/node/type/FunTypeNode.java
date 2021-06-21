@@ -72,4 +72,28 @@ public class FunTypeNode extends TypeNode {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        FunTypeNode funTypeNode = (FunTypeNode) obj;
+
+        if (!returned.equals(funTypeNode.returned)) {
+            return false;
+        }
+
+        if (!params.equals(funTypeNode.params)) {
+            return false;
+        }
+
+        if (!effects.equals(funTypeNode.effects)) {
+            return false;
+        }
+
+        return true;
+    }
 }
