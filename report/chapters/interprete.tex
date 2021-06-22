@@ -52,7 +52,73 @@ La memoria \`e gestita come un array d'interi diviso, logicamente, in due parti:
 \end{itemize}
 
 \section{Record di attivazione}\label{s:record-di-attivazione}
+Nella memoria, lo \textit{stack} \`e diviso in record di attivazione o frame. Quando viene creato un nuovo \textit{scope} e quindi nel main, all'invocazione di una funzione e in un nuovo blocco, viene fatto il \textbf{push} di un nuovo frame e, quando si esce dallo \textit{scope}, ne viene fatto il \textbf{pop}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{organizzazioneMemoria}
+    \caption{Memoria nell'interprete.}
+\end{figure}
+Ogni record di attivazione \`e composto sempre nello stesso modo:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{organizzazioneFrame}
+    \caption{Organizzazione di un record di attivazione.}
+\end{figure}
+\begin{itemize}
+    \item \textbf{Old frame pointer}: utilizzato per memorizzare l'indirizzo del frame pointer precedente al push di un nuovo frame;
+    \item \textbf{Old stack pointer}: utilizzato per memorizzare l'indirizzo dello stack pointer precedente al push di un nuovo frame;
+    \item \textbf{Return address}: utilizzato per memorizzare il valore dell'instruction pointer cos\`i per sapere dove ritornare una volta terminata l'esecuzione di una funzione;
+    \item \textbf{Access link}: utilizzato per risalire la catena statica degli scope per accedere alle variabili dichiarate al di fuori del frame corrente;
+    \item \textbf{Variables}: spazio di memoria riservato alle variabile dichiarate all'interno dello scoper che il frame rappresenta.
+\end{itemize}
 
 \section{Funzionamento dell'interprete}\label{s:funzionamento-interprete}
+\subsection{Campi dati}
+L'interprete e il suo funzionamento sono definiti all'interno della classe \verb|SVMInterpreter|. I suoi campi dati pi\`u rilevanti, in quanto necessari al corretto funzionamento, sono:
+\begin{itemize}
+    \item \textbf{code}: una lista di \verb|SVMInstruction|, generata dal parsing del codice generato, contiene la sequenza ordinata di istruzioni che l'interprete dovr\`a eseguire;
+    \item \textbf{memorySize}: la dimensione massima che la memoria pu\`o raggiungerer;
+    \item \textbf{memory}: un vettore di \verb|MemoryCell|, rappresenta la memoria dell'interprete. Pu\`o essere logicamente divisa in due parti: lo \textit{heap} e lo \textit{stack}. Lo \textit{heap} cresce a partire dagli indici minori ($0, 1, 2, \dots$), mentre lo \textit{stack} cresce a partire dagli indici maggiori ($memorySize, memorySize - 1, memorySize - 2, \dots$);
+    \item \textbf{registers}: una mappa che associa ad una stringa un intero. Le stringhe indicano i registri e, gli interi, il valore che quel registro assume;
+    \item \textbf{\$ip}: registro speciale che indica quale istruzione si sta eseguendo. 
+\end{itemize} 
+Sono poi presenti altri campi dati utilizzati per semplificare il processo di debug e visualizzazione dello stato dell'interprete:
+\begin{itemize}
+    \item \textbf{lastUpdatedRegister}: indica l'ultimo registro aggiornato;
+    \item \textbf{lastUpdatedMemoryCell}: indica l'indirizzo (l'indice del vettore \textit{memory}) di memoria aggiornato per ultimo;
+    \item \textbf{globalCounter}: indica quante istruzioni sono state lette fino a quel momento.
+\end{itemize}
 
+\subsection{Inizializzazione}
+Quando un nuovo oggetto di tipo \verb|SVMInterpreter| viene costruito, il costruttore inizializza i vari campi dati a valori di default, in particolare:
+\begin{itemize}
+    \item Il vettore \textit{memory} viene inizializzato con nuovi oggetti di tipo \verb|MemoryCell|;
+    \item I valori dei registri vengono inizializzati ai valori corretti per eseguire il \textit{main} del programma:
+        \begin{itemize}
+            \item \textbf{\$ip} = 0;
+            \item \textbf{\$sp} = \textit{memorySize};
+            \item \textbf{\$bsp} = \textit{memorySize};
+            \item \textbf{\$fp} = \textit{memorySize} - 1;
+            \item \textbf{\$ra} = \textit{null};
+            \item \textbf{\$al} = \textit{null};
+            \item \textbf{\$a0} = \textit{null};
+            \item \textbf{\$t1} = \textit{null};
+        \end{itemize}
+\end{itemize}
+
+\subsection{Gestione dello heap}
+La scrittura di dati nello heap viene fatta mediante l'istruzione \verb|sw $r $hp| dove \$r \`e il registro che contiene i dati da scrivere nello \textit{heap} e \$hp \`e un registro particolare il cui valore viene computato a run time. Per fare questo \`e stato scritto un metodo (\verb|int hp()|) che restituisce il primo indirizzo disponibile dello \textit{heap}. Il primo indirizzo disponibile \`e quello la cui cella di memeria \`e indicata come \textit{free}. Questo \`e stato fatto per ottimizzare la memoria utilizzata, infatti, quando viene letta un'istruzione \verb|delete pointer| la cella di memoria indicata dal puntatore verr\`a segnata come \textit{free} e potr\`a quindi essere riutilizzata.
+
+\subsection{Esecuzione delle istruzioni}
+Il metodo \verb|void run(boolean activeDebug)| si occupa di eseguire le istruzioni all'interno della lista \textit{code}. Questo viene fatto mediante un ciclo while che cicla finch\`e: o lo \textit{heap} supera lo \textit{stack} indicando la fine della memoria utilizzabile, oppure quando viene eseguita l'istruzione \verb|halt| che termina l'esecuzione senza lanciare eccezioni.\\
+Ad ogni iterazione viene letta l'istruzione da eseguire e vengono salvati i parametri che questa possiede. Inoltre viene incrementato l'\textit{instruction pointer} per l'iterazione successiva.
+\begin{lstlisting}[language=Java]
+    SVMInstruction instruction = code.get($ip);
+    $ip += 1;
+    String arg1 = instruction.getArg1();
+    String arg2 = instruction.getArg2();
+    String arg3 = instruction.getArg3();
+    int offset = instruction.getOffset();
+\end{lstlisting}
+Il comportamento che viene poi seguito dipende dal campo dati \verb|instruction| della \verb|SVMInstruction| che si sta eseguendo e quindi, tramite uno \verb|switch-case| vengono aggiornati i registri o la memoria in base a cosa ci si attende per l'istruzione in esecuzione.
 \end{document}
