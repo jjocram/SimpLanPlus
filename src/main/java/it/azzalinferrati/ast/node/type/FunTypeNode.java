@@ -50,12 +50,10 @@ public class FunTypeNode extends TypeNode {
 
     @Override
     public String toPrint(String indent) {
-        final String declaration = indent +
+        return indent +
                 params.stream().map((arg) ->  arg.toPrint("")).reduce("",
                 (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " X ")) + arg2)
                 + " -> " + returned.toPrint("");
-
-        return declaration;
     }
 
     @Override
