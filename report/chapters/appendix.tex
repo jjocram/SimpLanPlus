@@ -1,21 +1,21 @@
 \chapter{Guida all'installazione}\label{a:intstallazione}
-Per utlizzare il compilatore e l'interprete sviluppato per questo progetto all'interno di Eclipse \`e sufficiente seguire i seguenti passaggi:
+Per utilizzare il compilatore e l'interprete sviluppato per questo progetto all'interno di Eclipse \`e sufficiente seguire i seguenti passaggi:
 \begin{enumerate}
     \item Importare la cartella \verb|SimpLanPlus| all'interno del workspace di Eclipse:
         \begin{enumerate}
             \item \textit{File $>$ Import};
             \item Dalla schermata che si apre selezionare \textit{General $>$ Existing Projects into Workspace};
-            \item Clicclare su \textit{Browse} e selezionare la cartella \verb|SimpLanPlus|;
+            \item Cliccare su \textit{Browse} e selezionare la cartella \verb|SimpLanPlus|;
             \item Cliccare su \textit{Finish}.
         \end{enumerate}
     \item Aggiungere le librerie di ANTLR: vi sono due modi per aggiungere le librerie necessarie al funzionamento del progetto:
         \begin{enumerate}
             \item Utilizzando Maven:
                 \begin{enumerate}
-                    \item Aprire una finistre del terminale e spostarsi all'interno della cartell \verb|SimpLanPlus|. Pu\`o essere fatto direttamente da Eclipse cliccando su \textit{Open a Terminal} e poi cliccando \textit{Ok};
+                    \item Aprire una finestre del terminale e spostarsi all'interno della cartella \verb|SimpLanPlus|. Pu\`o essere fatto direttamente da Eclipse cliccando su \textit{Open a Terminal} e poi cliccando \textit{Ok};
                     \item Digitare il seguente comando:
                         \begin{lstlisting}
-./mvnw compile assembly:single
+                            ./mvnw compile assembly:single
                         \end{lstlisting}
                 \end{enumerate}
             \item Importandole manualmente:
@@ -23,8 +23,8 @@ Per utlizzare il compilatore e l'interprete sviluppato per questo progetto all'i
                     \item Scaricare ANTLR dal seguente link: \url{https://www.antlr.org/download/antlr-4.7.1-complete.jar};
                     \item Copiare il file scaricato nella cartella \verb|SimpLanPlus|;
                     \item Cliccare sulla freccia che punta verso il basso affianco al pulsante ``Play'' e premere \textit{Run Configurations};
-                    \item Assicurarsi che sia stata scelta la configuarazione per \textit{Execute};
-                    \item Aprire il tab \textit{Dependecies};
+                    \item Assicurarsi che sia stata scelta la configurazione per \textit{Execute};
+                    \item Aprire il tab \textit{Dependencies};
                     \item Selezionare, dalla lista, la voce \textit{Classpath Entries};
                     \item Premere \textit{Add JARs};
                     \item Selezionare il file JAR copiato in precedenza e premere \textit{Ok}.
