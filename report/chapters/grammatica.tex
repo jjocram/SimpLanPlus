@@ -2,6 +2,106 @@
 \begin{document}
 
 \chapter{Grammatica}\label{c:grammatica}
+(Manca cappello introduttivo)
+
+\section{Block}\label{s:block}
+Un programma in SimpLanPlus inizia con un cosiddetto \verb|block|, in cui a una lista di dichiarazioni (\verb|declaration|), può seguire una lista di istruzioni (\verb|statement|), entrambe potenzialmente vuote.
+\begin{lstlisting}[style=antlr]
+block       : '{' declaration* statement* '}';
+\end{lstlisting}
+Lo stesso \verb|block| potrà a sua volta essere utilizzato come parte di un'istruzione, come viene illustrato in \hyperref[s:istruzioni]{Sezione 2.3 Istruzioni}.
+
+\section{Dichiarazioni}\label{s:dichiarazioni}
+Le dichiarazioni sono di due tipi: di variabile e di funzione. La dichiarazione di variabile permette di definire variabili di tipo intero, booleano e puntatori (che puntano a loro volta a zone di memoria contenenti variabili intere, booleane o puntatori). Contestualmente alla dichiarazione di una variabile può anche avvenire l'assegnazione, fornendo un'espressione (\verb|exp|) di cui viene trattato più in dettaglio in \hyperref[s:espressioni]{Sezione 2.4 Espressioni}.
+La dichiarazione di funzione permette di ritornare o meno un valore (nel caso non venga ritornato, il tipo di ritorno è \verb|void|), di avere 0 o più argomenti (c.d. \textbf{parametri formali}) e di avere un \verb|block| di istruzioni correlato, lo stesso presentato nella precedente sezione.
+\begin{lstlisting}[style=antlr]
+declaration : decFun    #declarateFun
+            | decVar    #declarateVar;
+
+decFun      : funType ID '(' (arg (',' arg)*)? ')' block;
+
+decVar      : type ID ('=' exp)? ';';
+
+type        : 'int'
+            | 'bool'
+            | '^' type;
+
+funType     : type | 'void';
+
+arg         : type ID;
+\end{lstlisting}
+
+\section{Istruzioni}\label{s:istruzioni}
+Le istruzioni possono essere di diverso tipo:
+\begin{itemize}
+    \item assegnazione (\verb|assignment|), a cui ad una variabile precedentemente dichiarata si va ad assegnare un valore;
+    \item cancellazione (\verb|deletion|), con cui viene rimosso lo spazio di memoria dedicato ad una variabile di tipo puntatore;
+    \item stampa (\verb|print|), con cui viene stampato su \textit{console} il contenuto della variabile;
+    \item ritorno (\verb|ret|), che permette di ritornare un valore da una funzione e nel caso ``ritorni \verb|void|", allora l'istruzione semplicemente ritorna al chiamante;
+    \item condizionale (\verb|ite|), che permette di generare un costrutto \textit{if-then-else}, con condizione booleana e \textit{else-branch} facoltativo;
+    \item chiamata di funzione (\verb|call|), che permette di invocare una funzione, passando tutti gli argomenti richiesti (c.d. \textbf{parametri attuali});
+    \item blocco (\verb|block|), che permette di creare un blocco annidato come descritto in \hyperref[s:block]{Sezione 2.1 Block}.
+\end{itemize}
+\begin{lstlisting}[style=antlr]
+statement   : assignment ';'    #assigtStat
+            | deletion ';'      #deletStat
+            | print ';'         #printStat
+            | ret ';'           #retStat
+            | ite               #iteStat
+            | call ';'          #callStat
+            | block             #blockStat;
+
+assignment  : lhs '=' exp;
+
+lhs         : ID | lhs '^';
+
+deletion    : 'delete' ID;
+
+print       : 'print' exp;
+
+ret         : 'return' (exp)?;
+
+ite         : 'if' '(' condition=exp ')' thenBranch=statement ('else' elseBranch=statement)?;
+
+call        : ID '(' (exp(',' exp)*)? ')';
+\end{lstlisting}
+
+\section{Espressioni}\label{s:espressioni}
+Le espressioni, utilizzabili in diversi contesti, come nell'assegnazione di valori alle variabili, nell'allocazione di memoria per i puntatori e nelle condizioni booleane delle istruzioni \textit{if}.
+\begin{lstlisting}[style=antlr]
+exp         : '(' exp ')'                                       #baseExp
+            | '-' exp                                           #negExp
+            | '!' exp                                           #notExp
+            | lhs                                               #derExp
+            | 'new' type                                        #newExp
+            | left=exp op=('*' | '/')               right=exp   #binExp
+            | left=exp op=('+' | '-')               right=exp   #binExp
+            | left=exp op=('<' | '<=' | '>' | '>=') right=exp   #binExp
+            | left=exp op=('=='| '!=')              right=exp   #binExp
+            | left=exp op='&&'                      right=exp   #binExp
+            | left=exp op='||'                      right=exp   #binExp
+            | call                                              #callExp
+            | BOOL                                              #boolExp
+            | NUMBER                                            #valExp;
+
+// Booleans
+BOOL        : 'true'|'false';
+
+// IDs
+fragment CHAR   : 'a'..'z'|'A'..'Z';
+ID              : CHAR (CHAR | DIGIT)*;
+
+// Numbers
+fragment DIGIT  : '0'..'9';
+NUMBER          : DIGIT+;
+\end{lstlisting}
+
+\section{Commenti e spazi bianchi}\label{s:commenti-spazi-bianchi}
+Infine, i commenti possono essere di due tipi: in linea (che iniziano con \verb|//|) e a blocco (racchiusi fra \verb|/*| e \verb|*/|). Spazi bianchi, ritorni a capo e tabulazioni vengono scartati.
+\begin{lstlisting}[style=antlr]
+WS              : (' '|'\t'|'\n'|'\r') -> skip;
+LINECOMMENTS    : '//' (~('\n'|'\r'))* -> skip;
+BLOCKCOMMENTS   : '/*'( ~('/'|'*')|'/'~'*'|'*'~'/'|BLOCKCOMMENTS)* '*/' -> skip;
+\end{lstlisting}
 
 \end{document}
-
