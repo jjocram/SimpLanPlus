@@ -28,7 +28,6 @@ public class SimpLanPlusTest {
         filesWithErrors.add("example16.simplan");
         filesWithErrors.add("example17.simplan");
         filesWithErrors.add("example18.simplan");
-        filesWithErrors.add("example26.simplan"); //TODO: check after lecturer's response
 
         Collection<Object[]> params = new ArrayList<>(9);
         assert examplesFile != null;
