@@ -101,7 +101,7 @@ public class BlockNode implements Node {
             return new VoidTypeNode();
         }
 
-        return statements.get(statements.size() - 1).typeCheck();
+        return statements.get(statements.size() - 1).typeCheck(); //The last statement will be the return statement
     }
 
     @Override

@@ -5,7 +5,7 @@
 (Manca cappello introduttivo)
 
 \section{Block}\label{s:block}
-Un programma in SimpLanPlus inizia con un cosiddetto \verb|block|, in cui a una lista di dichiarazioni (\verb|declaration|), può seguire una lista di istruzioni (\verb|statement|), entrambe potenzialmente vuote.
+Un programma in \textbf{SimpLanPlus} inizia con un cosiddetto \verb|block|, in cui a una lista di dichiarazioni (\verb|declaration|), può seguire una lista di istruzioni (\verb|statement|), entrambe potenzialmente vuote.
 \begin{lstlisting}[style=antlr]
 block       : '{' declaration* statement* '}';
 \end{lstlisting}
@@ -67,7 +67,7 @@ call        : ID '(' (exp(',' exp)*)? ')';
 \end{lstlisting}
 
 \section{Espressioni}\label{s:espressioni}
-Le espressioni, utilizzabili in diversi contesti, come nell'assegnazione di valori alle variabili, nell'allocazione di memoria per i puntatori e nelle condizioni booleane delle istruzioni \textit{if}.
+Le espressioni sono utilizzabili in diversi contesti, come nell'assegnazione di valori alle variabili, nell'allocazione di memoria per i puntatori e nelle condizioni booleane delle istruzioni \textit{if}.
 \begin{lstlisting}[style=antlr]
 exp         : '(' exp ')'                                       #baseExp
             | '-' exp                                           #negExp

@@ -1,5 +1,7 @@
 {
     ^int a = new int;
+    a^ = 5;
     delete a;
     a = new int;
+    a^ = 4;
 }

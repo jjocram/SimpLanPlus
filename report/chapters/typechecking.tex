@@ -3,14 +3,23 @@
 
 \chapter{Type checking}\label{c:typechecking}
 \section{Correttezza dei tipi}
-La correttezza dei tipi viene gestista tramite il metodo \verb|Node typeCheck()| che restituisce un nodo rappresentante il tipo del nodo su cui si \`e invocata, null in caso quel nodo non debba avere associato un tipo o  un'eccezione in caso di errori durante il processo.
-\subsection{Tipi}
-I tipi implementati nel linguaggio sono:
+La correttezza dei tipi viene gestista tramite il metodo \verb|Node typeCheck()| che restituisce un nodo rappresentante il tipo del nodo (istanza di \verb|Node|) su cui si \`e invocato, null in caso quel nodo non debba avere associato un tipo o  un'eccezione in caso di errori durante il processo.\\
+Il valore \verb|null| viene ritornato da tutti i nodi che hanno come supertipo \verb|TypeNode|, dagli argomenti delle funzioni, dalle dichiarazione di variabili e funzioni.\\
+Le istruzioni, per scelta implementativa, ritornano il tipo \verb|void| ma ci sono alcune eccezioni:
 \begin{itemize}
-    \item \textbf{Boolean}: rappresenta un tipo booleano \verb|true| o \verb|false|;
-    \item \textbf{Integer}: rappresenta un tipo intero;
-    \item \textbf{Pointer}: rappresenta un tipo puntatore che punta a un tipo booleano, intero o a un altro tipo puntatore;
-    \item \textbf{Function}: tipo utilizzato per le funzioni, contiene la lista dei tipi dei parametri, il tipo ritornato e la lista degli effetti che i parametri subiscono all'invocazione della funzione.
+    \item \verb|RetNode| che ritorna il tipo dell'espressione, \verb|void| nel caso non ce ne sia alcuna;
+    \item \verb|CallNode| che ritorna il tipo di ritorno dichiarato dalla funzione;
+    \item \verb|IteNode| che ritorna il tipo comune ai due rami (che deve essere quindi uguale);
+    \item \verb|BlockNode| che ritorna \verb|void| in assenza di istruzioni o quando non vi \`e n\'e \verb|return| n\'e \textit{if-then-else} altrimenti ritorna il tipo di \verb|RetNode| o di \verb|IteNode|. 
+\end{itemize}
+\subsection{Tipi}
+Come brevemente anticipato in~\ref{s:dichiarazioni}, i tipi implementati nel linguaggio sono:
+\begin{itemize}
+    \item \verb|bool|: rappresenta un tipo booleano \verb|true| o \verb|false|;
+    \item \verb|int|: rappresenta un tipo intero;
+    \item \verb|pointer|: rappresenta un tipo puntatore che punta a un tipo booleano, intero o a un altro tipo puntatore;
+    \item \verb|void|: rappresenta il tipo vuoto;
+    \item \verb|function|: tipo utilizzato per le funzioni, contiene la lista dei tipi dei parametri e il tipo ritornato.
 \end{itemize}
 \end{document}
 
