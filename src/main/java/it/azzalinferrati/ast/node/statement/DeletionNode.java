@@ -43,7 +43,7 @@ public class DeletionNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(id.codeGeneration());
         buffer.append("del $a0 ;mark as deleted the address in $a0\n");
 

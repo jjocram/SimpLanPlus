@@ -40,7 +40,7 @@ public class NegativeExpNode extends ExpNode {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(exp.codeGeneration());
         buffer.append("multi $a0 $a0 -1\n");
 

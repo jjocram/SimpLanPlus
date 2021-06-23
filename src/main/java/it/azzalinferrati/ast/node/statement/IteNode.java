@@ -58,7 +58,7 @@ public class IteNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         String thenBranchLabel = LabelManager.getInstance().freshLabel("thenBranch");
         String endIfLabel = "endIf" + thenBranchLabel;

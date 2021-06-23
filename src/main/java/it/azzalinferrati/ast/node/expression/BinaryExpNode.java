@@ -83,7 +83,7 @@ public class BinaryExpNode extends ExpNode {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         LabelManager labelManager = LabelManager.getInstance();
 
         buffer.append(leftExpression.codeGeneration());

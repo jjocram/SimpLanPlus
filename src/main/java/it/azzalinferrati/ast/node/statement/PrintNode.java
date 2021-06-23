@@ -39,7 +39,7 @@ public class PrintNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(exp.codeGeneration());
         buffer.append("print $a0\n");
         return buffer.toString();

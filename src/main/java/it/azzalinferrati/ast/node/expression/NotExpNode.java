@@ -40,7 +40,7 @@ public class NotExpNode extends ExpNode{
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(exp.codeGeneration());
         buffer.append("not $a0 $a0\n");
         return buffer.toString();

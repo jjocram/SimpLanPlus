@@ -106,21 +106,19 @@ public class BlockNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         if (allowScopeCreation) {
             if (isMainBlock) {
                 buffer.append("push $sp\n");
-                buffer.append("li $t1 0\n");
-                buffer.append("push $t1\n");
             } else {
                 buffer.append("push $fp ;push old fp\n"); // push old $fp
                 buffer.append("push $bsp\n"); //remember old bsp
-
-                //push fake RA
-                buffer.append("li $t1 0\n"); //TODO in comune con la parte then dell'if
-                buffer.append("push $t1\n");
             }
+
+            //push fake RA
+            buffer.append("li $t1 0\n");
+            buffer.append("push $t1\n");
 
             buffer.append("mv $al $fp\n");
             buffer.append("push $al ;it's equal to the old $fp\n");

@@ -69,7 +69,7 @@ public class DecVarNode extends DeclarationNode {
         }
 
         // Declaration with initialization
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(exp.codeGeneration());
         buffer.append("push $a0\n");
 

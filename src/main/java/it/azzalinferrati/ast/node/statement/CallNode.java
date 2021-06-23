@@ -77,8 +77,7 @@ public class CallNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuffer buffer = new StringBuffer();
-        int offsetNumberOfParams = params.size() == 0 ? 0 : params.size() - 1;
+        StringBuilder buffer = new StringBuilder();
         buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
         buffer.append("push $sp\n"); //push old stack pointer
         buffer.append("mv $bsp $sp\n"); //update base stack pointer to the new place //TODO: look at BlockNode
@@ -123,7 +122,7 @@ public class CallNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(id.checkSemantics(env));
-        params.stream().forEach((p) -> errors.addAll(p.checkSemantics(env)));
+        params.forEach((p) -> errors.addAll(p.checkSemantics(env)));
         currentNestingLevel = env.getNestingLevel();
 
         if (!errors.isEmpty()) {
