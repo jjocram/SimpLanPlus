@@ -37,7 +37,6 @@ public class DeletionNode implements Node {
             throw new TypeCheckingException("Variable " + id.toPrint("") + " is not a pointer");
         }
 
-        //return null; // Nothing to return
         return new VoidTypeNode();
     }
 

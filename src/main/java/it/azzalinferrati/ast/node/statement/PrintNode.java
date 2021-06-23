@@ -33,7 +33,6 @@ public class PrintNode implements Node {
     public TypeNode typeCheck() throws TypeCheckingException {
         exp.typeCheck(); // Executes the type checking on the expression (throwing exceptions if needed)
 
-        //return null; // Nothing to return
         return new VoidTypeNode();
     }
 

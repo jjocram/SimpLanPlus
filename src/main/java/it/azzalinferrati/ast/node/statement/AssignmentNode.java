@@ -39,7 +39,6 @@ public class AssignmentNode implements Node {
         TypeNode expType = exp.typeCheck();
 
         if(Node.isSubtype(expType, lhsType)) {
-            //return null;
             return new VoidTypeNode();
         }
 
