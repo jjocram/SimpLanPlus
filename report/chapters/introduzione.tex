@@ -15,7 +15,7 @@ Lo scopo del progetto è stato quello di realizzare un compilatore e un interpre
 \end{itemize}
 
 \subsection{Il compilatore}
-Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima di generare il codice simil-assembly corrispondente:
+Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima di generare il codice simil-Assembly corrispondente:
 \begin{enumerate}
     \item analisi lessicale, in cui il codice sorgente viene trasformato in \textit{token}, ovvero piccoli blocchi logici, che servono poi a contribuire a creare l'\textbf{Abstract Syntax Tree (AST)};
     \item analisi semantica, in cui viene verificata la correttezza semantica del programma in input (ad esempio, che le variabili vengano utilizzate solo dopo una loro dichiarazione);
@@ -24,7 +24,15 @@ Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima 
 \end{enumerate}
 
 \subsection{L'interprete}
+L'interprete di \textbf{SimpLanPlus} prende in input il codice simil-Assembly generato dal compilatore, illustrato nella precedente sezione, e lo esegue un'istruzione alla volta.
+Il programma viene eseguito in una ``memoria virtuale" (simulata dal codice che implementa l'interprete) la cui dimensione è configurabile (come farlo è illustrato nel \hyperref[c:simplanplus-java]{Capitolo 7 SimpLanPlus.java}).
 
 \section{Tecnologie utilizzate}\label{s:teconologie-utilizzate}
+Le tecnologie principali utilizzate per il progetto sono le seguenti:
+\begin{itemize}
+    \item \textbf{Java 11}, con cui sono scritti gli interi compilatore e interprete;
+    \item \textbf{ANTLR 4.9.2}, per implementare in maniera automatica la parte di analisi lessicale e il parser sia per \textbf{SimpLanPlus} che per il linguaggio simil-Assembly;
+    \item \textbf{Maven (wrapper) 3.6.3}, per gestire le dipendenze, il processo di build e di test di tutte le parti del progetto.
+\end{itemize}
 
 \end{document}
