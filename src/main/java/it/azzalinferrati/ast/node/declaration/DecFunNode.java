@@ -108,8 +108,8 @@ public class DecFunNode implements Node {
 
             errors.addAll(block.checkSemantics(env));
             for (int i = 0; i < args.size(); i++) {
-                var arg = args.get(i);
-                var entry = env.safeLookup(arg.getId().getId());
+                var argId = args.get(i).getId();
+                var entry = env.safeLookup(argId.getId());
                 funType.setParamEffect(i, entry.getStatus());
             }
 
@@ -122,8 +122,8 @@ public class DecFunNode implements Node {
 
                 errors.addAll(block.checkSemantics(env));
                 for (int i = 0; i < args.size(); i++) {
-                    var arg = args.get(i);
-                    var entry = env.safeLookup(args.get(i).getId().getId());
+                    var argId = args.get(i).getId();
+                    var entry = env.safeLookup(argId.getId());
                     funType.setParamEffect(i, entry.getStatus());
                 }
 
