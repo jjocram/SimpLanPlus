@@ -3,6 +3,27 @@
 
 \chapter{Introduzione}\label{c:introduzione}
 \section{Scopo del progetto}\label{s:scopo-progetto}
+Lo scopo del progetto è stato quello di realizzare un compilatore e un interprete per un linguaggio imperativo chiamato \textbf{SimpLanPlus}.
+
+\subsection{Il linguaggio}
+\textbf{SimpLanPlus} è un linguaggio:
+\begin{itemize}
+    \item staticamente tipato;
+    \item non ad oggetti;
+    \item con gestione della memoria manuale (come in C/C++);
+    \item con la possibilità di definire funzioni, anche ricorsive, ma non mutualmente ricorsive.
+\end{itemize}
+
+\subsection{Il compilatore}
+Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima di generare il codice Assembly corrispondente:
+\begin{enumerate}
+    \item analisi lessicale, in cui il codice sorgente viene trasformato in \textit{token}, ovvero piccoli blocchi logici, che servono poi a contribuire a creare l'\textbf{Abstract Syntax Tree (AST)};
+    \item analisi semantica, in cui viene verificata la correttezza semantica del programma in input (ad esempio, che le variabili vengano utilizzate solo dopo una loro dichiarazione);
+    \item analisi degli effetti, in cui viene verificato lo stato delle variabili e dei puntatori (inizializzato $\bot$, letto/scritto $rw$, cancellato $d$, errore $\top$);
+    \item \textit{type checking}, in cui viene controllato che i tipi all'interno delle espressioni, nelle assegnazioni e nelle istruzioni siano concordi a quanto atteso.
+\end{enumerate}
+
+\subsection{L'interprete}
 
 \section{Tecnologie utilizzate}\label{s:teconologie-utilizzate}
 
