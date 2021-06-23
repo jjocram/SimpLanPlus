@@ -1,0 +1,16 @@
+{
+    ^int a = new int;
+    ^int b = new int;
+    void f(^int x, ^int y, int n) {
+        if (n == 0) {
+            delete y;
+        }
+        else {
+            ^int w = new int;
+            f(w, x, n-1);
+            delete y;
+        }
+    }
+
+    f(a, b, 1);
+}

@@ -1,7 +1,7 @@
 {
     /*
     This example shows the importance of having a fix-point method implemented for performing the effects analysis on functions.
-    The program is correct (with this specific configuration of a^ = 1 and b^ = 1, just a gets deleted) and should not output anything.
+    The program is correct and should not output anything. Both a and b will be marked as deleted.
     */
     ^int a = new int;
     ^int b = new int;

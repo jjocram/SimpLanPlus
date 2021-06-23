@@ -1,0 +1,5 @@
+{
+    ^int a = new int;
+    delete a;
+    a = new int;
+}

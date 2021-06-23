@@ -10,6 +10,7 @@ import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.statement.BlockNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
@@ -17,7 +18,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
  * <p>Represents a function declaration in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: {@code null} (it has no type) if the returned type matches the returned type declared in the function definition, otherwise throws an error.</p>
  * <p><strong>Semantic analysis</strong>: updates the current environment with the function definition (throws an error if already existent), pushes a new scope with the function arguments in it, then disallows the scope creation and finally checks the block for semantic errors.</p>
  * <p><strong>Code generation</strong>: Pushes the <strong>$ra</strong>, generates the code for the block, gets and removes the <strong>$ra</strong> from the stack, removes all the arguments from the stack, removes the <strong>$al</strong> from the stack, loads the old <strong>$fp</strong> and finally jumps to the instruction pointed by <strong>$ra</strong>.</p>
@@ -43,7 +44,7 @@ public class DecFunNode implements Node {
     public String toPrint(String indent) {
         final String declaration = indent + "Function dec\t>> " + id.toPrint(" ") + " : "
                 + args.stream().map((arg) -> "(" + arg.toPrint("") + ")").reduce("",
-                        (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " X ")) + arg2)
+                (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " X ")) + arg2)
                 + " -> " + type.toPrint("");
         final String body = indent + "Function body\t>>\n" + block.toPrint(indent);
 
@@ -98,21 +99,62 @@ public class DecFunNode implements Node {
 
             env.pushNewScope();
 
-            for(ArgNode arg: args) {
+            for (ArgNode arg : args) {
                 var stEntry = env.addNewDeclaration(arg.getId().getId(), arg.getType());
                 arg.getId().setEntry(stEntry);
             } // \Sigma_0
 
             env.addNewDeclaration(id.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
-
             block.disallowScopeCreation();
-            errors.addAll(block.checkSemantics(env));
-            // block.allowScopeCreation();
 
-            for(int i = 0; i < args.size(); i++) {
-                var arg = args.get(i);
-                funType.setParamEffect(i, arg.getId().getStatus());
+
+            /*
+            int i = 0
+            int old_i = i
+
+            i++
+
+            while(i != old_i){
+                old_i = i
+                i = new
             }
+             */
+
+            Environment old_env = new Environment(env);
+            List<Effect> old_effects = new ArrayList<>(funType.getEffects());
+
+            //System.out.println(env);
+            //System.out.println(funType.getEffects());
+            errors.addAll(block.checkSemantics(env));
+            for (int i = 0; i < args.size(); i++) {
+                var arg = args.get(i);
+                var entry = env.safeLookup(arg.getId().getId());
+                //arg.getId().setStatus(entry.getStatus());
+                funType.setParamEffect(i, entry.getStatus());
+            }
+
+
+            boolean different_funType = !funType.getEffects().equals(old_effects);
+
+            while (different_funType) {
+                //System.out.println(env);
+                //System.out.println(funType.getEffects());
+                env.replace(old_env);
+                old_effects = new ArrayList<>(funType.getEffects());
+
+                errors.addAll(block.checkSemantics(env));
+                for (int i = 0; i < args.size(); i++) {
+                    var arg = args.get(i);
+                    var entry = env.safeLookup(args.get(i).getId().getId());
+                    //arg.getId().setStatus(entry.getStatus());
+                    funType.setParamEffect(i, entry.getStatus());
+                }
+
+                different_funType = !funType.getEffects().equals(old_effects);;
+            }
+
+            //System.out.println(env);
+            //System.out.println(funType.getEffects());
 
             env.popScope();
         } catch (MultipleDeclarationException exception) {

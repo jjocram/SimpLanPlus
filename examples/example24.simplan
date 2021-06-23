@@ -1,0 +1,12 @@
+{
+    void f(int a) {
+        if (a==0) {
+            print a;
+            return;
+        }
+
+        return f(a-1);
+    }
+
+    f(2);
+}

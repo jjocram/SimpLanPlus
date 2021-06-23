@@ -21,12 +21,14 @@ public class SimpLanPlusTest {
         List<String> filesWithErrors = new ArrayList<>();
         filesWithErrors.add("example2.simplan");
         filesWithErrors.add("example3.simplan");
+        filesWithErrors.add("example5.simplan");
         filesWithErrors.add("example12.simplan");
         filesWithErrors.add("example13.simplan");
         filesWithErrors.add("example14.simplan");
         filesWithErrors.add("example16.simplan");
         filesWithErrors.add("example17.simplan");
         filesWithErrors.add("example18.simplan");
+        filesWithErrors.add("example26.simplan"); //TODO: check after lecturer's response
 
         Collection<Object[]> params = new ArrayList<>(9);
         assert examplesFile != null;
