@@ -18,7 +18,6 @@ import it.azzalinferrati.svm.parser.SVMParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -38,13 +37,14 @@ public class SimpLanPlus {
             /* FLAGS */
             Flags flags = new Flags(args);
             String filename = args[0];
+            String fileContent = Files.readString(Paths.get(filename));
 
             System.out.println("Input file:\t" + filename);
             System.out.println("Flags:\t\t" + flags);
 
             /* COMPILER */
             if (flags.mode().equals("compile")) {
-                var assembly = compile(flags, filename);
+                var assembly = compile(flags, fileContent);
 
                 // Generating the Assembly file name.
                 int fileExtBeginIndex = filename.lastIndexOf(".");
@@ -57,13 +57,12 @@ public class SimpLanPlus {
 
             /* INTERPRETER */
             if (flags.mode().equals("run")) {
-                var assembly = Files.readString(Paths.get(filename));
-                run(flags, assembly);
+                run(flags, fileContent);
             }
 
             /* ALL: COMPILER & INTERPRETER */
             if (flags.mode().equals("all")) {
-                run(flags, compile(flags, filename));
+                run(flags, compile(flags, fileContent));
             }
         } catch (Exception exc) {
             System.err.println(exc.getMessage());
@@ -76,13 +75,12 @@ public class SimpLanPlus {
      * Handles the compilation phase.
      * 
      * @param flags    for the compilation phase
-     * @param fileName where to find the SimpLanPlus code
+     * @param simpLanPlusCode the SimpLanPlusCode
      * @return the generated Assembly code for the SimpLanPlus Virtual Machine (SVM)
-     * @throws IOException if the file {@code fileName} is not found
      */
-    private static String compile(final Flags flags, final String fileName) throws IOException {
+    private static String compile(final Flags flags, final String simpLanPlusCode) {
         /* SIMPLANPLUS LEXER */
-        SimpLanPlusLexer slpLexer = new SimpLanPlusLexer(CharStreams.fromFileName(fileName));
+        SimpLanPlusLexer slpLexer = new SimpLanPlusLexer(CharStreams.fromString(simpLanPlusCode));
         CommonTokenStream slpLexerTokens = new CommonTokenStream(slpLexer);
 
         slpLexer.removeErrorListeners();
