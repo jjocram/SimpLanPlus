@@ -5,7 +5,7 @@
 \section{Scopo del progetto}\label{s:scopo-progetto}
 Lo scopo del progetto è stato quello di realizzare un compilatore e un interprete per un linguaggio imperativo chiamato \textbf{SimpLanPlus}.
 
-\subsection{Il linguaggio}
+\subsection{Il linguaggio}\label{ss:linguaggio}
 \textbf{SimpLanPlus} è un linguaggio:
 \begin{itemize}
     \item staticamente tipato;
@@ -14,7 +14,7 @@ Lo scopo del progetto è stato quello di realizzare un compilatore e un interpre
     \item con la possibilità di definire funzioni, anche ricorsive, ma non mutualmente ricorsive.
 \end{itemize}
 
-\subsection{Il compilatore}
+\subsection{Il compilatore}\label{ss:compilatore}
 Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima di generare il codice simil-Assembly corrispondente:
 \begin{enumerate}
     \item analisi lessicale, in cui il codice sorgente viene trasformato in \textit{token}, ovvero piccoli blocchi logici, che servono poi a contribuire a creare l'\textbf{Abstract Syntax Tree (AST)};
@@ -23,7 +23,7 @@ Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima 
     \item \textit{type checking}, in cui viene controllato che i tipi all'interno delle espressioni, nelle assegnazioni e nelle istruzioni siano concordi a quanto atteso.
 \end{enumerate}
 
-\subsection{L'interprete}
+\subsection{L'interprete}\label{ss:interprete}
 L'interprete di \textbf{SimpLanPlus} prende in input il codice simil-Assembly generato dal compilatore, illustrato nella precedente sezione, e lo esegue un'istruzione alla volta.
 Il programma viene eseguito in una ``memoria virtuale" (simulata dal codice che implementa l'interprete) la cui dimensione è configurabile (come farlo è illustrato nel \hyperref[c:simplanplus-java]{Capitolo 7 SimpLanPlus.java}).
 

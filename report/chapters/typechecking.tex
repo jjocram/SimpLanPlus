@@ -2,7 +2,7 @@
 \begin{document}
 
 \chapter{Type checking}\label{c:typechecking}
-\section{Correttezza dei tipi}
+\section{Correttezza dei tipi}\label{s:correttezza-tipi}
 La correttezza dei tipi viene gestista tramite il metodo \verb|Node typeCheck()| che restituisce un nodo rappresentante il tipo del nodo (istanza di \verb|Node|) su cui si \`e invocato, null in caso quel nodo non debba avere associato un tipo o  un'eccezione in caso di errori durante il processo.\\
 Il valore \verb|null| viene ritornato da tutti i nodi che hanno come supertipo \verb|TypeNode|, dagli argomenti delle funzioni, dalle dichiarazione di variabili e funzioni.\\
 Le istruzioni, per scelta implementativa, ritornano il tipo \verb|void| ma ci sono alcune eccezioni:
@@ -12,7 +12,7 @@ Le istruzioni, per scelta implementativa, ritornano il tipo \verb|void| ma ci so
     \item \verb|IteNode| che ritorna il tipo comune ai due rami (che deve essere quindi uguale);
     \item \verb|BlockNode| che ritorna \verb|void| in assenza di istruzioni o quando non vi \`e n\'e \verb|return| n\'e \textit{if-then-else} altrimenti ritorna il tipo di \verb|RetNode| o di \verb|IteNode|. 
 \end{itemize}
-\subsection{Tipi}
+\subsection{Tipi}\label{s:tipi}
 Come brevemente anticipato in~\ref{s:dichiarazioni}, i tipi implementati nel linguaggio sono:
 \begin{itemize}
     \item \verb|bool|: rappresenta un tipo booleano \verb|true| o \verb|false|;
