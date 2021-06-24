@@ -52,6 +52,18 @@ La memoria \`e gestita come un array di \verb|MemoryCell| diviso, logicamente, i
 \end{itemize}
 
 \subsubsection{MemoryCell}
+La classe \verb|MemoryCell| rappresenta una singola cella di memoria dell'interprete. I campi dati sono: 
+\begin{itemize}
+    \item \verb|data|: un intero che rappresenta il dato salvato nella cella di memoria;
+    \item \verb|isUsed|: un booleano che indica se la cella di memoria \`e in uso oppure pu\`o essere liberamente scritta. Questo campo dati \`e usato per identificare quale cella utilizzare per scrivere dati sullo heap.
+\end{itemize}
+Sono stati implementati quattro metodi che semplificano la gestione delle celle di memoria:
+\begin{itemize}
+    \item \verb|int getData()|: ritorna il dato contenuto nella cella di memoria. Lancia un eccezione nel caso in cui la cella di memoria non sia mai stata scritta;
+    \item \verb|void setData(Integer data)|: aggiorna la cella con il dato passato in input alla funzione. Questo metodo segna come \textit{in uso} la cella; 
+    \item \verb|void freeCell()|: segna come \textit{non in uso} la cella di memoria, viene chiamato quando viene fatta la \verb|delete| di un puntatore;
+    \item \verb|boolean isFree()|: ritorna un booleano rappresentante se la cella \`e in uso oppure no.
+\end{itemize}
 
 \section{Record di attivazione}\label{s:record-di-attivazione}
 Nella memoria, lo \textit{stack} \`e diviso in record di attivazione o \textit{frame}. Quando viene creato un nuovo \textit{scope} e quindi: nel main, all'invocazione di una funzione e in un nuovo blocco, viene fatto il \textbf{push} di un nuovo \textit{frame} e, quando si esce dallo \textit{scope}, ne viene fatto il \textbf{pop}.
