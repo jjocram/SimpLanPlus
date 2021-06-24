@@ -3,6 +3,38 @@
 
 \chapter{Analisi semantica}\label{c:analisi-semantica}
 \section{Struttura ambiente}\label{s:struttura-ambiente}
+L'ambiente è definito all'interno del nostro compilatore attraverso le classi \verb|Environment| e \verb|STEntry|, la prima che rappresenta l'ambiente nel suo intero, la seconda invece una singola \textit{entry}.
+Per semplicità, \verb|Environment| corrisponde sia al c.d. ambiente $\Gamma{}$, utilizzato per il type checking, che all'ambiente $\Sigma{}$ utilizzato per l'analisi degli effetti, di cui viene trattato più approfonditamente in \hyperref[c:analisi-effetti]{Capitolo 4 Analisi degli effetti}. In questo capitolo verrà trattato solo ciò che concerne l'analisi semantica in senso stretto.
+
+\subsection[Classe Environment]{Classe \texttt{Environment}}
+\verb|Environment| è una classe molto ricca di funzionalità che permette di gestire ad alto livello la \textit{Symbol Table}. Tale \textit{Symbol Table} è implementata come uno \textit{stack} di \textit{hash map}, in cui ogni elemento dello \textit{stack} (implementato come una \textit{array} dinamico) rappresenta uno scope e ogni elemento di una \textit{hash map} associa la stringa di un identificatore con la corrispondente \textit{entry}, rappresentata da un'istanza di \verb|STEntry|.
+Ci sono inoltre altri campi ausiliari che memorizzano il livello di annidamento corrente e l'\textit{offset} nello \textit{scope} corrente per la generazione del codice simil-Assembly.\\
+I metodi per la gestione della \textit{Symbol Table} sono:
+\begin{itemize}
+    \item \verb|void pushNewScope()| che corrisponde all'operazione $\Gamma{}\cdot{}[\;]$, la quale incrementa contestualmente il livello di annidamento;
+    \item \verb|STEntry addNewDeclaration(final String id, final TypeNode type)| che corrisponde all'operazione $\Gamma{}[$\verb|id| $ \rightmapsto{}$\verb|type|$]$, aggiornando contestualmente l'offset in caso $type$ non corrisponda ad un tipo funzione;
+    \item \verb|STEntry lookup(final String id)| che corrisponde all'operazione $\Gamma($\verb|id|$)$ che restituisce la prima \verb|STEntry| corrispondente all'identificatore $id$ a partire dal top dello stack.
+    \item \verb|void popScope()| che corrisponde all'operazione $\Gamma \leftarrow{} \Gamma'$ partendo da $\Gamma = \Gamma'\cdot{}top(\Gamma)$.
+\end{itemize}
+
+\subsection[Classe STEntry]{Classe \texttt{STEntry}}
+Come specificato nella precedente sezione, \verb|STEntry| raccoglie i dati relativi ad una singola entry della \textit{Symbol Table}, sia per $\Gamma{}$ che per $\Sigma{}$.
+I campi dati relativi alla gestione delle entry della \textit{Symbol Table} sono:
+\begin{itemize}
+    \item \verb|nestingLevel| che rappresenta il livello di annidamento della variabile o funzione all'interno del codice sorgente;
+    \item \verb|type| che rappresenta il tipo correlato all'identificatore;
+    \item \verb|offset| che è la posizione nel \textit{frame} rispetto all'Access Link.
+\end{itemize}
+
+\section{Controllo errori semantici}
+Il controllo degli errori semantici e la costruzione della \textit{Symbol Table} viene fatta tramite il metodo \verb|ArrayList<SemanticError> checkSemantics(Environment env)| presente in ogni nodo dell'AST.
+L'istanza di \verb|Environment| viene creata e passata alla radice dell'AST all'interno della classe \verb|SimpLanPlus|, illustrata più in dettaglio nel \hyperref[c:simplanplus-java]{Capitolo 7 SimpLanPlus.java}.
+Ogni nodo si occupa di verificare la correttezza di sé e, se dispone di nodi figli nell'AST, lo invoca anche su di loro.
+In caso di presenza di errori, essi vengono segnalati con la creazione di un'istanza di \verb|SemanticError|, una classe di utilità che contiene il messaggio d'errore da segnalare all'utente.
+Tutte le istanze di \verb|SemanticError| vengono collezionate e ritornate alla fine dell'esecuzione del metodo \verb|checkSemantics| sul nodo corrente.
+Conseguentemente, per quanto spiegato finora, ogni nodo ritorna gli errori di sé e dei suoi nodi figli.\\
+\noindent
+L'implementazione dei metodi checkSemantics ricalca quanto visto durante le lezioni sull'analisi semantica del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
 
 
 \end{document}
