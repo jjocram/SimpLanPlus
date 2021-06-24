@@ -54,7 +54,7 @@ La memoria \`e gestita come un array di \verb|MemoryCell| diviso, logicamente, i
 \subsubsection{MemoryCell}\label{sss:memorycell}
 La classe \verb|MemoryCell| rappresenta una singola cella di memoria dell'interprete. I campi dati sono: 
 \begin{itemize}
-    \item \verb|data|: un intero che rappresenta il dato salvato nella cella di memoria;
+    \item \verb|data|: un intero che rappresenta il dato salvato nella cella di memoria (mentre per gli interi di \textbf{SimpLanPlus} il dato viene memorizzato così com'è, i booleani vengono convertiti per semplicità di gestione in $1$ (\verb|true|) e $0$ (\verb|false|));
     \item \verb|isUsed|: un booleano che indica se la cella di memoria \`e in uso oppure pu\`o essere liberamente scritta. Questo campo dati \`e usato per identificare quale cella utilizzare per scrivere dati sullo heap.
 \end{itemize}
 Sono stati implementati quattro metodi che semplificano la gestione delle celle di memoria:
@@ -126,13 +126,13 @@ La scrittura di dati nello heap viene fatta mediante l'istruzione \verb|sw $r $h
 \subsection{Esecuzione delle istruzioni}\label{ss:esecuzione-istruzioni}
 Il metodo \verb|void run(boolean activeDebug)| si occupa di eseguire le istruzioni all'interno della lista \textit{code}. Questo viene fatto mediante un ciclo while che itera finch\`e: o lo \textit{heap} supera lo \textit{stack} indicando la fine della memoria utilizzabile, oppure quando viene eseguita l'istruzione \verb|halt| che termina l'esecuzione senza lanciare eccezioni.\\
 Ad ogni iterazione viene letta l'istruzione da eseguire e vengono salvati i parametri che questa possiede. Inoltre viene incrementato l'\textit{instruction pointer} per l'iterazione successiva.
-\begin{lstlisting}[language=Java]
-    SVMInstruction instruction = code.get($ip);
-    $ip += 1;
-    String arg1 = instruction.getArg1();
-    String arg2 = instruction.getArg2();
-    String arg3 = instruction.getArg3();
-    int offset = instruction.getOffset();
+\begin{lstlisting}[language = Java, escapeinside={(*@}{@*)}]
+SVMInstruction instruction = code.get($ip);
+$ip += 1;
+String arg1 = instruction.getArg1();
+String arg2 = instruction.getArg2();
+String arg3 = instruction.getArg3();
+int offset = instruction.getOffset();
 \end{lstlisting}
 Il comportamento che viene poi seguito dipende dal campo dati \verb|instruction| della \verb|SVMInstruction| che si sta eseguendo e quindi, tramite uno \textit{switch-case} vengono aggiornati i registri o la memoria in base a cosa ci si attende per l'istruzione in esecuzione.
 \end{document}
