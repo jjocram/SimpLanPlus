@@ -1,7 +1,7 @@
 \documentclass[../report.tex]{subfiles}
 \begin{document}
 
-\chapter{Guida all'installazione}\label{a:intstallazione}
+\chapter{Guida all'installazione}\label{a:installazione}
 Per utilizzare il compilatore e l'interprete sviluppato per questo progetto all'interno di Eclipse \`e sufficiente seguire i seguenti passaggi:
 \begin{enumerate}
     \item Importare la cartella \verb|SimpLanPlus| all'interno del workspace di Eclipse:
@@ -13,14 +13,14 @@ Per utilizzare il compilatore e l'interprete sviluppato per questo progetto all'
         \end{enumerate}
     \item Aggiungere le librerie di ANTLR e generare l'eseguibile:
             \begin{enumerate}
-                \item Tasto destro sulla cartella del progeto;
+                \item Tasto destro sulla cartella del progetto;
                 \item \textit{Show in Local Terminal $>$ Terminal}
                 \item Digitare il seguente comando:\\\\
                     \verb|./mvnw compile assembly:single|
             \end{enumerate}
     \item Scrivere e salvare un file \verb|.simplan|. Questo punto \`e opzionale in caso si vogliano usare i file presenti nella cartella \verb|examples|;
     %\item Premere il pulsante ``Play'' di Eclipse. Verr\`a mostrato un prompt nel quale va inserito il path al file \verb|.simplan| scritto al punto precedente. \`E possibile utilizzare uno dei file forniti nella cartella \verb|examples| scrivendo nel prompt \verb|examples/example1.simplan|.
-    \item Nello stesso terminale aperto al punto 2 \`e possibile compilare ed eseguire i programmi SimpLanPlus. Per farlo \`e sufficiente scrivere il seguente comando:\\\\
+    \item \label{a:pt4}Nello stesso terminale aperto al punto 2 \`e possibile compilare ed eseguire i programmi SimpLanPlus. Per farlo \`e sufficiente scrivere il seguente comando:\\\\
         \verb|java -jar target/SimpLanPlus.jar <path file da eseguire>|\\\\
         Sostituendo \verb|<path file da eseguire>| con il path del file che si vuole eseguire. Per esempio, \`e possibile utilizzare uno dei file forniti nella cartella \textit{examples} con il seguente comando:\\\\
         \verb|java -jar target/SimpLanPlus.jar examples/example1.simplan|

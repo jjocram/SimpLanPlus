@@ -21,10 +21,10 @@ Un'istruzione \`e composta da diverse componenti, alcune obbligatorie, altre inv
 Per ogni istruzione letta, viene creato un oggetto di tipo \verb|SVMInstruction| la cui classe \`e definita in \verb|svm/instruction/SVMInstruction.java|.
 \section{CPU e memoria}\label{s:cpu-e-memoria}
 L'interprete emula il comportamento di una CPU e di una memoria.
-\subsection{CPU}
+\subsection{CPU}\label{ss:cpu}
 La CPU esegue le istruzioni passate al costruttore dell'interprete. Il metodo \verb|run| esegue un ciclo finch\'e o la memoria non ha pi\`u celle a disposizione o si raggiunge l'istruzione \verb|halt|. A ogni iterazione si accede all'istruzione indicata dal registro \verb|$ip| che viene poi incrementato di uno per l'iterazione successiva. Il comportamento da seguire dipende dall'istruzione, in particolare dal campo dati \verb|instruction| degli oggetti \verb|SVMInstruction|.
 
-\subsection{Registri}
+\subsection{Registri}\label{ss:registri}
 La CPU ha accesso a 8 registri:
 \begin{itemize}
     \item \textbf{Instruction pointer} (\$ip): indica quale istruzione sar\`a la prossima a essere eseguita;
@@ -42,7 +42,7 @@ Sono state scritte due funzioni per gestire i registri:
     \item \verb|int readRegister(String register)| che ritorna il valore contenuto nel registro \verb|register|.
 \end{itemize}
 
-\subsection{Memoria}
+\subsection{Memoria}\label{ss:memoria}
 La memoria \`e gestita come un array di \verb|MemoryCell| diviso, logicamente, in due parti: lo stack e lo heap. Lo stack si sviluppa dalle ultime posizioni dell'array e ``cresce'' verso indici pi\`u piccoli mentre lo heap comincia a indice 0 e si sviluppa verso indici pi\`u grandi. Sono state scritte quattro funzioni per gestire la memoria:
 \begin{itemize}
     \item \verb|void writeOnMemory(int address, int data)| che prende in input due interi: il primo \`e l'indice al quale andare a scrivere e il secondo \`e il dato da scrivere;
@@ -51,7 +51,7 @@ La memoria \`e gestita come un array di \verb|MemoryCell| diviso, logicamente, i
     \item \verb|void freeMemory(int address)| che segna come ``libera'' una cella di memoria, viene chiamata alla \verb|delete| di un puntatore.
 \end{itemize}
 
-\subsubsection{MemoryCell}
+\subsubsection{MemoryCell}\label{sss:memorycell}
 La classe \verb|MemoryCell| rappresenta una singola cella di memoria dell'interprete. I campi dati sono: 
 \begin{itemize}
     \item \verb|data|: un intero che rappresenta il dato salvato nella cella di memoria;
@@ -87,7 +87,7 @@ Ogni record di attivazione \`e composto sempre nello stesso modo:
 \end{itemize}
 
 \section{Funzionamento dell'interprete}\label{s:funzionamento-interprete}
-\subsection{Campi dati}
+\subsection{Campi dati}\label{ss:campi-dati}
 L'interprete e il suo funzionamento sono definiti all'interno della classe \verb|SVMInterpreter|. I suoi campi dati pi\`u rilevanti, in quanto necessari al corretto funzionamento, sono:
 \begin{itemize}
     \item \textbf{code}: una lista di \verb|SVMInstruction|, generata dal parsing del codice generato, contiene la sequenza ordinata di istruzioni che l'interprete dovr\`a eseguire;
@@ -103,7 +103,7 @@ Sono poi presenti altri campi dati utilizzati per semplificare il processo di de
     \item \textbf{globalCounter}: indica quante istruzioni sono state lette fino a quel momento.
 \end{itemize}
 
-\subsection{Inizializzazione}
+\subsection{Inizializzazione}\label{ss:inizializzazione}
 Quando un nuovo oggetto di tipo \verb|SVMInterpreter| viene costruito, il costruttore inizializza i vari campi dati a valori di default, in particolare:
 \begin{itemize}
     \item Il vettore \textit{memory} viene inizializzato con nuovi oggetti di tipo \verb|MemoryCell|;
@@ -120,10 +120,10 @@ Quando un nuovo oggetto di tipo \verb|SVMInterpreter| viene costruito, il costru
         \end{itemize}
 \end{itemize}
 
-\subsection{Gestione dello heap}
+\subsection{Gestione dello heap}\label{ss:gestione-heap}
 La scrittura di dati nello heap viene fatta mediante l'istruzione \verb|sw $r $hp| dove \$r \`e il registro che contiene i dati da scrivere nello \textit{heap} e \$hp \`e un registro particolare il cui valore viene computato a run-time. Per fare questo \`e stato scritto un metodo (\verb|int hp()|) che restituisce il primo indirizzo disponibile dello \textit{heap}. Il primo indirizzo disponibile \`e quello la cui cella di memoria \`e indicata come \textit{free}. Questo \`e stato fatto per ottimizzare la memoria utilizzata, infatti, quando viene letta un'istruzione \verb|delete pointer| la cella di memoria indicata dal puntatore verr\`a segnata come \textit{free} e potr\`a quindi essere riutilizzata.
 
-\subsection{Esecuzione delle istruzioni}
+\subsection{Esecuzione delle istruzioni}\label{ss:esecuzione-istruzioni}
 Il metodo \verb|void run(boolean activeDebug)| si occupa di eseguire le istruzioni all'interno della lista \textit{code}. Questo viene fatto mediante un ciclo while che itera finch\`e: o lo \textit{heap} supera lo \textit{stack} indicando la fine della memoria utilizzabile, oppure quando viene eseguita l'istruzione \verb|halt| che termina l'esecuzione senza lanciare eccezioni.\\
 Ad ogni iterazione viene letta l'istruzione da eseguire e vengono salvati i parametri che questa possiede. Inoltre viene incrementato l'\textit{instruction pointer} per l'iterazione successiva.
 \begin{lstlisting}[language=Java]
