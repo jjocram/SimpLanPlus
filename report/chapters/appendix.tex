@@ -7,34 +7,23 @@ Per utilizzare il compilatore e l'interprete sviluppato per questo progetto all'
     \item Importare la cartella \verb|SimpLanPlus| all'interno del workspace di Eclipse:
         \begin{enumerate}
             \item \textit{File $>$ Import};
-            \item Dalla schermata che si apre selezionare \textit{General $>$ Existing Projects into Workspace};
-            \item Cliccare su \textit{Browse} e selezionare la cartella \verb|SimpLanPlus|;
+            \item Dalla schermata che si apre selezionare \textit{General $>$ Projects from Folder or Archive};
+            \item Cliccare su \textit{Directory} e selezionare la cartella scaricata contenente il progetto;
             \item Cliccare su \textit{Finish}.
         \end{enumerate}
-    \item Aggiungere le librerie di ANTLR: vi sono due modi per aggiungere le librerie necessarie al funzionamento del progetto:
-        \begin{enumerate}
-            \item Utilizzando Maven:
-                \begin{enumerate}
-                    \item Aprire una finestre del terminale e spostarsi all'interno della cartella \verb|SimpLanPlus|. Pu\`o essere fatto direttamente da Eclipse cliccando su \textit{Open a Terminal} e poi cliccando \textit{Ok};
-                    \item Digitare il seguente comando:
-                        \begin{lstlisting}
-                            ./mvnw compile assembly:single
-                        \end{lstlisting}
-                \end{enumerate}
-            \item Importandole manualmente:
-                \begin{enumerate}
-                    \item Scaricare ANTLR dal seguente link: \url{https://www.antlr.org/download/antlr-4.7.1-complete.jar};
-                    \item Copiare il file scaricato nella cartella \verb|SimpLanPlus|;
-                    \item Cliccare sulla freccia che punta verso il basso affianco al pulsante ``Play'' e premere \textit{Run Configurations};
-                    \item Assicurarsi che sia stata scelta la configurazione per \textit{Execute};
-                    \item Aprire il tab \textit{Dependencies};
-                    \item Selezionare, dalla lista, la voce \textit{Classpath Entries};
-                    \item Premere \textit{Add JARs};
-                    \item Selezionare il file JAR copiato in precedenza e premere \textit{Ok}.
-                \end{enumerate}
-        \end{enumerate}
+    \item Aggiungere le librerie di ANTLR e generare l'eseguibile:
+            \begin{enumerate}
+                \item Tasto destro sulla cartella del progeto;
+                \item \textit{Show in Local Terminal $>$ Terminal}
+                \item Digitare il seguente comando:\\\\
+                    \verb|./mvnw compile assembly:single|
+            \end{enumerate}
     \item Scrivere e salvare un file \verb|.simplan|. Questo punto \`e opzionale in caso si vogliano usare i file presenti nella cartella \verb|examples|;
-    \item Premere il pulsante ``Play'' di Eclipse. Verr\`a mostrato un prompt nel quale va inserito il path al file \verb|.simplan| scritto al punto precedente. \`E possibile utilizzare uno dei file forniti nella cartella \verb|examples| scrivendo nel prompt \verb|examples/example1.simplan|.
+    %\item Premere il pulsante ``Play'' di Eclipse. Verr\`a mostrato un prompt nel quale va inserito il path al file \verb|.simplan| scritto al punto precedente. \`E possibile utilizzare uno dei file forniti nella cartella \verb|examples| scrivendo nel prompt \verb|examples/example1.simplan|.
+    \item Nello stesso terminale aperto al punto 2 \`e possibile compilare ed eseguire i programmi SimpLanPlus. Per farlo \`e sufficiente scrivere il seguente comando:\\\\
+        \verb|java -jar target/SimpLanPlus.jar <path file da eseguire>|\\\\
+        Sostituendo \verb|<path file da eseguire>| con il path del file che si vuole eseguire. Per esempio, \`e possibile utilizzare uno dei file forniti nella cartella \textit{examples} con il seguente comando:\\\\
+        \verb|java -jar target/SimpLanPlus.jar examples/example1.simplan|
 \end{enumerate}
 
 \end{document}
