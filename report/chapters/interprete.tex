@@ -31,6 +31,7 @@ La CPU ha accesso a 8 registri:
     \item \textbf{Stack pointer} (\$sp): punta alla cima dello stack;
     \item \textbf{Heap pointer} (\$hp): punta alla prima posizione libera dello heap;
     \item \textbf{Frame pointer} (\$fp): punta all'access link corrente relativo al frame attivo;
+    \item \textbf{Base stack pointer} (\$bsp): punta alla cella di memoria contenente il vecchio stack pointer, utile nel caso si esca da una funzione prima della fine delle istruzioni tramite un \verb|return|;
     \item \textbf{Access link} (\$al): registro utilizzato per attraversare la catena statica degli scope;
     \item \textbf{Return address} (\$ra): registro utilizzato per salvare l'indirizzo (numero d'istruzione) al quale ritornare una volta usciti da un frame;
     \item \textbf{Accumulatore} (\$a0): registro utilizzato per salvare il valore computato da alcune espressioni;
