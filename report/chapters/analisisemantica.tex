@@ -26,5 +26,16 @@ I campi dati relativi alla gestione delle entry della \textit{Symbol Table} sono
     \item \verb|offset| che è la posizione nel \textit{frame} rispetto all'Access Link.
 \end{itemize}
 
+\section{Controllo errori semantici}
+Il controllo degli errori semantici e la costruzione della \textit{Symbol Table} viene fatta tramite il metodo \verb|ArrayList<SemanticError> checkSemantics(Environment env)| presente in ogni nodo dell'AST.
+L'istanza di \verb|Environment| viene creata e passata alla radice dell'AST all'interno della classe \verb|SimpLanPlus|, illustrata più in dettaglio nel \hyperref[c:simplanplus-java]{Capitolo 7 SimpLanPlus.java}.
+Ogni nodo si occupa di verificare la correttezza di sé e, se dispone di nodi figli nell'AST, lo invoca anche su di loro.
+In caso di presenza di errori, essi vengono segnalati con la creazione di un'istanza di \verb|SemanticError|, una classe di utilità che contiene il messaggio d'errore da segnalare all'utente.
+Tutte le istanze di \verb|SemanticError| vengono collezionate e ritornate alla fine dell'esecuzione del metodo \verb|checkSemantics| sul nodo corrente.
+Conseguentemente, per quanto spiegato finora, ogni nodo ritorna gli errori di sé e dei suoi nodi figli.\\
+\noindent
+L'implementazione dei metodi checkSemantics ricalca quanto visto durante le lezioni sull'analisi semantica del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
+
+
 \end{document}
 
