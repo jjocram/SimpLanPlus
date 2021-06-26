@@ -1,4 +1,10 @@
 {
+    /*
+    This example shows the correct working of the empty return statement (i.e. used on functions that return void), which is not necessary.
+    By the way, the program tries also to print the value of that same void-returning function, which is not possible.
+    The program should output:
+      - "Print statements cannot output void-returning functions."
+    */
     void f(int a) {
         if (a==0) {
             print a;
@@ -9,4 +15,5 @@
     }
 
     f(2);
+    print f(2);
 }

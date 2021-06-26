@@ -1,4 +1,10 @@
 {
+    /*
+    This example shows the importance of having a fix-point method implemented for performing the effects analysis on functions.
+    Without a fix-point method, only y would be marked as deleted, while x would not.
+    The correct type in the effect analysis of f is that x |-> d, y |-> d, n |-> rw.
+    The program is well-formed and does not output anything, but a and b can both be possibly deleted hence a and b must be reassigned after calling f with them.
+    */
     ^int a = new int;
     ^int b = new int;
     void f(^int x, ^int y, int n) {

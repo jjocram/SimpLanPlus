@@ -1,7 +1,12 @@
 {
+    /*
+    This program shows the re-use of previously deleted pointers.
+    The program is well-formed and should output 4.
+    */
     ^int a = new int;
     a^ = 5;
     delete a;
     a = new int;
     a^ = 4;
+    print a^;
 }

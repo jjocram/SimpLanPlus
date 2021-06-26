@@ -31,7 +31,11 @@ public class PrintNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        exp.typeCheck(); // Executes the type checking on the expression (throwing exceptions if needed)
+        TypeNode expType = exp.typeCheck(); // Executes the type checking on the expression (throwing exceptions if needed)
+
+        if(expType instanceof VoidTypeNode) {
+            throw new TypeCheckingException("Print statements cannot output void-returning functions");
+        }
 
         return new VoidTypeNode();
     }
