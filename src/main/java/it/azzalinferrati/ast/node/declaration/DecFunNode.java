@@ -53,8 +53,6 @@ public class DecFunNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        System.out.println(type);
-        System.out.println(block.typeCheck());
         if (!Node.isSubtype(type, block.typeCheck())) {
             // Error
             throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type.toPrint(""));
