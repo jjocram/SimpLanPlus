@@ -3,35 +3,37 @@
 
 \chapter{Introduzione}\label{c:introduzione}
 \section{Scopo del progetto}\label{s:scopo-progetto}
-Lo scopo del progetto è stato quello di realizzare un compilatore e un interprete per un linguaggio imperativo chiamato \textbf{SimpLanPlus}.
+Lo scopo del progetto è stato quello di realizzare un compilatore e un interprete per un linguaggio imperativo chiamato \textbf{SimpLanPlus}.\\
+\noindent
+L'interprete è chiamato \textbf{SimpLanPlus Virtual Machine (SVM)} ed esegue una speciale versione di linguaggio assomigliante, per molti aspetti, ad Assembly appositamente creato per il suo funzionamento, che da qui in avanti chiameremo \textbf{SVM-Assembly}.
 
 \subsection{Il linguaggio}\label{ss:linguaggio}
 \textbf{SimpLanPlus} è un linguaggio:
 \begin{itemize}
     \item staticamente tipato;
     \item non ad oggetti;
-    \item con gestione della memoria manuale (come in C/C++);
+    \item con gestione della memoria manuale (come, ad esempio, in C/C++);
     \item con la possibilità di definire funzioni, anche ricorsive, ma non mutualmente ricorsive.
 \end{itemize}
 
 \subsection{Il compilatore}\label{ss:compilatore}
-Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima di generare il codice simil-Assembly corrispondente:
+Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima di generare il codice \textbf{SVM-Assembly} corrispondente:
 \begin{enumerate}
-    \item analisi lessicale, in cui il codice sorgente viene trasformato in \textit{token}, ovvero piccoli blocchi logici, che servono poi a contribuire a creare l'\textbf{Abstract Syntax Tree (AST)};
+    \item analisi lessicale, in cui il codice sorgente viene trasformato in \textit{token}, ovvero piccoli blocchi logici, che contribuiscono alla creazione dell'\textbf{Abstract Syntax Tree (AST)};
     \item analisi semantica, in cui viene verificata la correttezza semantica del programma in input (ad esempio, che le variabili vengano utilizzate solo dopo una loro dichiarazione);
     \item analisi degli effetti, in cui viene verificato lo stato delle variabili e dei puntatori sullo stack (inizializzato $\bot$, letto/scritto $rw$, cancellato $d$, errore $\top$);
     \item \textit{type checking}, in cui viene controllato che i tipi all'interno delle espressioni, nelle assegnazioni e nelle istruzioni siano concordi a quanto atteso.
 \end{enumerate}
 
 \subsection{L'interprete}\label{ss:interprete}
-L'interprete di \textbf{SimpLanPlus} prende in input il codice simil-Assembly generato dal compilatore, illustrato nella precedente sezione, e lo esegue un'istruzione alla volta.
+L'interprete di \textbf{SimpLanPlus}, \textbf{SVM}, prende in input il codice \textbf{SVM-Assembly} generato dal compilatore e illustrato nella precedente sezione, eseguendolo un'istruzione alla volta.
 Il programma viene eseguito in una ``memoria virtuale" (simulata dal codice che implementa l'interprete) la cui dimensione è configurabile (come farlo è illustrato nel \hyperref[c:simplanplus-java]{Capitolo 7 SimpLanPlus.java}).
 
 \section{Tecnologie utilizzate}\label{s:teconologie-utilizzate}
 Le tecnologie principali utilizzate per il progetto sono le seguenti:
 \begin{itemize}
     \item \textbf{Java 11}, con cui sono scritti gli interi compilatore e interprete;
-    \item \textbf{ANTLR 4.9.2}, per implementare in maniera automatica la parte di analisi lessicale e il parser, sia per \textbf{SimpLanPlus}, che per il linguaggio simil-Assembly;
+    \item \textbf{ANTLR 4.9.2}, per implementare in maniera automatica la parte di analisi lessicale e il parser, sia per \textbf{SimpLanPlus}, che per il linguaggio \textbf{SVM-Assembly};
     \item \textbf{Maven (wrapper) 3.6.3}, per gestire le dipendenze, il processo di build e di test di tutte le parti del progetto.
 \end{itemize}
 
