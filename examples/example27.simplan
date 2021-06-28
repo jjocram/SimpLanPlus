@@ -1,0 +1,29 @@
+{
+    /*
+        This example shows how to return pointers from functions, both initialized out of the return statement and inside of it.
+        The program is well formed and should output 0 5 1 -1 1 (being the address of p1, its value, the address of p2, its uninitialized value, the newly assigned value of p2).
+    */
+    ^int returnPointerPreviouslyLocalVariable() {
+        ^int a = new int;
+        a^ = 5;
+        return a;
+    }
+
+    ^bool returnPointerCreatedOnReturn() {
+        return new bool;
+    }
+
+    ^int p1 = returnPointerPreviouslyLocalVariable();
+
+    ^bool p2 = returnPointerCreatedOnReturn();
+    
+    print p1;
+    print p1^;
+
+    print p2;
+    print p2^;
+
+
+    p2^ = true;
+    print p2^;
+}
