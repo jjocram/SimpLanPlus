@@ -99,11 +99,31 @@ NUMBER          : DIGIT+;
 \end{lstlisting}
 
 \section{Commenti e spazi bianchi}\label{s:commenti-spazi-bianchi}
-Infine, i commenti possono essere di due tipi: in linea (che iniziano con \verb|//|) e a blocco (racchiusi fra \verb|/*| e \verb|*/|). Spazi bianchi, ritorni a capo e tabulazioni vengono scartati.
+Come in molti altri linguaggi di programmazione, i commenti possono essere di due tipi: in linea (che iniziano con \verb|//|) e a blocco (racchiusi fra \verb|/*| e \verb|*/|). Spazi bianchi, ritorni a capo e tabulazioni vengono scartati.
 \begin{lstlisting}[style=antlr]
 WS              : (' '|'\t'|'\n'|'\r') -> skip;
 LINECOMMENTS    : '//' (~('\n'|'\r'))* -> skip;
 BLOCKCOMMENTS   : '/*'( ~('/'|'*')|'/'~'*'|'*'~'/'|BLOCKCOMMENTS)* '*/' -> skip;
+\end{lstlisting}
+
+\section{Errori sintattici}\label{s:errori-sintattici}
+Infine, a livello di grammatica è gestita la collezione di errori sintattici grazie a una funzionalità di ANTLR che permette di inserire codice ad alto livello (Java, nel caso di questo progetto) nel file della grammatica, il quale viene poi aggiunto in fase di auto-generazione del codice relativo al lexer e al parser.
+\begin{lstlisting}[style=antlr]
+@lexer::header {
+import java.util.List;
+import java.util.ArrayList;
+}
+@lexer::members {
+private List<String> errors = new ArrayList<>();
+
+public int errorCount() {
+    return errors.size();
+}
+}
+
+/* Regole della grammatica descritte sopra */
+
+ERR     : . { errors.add("Invalid character: "+ getText()); } -> channel(HIDDEN);
 \end{lstlisting}
 
 \end{document}
