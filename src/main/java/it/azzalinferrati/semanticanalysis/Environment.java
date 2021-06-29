@@ -333,7 +333,7 @@ public class Environment {
      * the arguments.
      *
      * @param env1 environment to update (multi-scope)
-     * @param env2 environment with updates (single-scope=
+     * @param env2 environment with updates (single-scope)
      * @return the updated environment
      */
     public static Environment update(Environment env1, Environment env2) {
