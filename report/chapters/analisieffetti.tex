@@ -2,6 +2,41 @@
 \begin{document}
 
 \chapter{Analisi degli effetti}\label{c:analisi-effetti}
+\section{Struttura ambiente}\label{s:struttura-ambiente-effetti}
+Essendo l'ambiente dell'analisi degli effetti correlato dal punto di vista implementativo con quello dell'analisi semantica, vale quanto descritto in \hyperref[s:struttura-ambiente]{Sezione 3.1 Struttura ambiente}.
+
+\subsection[Classe Effect]{Classe \texttt{Effect}}\label{ss:effect-effetti}
+La classe \verb|Effect| rappresenta un effetto applicato ad una variabile.
+Contiene un solo vero e proprio campo dati, \verb|value| (di tipo intero, in modo che esista un ordinamento), che memorizza l'effetto corrente.
+Ci sono altri campi dati, statici, che sono istanze della stessa classe e rappresentano gli effetti possibili:
+\begin{itemize}
+    \item \verb|INITIALIZED| ($\bot$, con \verb|value| $= 0$), assegnato ad una variabile quando viene dichiarata ma non allocata;
+    \item \verb|READ_WRITE| ($rw$, con \verb|value| $= 1$), assegnato ad una variabile quando viene letta o scritta;
+    \item \verb|DELETE| ($d$, con \verb|value| $= 2$), assegnata ad una variabile di tipo puntatore quando viene cancellata la memoria puntata;
+    \item \verb|ERROR| ($\top$, con \verb|value| $= 3$), assegnata ad una variabile il cui stato è inconsistente e irreparabile.
+\end{itemize}
+I metodi disponibili per operare su istanze di tipo \verb|Effect| sono tutti statici e sono i seguenti:
+\begin{itemize}
+    \item \verb|Effect max(Effect e1, Effect e2)| che ritorna il massimo fra \verb|e1| e \verb|e2| (vengono confrontati i campi \verb|value|)
+    \item \verb|Effect seq(Effect e1, Effect e2)| che ritorna \verb|max(e1, e2)| se $\leq{} rw$, $d$ se \verb|e1| $\leq{} rw$ e \verb|e2| $= d$ oppure \verb|e1| $= d$ e \verb|e2| $= \bot$, $\top$ in tutti gli altri casi;
+    \item \verb|Effect par(Effect e1, Effect e2)| che ritorna il massimo fra gli effetti ritornati dalle invocazioni \verb|seq(e1, e2)| e \verb|seq(e2, e1)|.
+\end{itemize}
+
+\subsection[Classe STEntry]{Classe \texttt{STEntry}}\label{ss:stentry-effetti}
+Oltre ai campi dati illustrati in \hyperref[ss:stentry]{Sezione 3.1.2 \texttt{STEntry}}, è stato aggiunto un campo dati \verb|status| (di tipo \verb|Effect| rappresentate l'effetto corrente per la variabile a cui fa riferimento la \textit{entry}.
+
+\subsection[Classe Environment]{Classe \texttt{Environment}}\label{ss:environment-effetti}
+In \verb|Environment|, oltre a quanto descritto in \hyperref[ss:environment]{Sezione 3.1.1 Classe \texttt{Environment}}, ci sono ulteriori metodi che si occupano della gestione dell'analisi degli effetti.\\
+\noindent
+I principali sono descritti di seguito:
+\begin{itemize}
+    \item \verb|Environment max(Environment env1, Environment env2)| che per ogni scope, a partire da quello di livello $0$, per ogni variabile presente sia in \verb|env1| che in \verb|env2| applica l'operazione \verb|max| fra gli stati mentre per quelle presenti solo in \verb|env1|, le ritorna così come sono;
+    \item \verb|Environment seq(Environment env1, Environment env2)| si comporta come \verb|max|, applicando però l'operatore \verb|seq| fra gli stati delle variabili;
+    \item \verb|Environment par(Environment env1, Environment env2)| assume che \verb|env1| ed \verb|env2| siano ambienti con un solo scope (perché solo in tale contesto viene invocata questa funzione), per ogni variabile presente in entrambi gli ambienti viene fatto il \verb|par| fra gli stati, altrimenti le variabili vengono semplicemente aggiunte all'ambiente risultante.
+    \item \verb|Environment update(Environment env1, Environment env2)| assume che \verb|env1| e \verb|env2| abbiano rispettivamente un livello di annidamento $\geq{} 1$ e $= 1$.
+    Se \verb|env2| è vuoto oppure non ha variabili definite viene ritornato \verb|env1| (caso base) altrimenti, $\forall u \in$ \verb|env2| prima si rimuove $u$ da \verb|env2|, successivamente se $u \in top($\verb|env1|$)$ allora \verb|env1|$[u \rightmapsto{} u.type]$ e viene ritornato \verb|update(env1, env2)| (è una chiamata ricorsiva, con \verb|env1| e \verb|env2| che sono stati aggiornati), altrimenti effettua un serie di chiamate ricorsive riassumibili nella formula \verb|update(update(env,| $[u \rightmapsto{} u.type]$\verb|)|$\cdot{}\; top($\verb|env1|$)$\verb|, env2)| con \verb|env1| $\leftarrow$ \verb|env| $\cdot{}\; top($\verb|env1|$)$
+    \item \verb|ArrayList<SemanticError> checkVariableStatus(IdNode variable,|\\ \verb|BiFunction<Effect, Effect, Effect> rule, Effect effectToApply)| che dato un nodo identificatore dell'AST, lo ricerca all'interno della \textit{Symbol Table}, e applica \verb|rule| (che può essere \verb|max|, \verb|seq| o \verb|par| definite in \hyperref[ss:effect-effetti]{Sezione 4.1.1 Classe \texttt{Effect}}) fra lo stato di \verb|id| e l'effetto \verb|effectToApply|, eventualmente ritornando un errore\footnote{La scelta di ritornare una lista di \texttt{SemanticError} è fatta per evitare di fare controlli di nullità sul risultato che appesantirebbe la lettura del codice e sarebbe prono ad errori.} in caso l'effetto risultante da \verb|rule| sia \verb|ERROR|.
+\end{itemize}
 
 \end{document}
 
