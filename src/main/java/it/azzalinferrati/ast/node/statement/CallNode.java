@@ -62,10 +62,6 @@ public class CallNode implements Node {
             actualFunArgTypes.add(exp.typeCheck());
         }
 
-        if (formalFunArgTypes.size() != actualFunArgTypes.size()) {
-            throw new TypeCheckingException("The number of actual parameters do not match that of the formal parameters of function " + id.toPrint(""));
-        }
-
         for (int i = 0, size = formalFunArgTypes.size(); i < size; i++) {
             if (!Node.isSubtype(formalFunArgTypes.get(i), actualFunArgTypes.get(i))) {
                 throw new TypeCheckingException("In function " + id.toPrint("") + " expected argument of type " + formalFunArgTypes.get(i).toPrint("") + ", got " + actualFunArgTypes.get(i).toPrint(""));
@@ -124,6 +120,13 @@ public class CallNode implements Node {
         errors.addAll(id.checkSemantics(env));
         params.forEach((p) -> errors.addAll(p.checkSemantics(env)));
         currentNestingLevel = env.getNestingLevel();
+
+        var formalFunArgLen = ((FunTypeNode) id.getSTEntry().getType()).getParams().size();
+        var actualFunArgLen = params.size();
+
+        if(formalFunArgLen != actualFunArgLen) {
+            errors.add(new SemanticError("The number of actual parameters do not match that of the formal parameters of function " + id));
+        }
 
         if (!errors.isEmpty()) {
             return errors;
