@@ -135,7 +135,7 @@ public class CallNode implements Node {
                 .filter(i -> !(params.get(i) instanceof DereferenceExpNode))
                 .boxed()
                 .collect(Collectors.toList());
-        List<Effect> effects = ((FunTypeNode) id.getSTEntry().getType()).getEffects();
+        List<Effect> effects = id.getSTEntry().getStatusFunction();
         for (int i : indexesOfNotPointers) {
             if (effects.get(i).equals(Effect.ERROR)) {
                 errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId()));
@@ -153,7 +153,6 @@ public class CallNode implements Node {
         for (var variable : varsInExpressions) {
             var entryInE1 = e1.safeLookup(variable.getId());
             entryInE1.setStatus(Effect.seq(entryInE1.getStatus(), Effect.READ_WRITE));
-            //variable.setStatus(entryInE1.getStatus()); //TBD with update function
         }
 
         Environment e2 = new Environment();

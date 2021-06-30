@@ -1,5 +1,9 @@
 package it.azzalinferrati.semanticanalysis;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 
 /**
@@ -20,15 +24,25 @@ public class STEntry {
     // Status of the variable.
     private Effect status;
 
+    // Effects of a function.
+    private List<Effect> statusFunction;
+
     public STEntry(int nestingLevel, int offset) {
         this.nestingLevel = nestingLevel;
         this.offset = offset;
         this.status = new Effect();
+        this.statusFunction = new ArrayList<>();
     }
 
     public STEntry(int nestingLevel, TypeNode type, int offset) {
         this(nestingLevel, offset);
         this.type = type;
+        if(type instanceof FunTypeNode) {
+            var paramsNumber = ((FunTypeNode) type).getParams().size();
+            for(int i = 0; i < paramsNumber; i++) {
+                this.statusFunction.add(new Effect(Effect.INITIALIZED));
+            }
+        }
     }
 
     /**
@@ -37,8 +51,12 @@ public class STEntry {
      * @param s Symbol Table Entry
      */
     public STEntry(STEntry s) {
-        this(s.nestingLevel, s.type, s.offset);
+        this(s.nestingLevel, s.offset);
+        this.type = s.type;
         this.status = new Effect(s.status);
+        for(var fnStatus: s.statusFunction) {
+            this.statusFunction.add(new Effect(fnStatus));
+        }
     }
 
     /**
@@ -64,6 +82,10 @@ public class STEntry {
         return status;
     }
 
+    public List<Effect> getStatusFunction() {
+        return statusFunction;
+    }
+
     /**
      * @return the offset for code generation.
      */
@@ -78,6 +100,10 @@ public class STEntry {
      */
     public void setStatus(Effect status) {
         this.status = new Effect(status);
+    }
+
+    public void setParamEffect(int paramIndex, Effect effect) {
+        statusFunction.set(paramIndex, new Effect(effect));
     }
 
     /**
