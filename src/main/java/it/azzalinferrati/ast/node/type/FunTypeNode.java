@@ -21,15 +21,9 @@ public class FunTypeNode extends TypeNode {
     final private List<TypeNode> params;
     final private TypeNode returned;
 
-    final private List<Effect> effects;
-
     public FunTypeNode(final List<TypeNode> params, final TypeNode returned) {
         this.params = params;
         this.returned = returned;
-        this.effects = new ArrayList<>();
-        for(int i = 0; i < params.size(); i++) {
-            this.effects.add(new Effect(Effect.INITIALIZED));
-        }
     }
 
     public List<TypeNode> getParams() {
@@ -38,14 +32,6 @@ public class FunTypeNode extends TypeNode {
 
     public TypeNode getReturned() {
         return returned;
-    }
-
-    public void setParamEffect(int paramIndex, Effect effect) {
-        effects.set(paramIndex, new Effect(effect));
-    }
-
-    public List<Effect> getEffects() {
-        return effects;
     }
 
     @Override
@@ -85,10 +71,6 @@ public class FunTypeNode extends TypeNode {
         }
 
         if (!params.equals(funTypeNode.params)) {
-            return false;
-        }
-
-        if (!effects.equals(funTypeNode.effects)) {
             return false;
         }
 

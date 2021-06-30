@@ -103,20 +103,17 @@ public class DecFunNode implements Node {
             block.disallowScopeCreation();
 
             Environment old_env = new Environment(env);
-            // List<Effect> old_effects = new ArrayList<>(funType.getEffects()); // TODO sostituito, rimuovere
             List<Effect> old_effects = new ArrayList<>(innerFunDecEntry.getStatusFunction());
 
             errors.addAll(block.checkSemantics(env));
             for (int i = 0; i < args.size(); i++) {
                 var argId = args.get(i).getId();
                 var entry = env.safeLookup(argId.getId());
-                // funType.setParamEffect(i, entry.getStatus()); // TODO sostituito, rimuovere
                 id.getSTEntry().setParamEffect(i, entry.getStatus());
                 innerFunDecEntry.setParamEffect(i, entry.getStatus());
             }
 
 
-            // boolean different_funType = !funType.getEffects().equals(old_effects); // TODO sostituito, rimuovere
             boolean different_funType = !innerFunDecEntry.getStatusFunction().equals(old_effects);
 
             while (different_funType) {
@@ -127,19 +124,16 @@ public class DecFunNode implements Node {
                     env.safeLookup(id.getId()).setParamEffect(i, innerFunDecEntry.getStatusFunction().get(i));
                 }
 
-                // old_effects = new ArrayList<>(funType.getEffects()); // TODO sostituito, rimuovere
                 old_effects = new ArrayList<>(innerFunDecEntry.getStatusFunction());
 
                 errors.addAll(block.checkSemantics(env));
                 for (int i = 0; i < args.size(); i++) {
                     var argId = args.get(i).getId();
                     var entry = env.safeLookup(argId.getId());
-                    // funType.setParamEffect(i, entry.getStatus()); // TODO sostituito, rimuovere
                     id.getSTEntry().setParamEffect(i, entry.getStatus());
                     innerFunDecEntry.setParamEffect(i, entry.getStatus());
                 }
              
-                // different_funType = !funType.getEffects().equals(old_effects); // TODO sostituito, rimuovere
                 different_funType = !innerFunDecEntry.getStatusFunction().equals(old_effects);
             }
 
