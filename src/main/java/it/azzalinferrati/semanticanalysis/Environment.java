@@ -269,7 +269,7 @@ public class Environment {
                 if (entryInScopeEnv2 != null) { // ==> id \in dom(env2)
                     var opEntry = new STEntry(entryInScopeEnv1.getNestingLevel(), entryInScopeEnv1.getType(),
                             entryInScopeEnv1.getOffset());
-                    opEntry.setStatus(operation.apply(entryInScopeEnv1.getStatus(), entryInScopeEnv2.getStatus()));
+                    opEntry.setVariableStatus(operation.apply(entryInScopeEnv1.getVariableStatus(), entryInScopeEnv2.getVariableStatus()));
 
                     resultEnvScope.put(id, opEntry);
                 } else {
@@ -300,7 +300,7 @@ public class Environment {
             if (!scope2.containsKey(xInE1.getKey())) {
                 STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(),
                         xInE1.getValue().getType());
-                entry.setStatus(xInE1.getValue().getStatus());
+                entry.setVariableStatus(xInE1.getValue().getVariableStatus());
             }
         }
 
@@ -308,7 +308,7 @@ public class Environment {
             if (!scope1.containsKey(xInE2.getKey())) {
                 STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE2.getKey(),
                         xInE2.getValue().getType());
-                entry.setStatus(xInE2.getValue().getStatus());
+                entry.setVariableStatus(xInE2.getValue().getVariableStatus());
             }
         }
 
@@ -317,8 +317,8 @@ public class Environment {
                 if (xInE1.getKey().equals(xInE2.getKey())) {
                     STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(),
                             xInE1.getValue().getType());
-                    Effect parResult = Effect.par(xInE1.getValue().getStatus(), xInE2.getValue().getStatus());
-                    entry.setStatus(parResult);
+                    Effect parResult = Effect.par(xInE1.getValue().getVariableStatus(), xInE2.getValue().getVariableStatus());
+                    entry.setVariableStatus(parResult);
                 }
             }
         }
@@ -362,7 +362,7 @@ public class Environment {
             Environment envWithOnlyU = new Environment();
             envWithOnlyU.pushNewScope();
             STEntry tmpEntry = envWithOnlyU.addUniqueNewDeclaration(u.getKey(), u.getValue().getType());
-            tmpEntry.setStatus(u.getValue().getStatus());
+            tmpEntry.setVariableStatus(u.getValue().getVariableStatus());
 
             env1.popScope();
             Environment tmpEnv = update(env1, envWithOnlyU);
@@ -397,9 +397,9 @@ public class Environment {
 
         try {
             var stEntry = lookup(variable.getId());
-            Effect status = rule.apply(stEntry.getStatus(), effectToApply);
+            Effect status = rule.apply(stEntry.getVariableStatus(), effectToApply);
 
-            stEntry.setStatus(status);
+            stEntry.setVariableStatus(status);
             variable.setStatus(status);
 
             if (status.equals(Effect.ERROR)) {
@@ -417,7 +417,7 @@ public class Environment {
         ArrayList<SemanticError> errors = new ArrayList<>();
         for (var scope : symbolTable) {
             for (var entry : scope.entrySet()) {
-                if (entry.getValue().getStatus().equals(Effect.ERROR)) {
+                if (entry.getValue().getVariableStatus().equals(Effect.ERROR)) {
                     errors.add(new SemanticError("Variable " + entry.getKey() + " is used after deletion"));
                 }
             }

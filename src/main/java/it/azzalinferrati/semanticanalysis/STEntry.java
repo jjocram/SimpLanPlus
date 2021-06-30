@@ -22,16 +22,16 @@ public class STEntry {
     private int offset;
 
     // Status of the variable.
-    private Effect status;
+    private Effect variableStatus;
 
     // Effects of a function.
-    private List<Effect> statusFunction;
+    private List<Effect> functionStatus;
 
     public STEntry(int nestingLevel, int offset) {
         this.nestingLevel = nestingLevel;
         this.offset = offset;
-        this.status = new Effect();
-        this.statusFunction = new ArrayList<>();
+        this.variableStatus = new Effect();
+        this.functionStatus = new ArrayList<>();
     }
 
     public STEntry(int nestingLevel, TypeNode type, int offset) {
@@ -40,7 +40,7 @@ public class STEntry {
         if(type instanceof FunTypeNode) {
             var paramsNumber = ((FunTypeNode) type).getParams().size();
             for(int i = 0; i < paramsNumber; i++) {
-                this.statusFunction.add(new Effect(Effect.INITIALIZED));
+                this.functionStatus.add(new Effect(Effect.INITIALIZED));
             }
         }
     }
@@ -53,9 +53,9 @@ public class STEntry {
     public STEntry(STEntry s) {
         this(s.nestingLevel, s.offset);
         this.type = s.type;
-        this.status = new Effect(s.status);
-        for(var fnStatus: s.statusFunction) {
-            this.statusFunction.add(new Effect(fnStatus));
+        this.variableStatus = new Effect(s.variableStatus);
+        for(var fnStatus: s.functionStatus) {
+            this.functionStatus.add(new Effect(fnStatus));
         }
     }
 
@@ -78,12 +78,15 @@ public class STEntry {
     /**
      * @return the current status of the variable.
      */
-    public Effect getStatus() {
-        return status;
+    public Effect getVariableStatus() {
+        return variableStatus;
     }
 
-    public List<Effect> getStatusFunction() {
-        return statusFunction;
+    /**
+     * @return the current status of the arguments of a function.
+     */
+    public List<Effect> getFunctionStatus() {
+        return functionStatus;
     }
 
     /**
@@ -98,12 +101,17 @@ public class STEntry {
      * 
      * @param status new status for the variable
      */
-    public void setStatus(Effect status) {
-        this.status = new Effect(status);
+    public void setVariableStatus(Effect status) {
+        this.variableStatus = new Effect(status);
     }
 
-    public void setParamEffect(int paramIndex, Effect effect) {
-        statusFunction.set(paramIndex, new Effect(effect));
+    /**
+     * Sets the new effect for the {@code paramIndex}-th argument of the function.
+     * 
+     * @param status new status for the argument
+     */
+    public void setParamStatus(int paramIndex, Effect status) {
+        functionStatus.set(paramIndex, new Effect(status));
     }
 
     /**
@@ -115,7 +123,7 @@ public class STEntry {
 
     public String toPrint(String s) {
         return s + "(nesting level: " + nestingLevel + ", type: " + type.toPrint("") + ", offset: " + offset
-                + ", status: " + status + ")";
+                + ", status: " + variableStatus + ")";
     }
 
     @Override
@@ -139,7 +147,11 @@ public class STEntry {
             return false;
         }
 
-        if (!status.equals(entry.status)) {
+        if (!variableStatus.equals(entry.variableStatus)) {
+            return false;
+        }
+
+        if(!functionStatus.equals(entry.functionStatus)) {
             return false;
         }
 

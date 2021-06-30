@@ -135,7 +135,7 @@ public class CallNode implements Node {
                 .filter(i -> !(params.get(i) instanceof DereferenceExpNode))
                 .boxed()
                 .collect(Collectors.toList());
-        List<Effect> effects = id.getSTEntry().getStatusFunction();
+        List<Effect> effects = id.getSTEntry().getFunctionStatus();
         for (int i : indexesOfNotPointers) {
             if (effects.get(i).equals(Effect.ERROR)) {
                 errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId()));
@@ -152,7 +152,7 @@ public class CallNode implements Node {
 
         for (var variable : varsInExpressions) {
             var entryInE1 = e1.safeLookup(variable.getId());
-            entryInE1.setStatus(Effect.seq(entryInE1.getStatus(), Effect.READ_WRITE));
+            entryInE1.setVariableStatus(Effect.seq(entryInE1.getVariableStatus(), Effect.READ_WRITE));
         }
 
         Environment e2 = new Environment();
@@ -171,12 +171,12 @@ public class CallNode implements Node {
 
             IdNode pointer = params.get(i).variables().stream().findFirst().get(); //always exists only once pointer in the list of variables of this parameter
 
-            Effect u_iEffect = env.safeLookup(pointer.getId()).getStatus();
+            Effect u_iEffect = env.safeLookup(pointer.getId()).getVariableStatus();
             Effect x_iEffect = effects.get(i);
             Effect seq = Effect.seq(u_iEffect, x_iEffect);
 
             STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId(), pointer.getSTEntry().getType());
-            entry.setStatus(seq);
+            entry.setVariableStatus(seq);
 
             resultingEnvironments.add(mthEnv);
         }

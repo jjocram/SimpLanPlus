@@ -31,11 +31,11 @@ public class IdNode implements Node {
     }
 
     public void setStatus(Effect effect) {
-        entry.setStatus(effect);
+        entry.setVariableStatus(effect);
     }
 
     public Effect getStatus() {
-        return entry.getStatus();
+        return entry.getVariableStatus();
     }
 
     public String getId() {

@@ -103,45 +103,45 @@ public class DecFunNode implements Node {
             block.disallowScopeCreation();
 
             Environment old_env = new Environment(env);
-            List<Effect> old_effects = new ArrayList<>(innerFunDecEntry.getStatusFunction());
+            List<Effect> old_effects = new ArrayList<>(innerFunDecEntry.getFunctionStatus());
 
             errors.addAll(block.checkSemantics(env));
             for (int i = 0; i < args.size(); i++) {
                 var argId = args.get(i).getId();
                 var entry = env.safeLookup(argId.getId());
-                id.getSTEntry().setParamEffect(i, entry.getStatus());
-                innerFunDecEntry.setParamEffect(i, entry.getStatus());
+                id.getSTEntry().setParamStatus(i, entry.getVariableStatus());
+                innerFunDecEntry.setParamStatus(i, entry.getVariableStatus());
             }
 
 
-            boolean different_funType = !innerFunDecEntry.getStatusFunction().equals(old_effects);
+            boolean different_funType = !innerFunDecEntry.getFunctionStatus().equals(old_effects);
 
             while (different_funType) {
                 env.replace(old_env);
 
                 for (int i = 0; i< args.size(); i++) {
                     //Update ID in function scope
-                    env.safeLookup(id.getId()).setParamEffect(i, innerFunDecEntry.getStatusFunction().get(i));
+                    env.safeLookup(id.getId()).setParamStatus(i, innerFunDecEntry.getFunctionStatus().get(i));
                 }
 
-                old_effects = new ArrayList<>(innerFunDecEntry.getStatusFunction());
+                old_effects = new ArrayList<>(innerFunDecEntry.getFunctionStatus());
 
                 errors.addAll(block.checkSemantics(env));
                 for (int i = 0; i < args.size(); i++) {
                     var argId = args.get(i).getId();
                     var entry = env.safeLookup(argId.getId());
-                    id.getSTEntry().setParamEffect(i, entry.getStatus());
-                    innerFunDecEntry.setParamEffect(i, entry.getStatus());
+                    id.getSTEntry().setParamStatus(i, entry.getVariableStatus());
+                    innerFunDecEntry.setParamStatus(i, entry.getVariableStatus());
                 }
              
-                different_funType = !innerFunDecEntry.getStatusFunction().equals(old_effects);
+                different_funType = !innerFunDecEntry.getFunctionStatus().equals(old_effects);
             }
 
             env.popScope();
 
             for (int i = 0; i< args.size(); i++) {
                 //Update ID in previous scope
-                env.safeLookup(id.getId()).setParamEffect(i, innerFunDecEntry.getStatusFunction().get(i));
+                env.safeLookup(id.getId()).setParamStatus(i, innerFunDecEntry.getFunctionStatus().get(i));
             }
         } catch (MultipleDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
