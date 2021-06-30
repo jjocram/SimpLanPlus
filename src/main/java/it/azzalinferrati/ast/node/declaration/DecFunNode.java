@@ -12,6 +12,7 @@ import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
+import it.azzalinferrati.semanticanalysis.STEntry;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.MultipleDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -98,34 +99,42 @@ public class DecFunNode implements Node {
                 arg.getId().setEntry(stEntry);
             } // \Sigma_0
 
-            env.addNewDeclaration(id.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
+            STEntry innerFunDecEntry = env.addNewDeclaration(id.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
             block.disallowScopeCreation();
 
             Environment old_env = new Environment(env);
-            List<Effect> old_effects = new ArrayList<>(funType.getEffects());
+            // List<Effect> old_effects = new ArrayList<>(funType.getEffects()); // TODO sostituito, rimuovere
+            List<Effect> old_effects = new ArrayList<>(innerFunDecEntry.getStatusFunction());
 
             errors.addAll(block.checkSemantics(env));
             for (int i = 0; i < args.size(); i++) {
                 var argId = args.get(i).getId();
                 var entry = env.safeLookup(argId.getId());
-                funType.setParamEffect(i, entry.getStatus());
+                // funType.setParamEffect(i, entry.getStatus()); // TODO sostituito, rimuovere
+                id.getSTEntry().setParamEffect(i, entry.getStatus());
+                innerFunDecEntry.setParamEffect(i, entry.getStatus());
             }
 
 
-            boolean different_funType = !funType.getEffects().equals(old_effects);
+            // boolean different_funType = !funType.getEffects().equals(old_effects); // TODO sostituito, rimuovere
+            boolean different_funType = !innerFunDecEntry.getStatusFunction().equals(old_effects);
 
             while (different_funType) {
                 env.replace(old_env);
-                old_effects = new ArrayList<>(funType.getEffects());
+                // old_effects = new ArrayList<>(funType.getEffects()); // TODO sostituito, rimuovere
+                old_effects = new ArrayList<>(innerFunDecEntry.getStatusFunction());
 
                 errors.addAll(block.checkSemantics(env));
                 for (int i = 0; i < args.size(); i++) {
                     var argId = args.get(i).getId();
                     var entry = env.safeLookup(argId.getId());
-                    funType.setParamEffect(i, entry.getStatus());
+                    // funType.setParamEffect(i, entry.getStatus()); // TODO sostituito, rimuovere
+                    id.getSTEntry().setParamEffect(i, entry.getStatus());
+                    innerFunDecEntry.setParamEffect(i, entry.getStatus());
                 }
-
-                different_funType = !funType.getEffects().equals(old_effects);
+             
+                // different_funType = !funType.getEffects().equals(old_effects); // TODO sostituito, rimuovere
+                different_funType = !innerFunDecEntry.getStatusFunction().equals(old_effects);
             }
 
             env.popScope();

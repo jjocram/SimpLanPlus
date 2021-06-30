@@ -135,7 +135,8 @@ public class CallNode implements Node {
                 .filter(i -> !(params.get(i) instanceof DereferenceExpNode))
                 .boxed()
                 .collect(Collectors.toList());
-        List<Effect> effects = ((FunTypeNode) id.getSTEntry().getType()).getEffects();
+        // List<Effect> effects = ((FunTypeNode) id.getSTEntry().getType()).getEffects(); // TODO sostituito, rimuovere
+        List<Effect> effects = id.getSTEntry().getStatusFunction();
         for (int i : indexesOfNotPointers) {
             if (effects.get(i).equals(Effect.ERROR)) {
                 errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId()));
