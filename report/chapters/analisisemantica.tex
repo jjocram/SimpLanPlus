@@ -13,8 +13,8 @@ Ci sono inoltre ulteriori campi ausiliari che memorizzano, ad esempio, il livell
 I metodi principali\footnote{Ci sono altri metodi, varianti di quelli presentati, che servono a semplificare il codice del compilatore in certi contesti con particolari precondizioni. Per esempio, il metodo \texttt{lookup} lancia un'eccezione in caso \texttt{id} non venga trovato: in contesti in cui si è certi che \texttt{id} esista, non è necessario gestire tale eccezione e quindi ne è stata creata una variante che non la lancia.} per la gestione della \textit{Symbol Table} sono:
 \begin{itemize}
     \item \verb|void pushNewScope()| che corrisponde all'operazione $\Gamma{}\cdot{}[\;]$, la quale incrementa contestualmente il livello di annidamento;
-    \item \verb|STEntry addNewDeclaration(final String id, final TypeNode type)| che corrisponde all'operazione $\Gamma{}[$\verb|id| $ \rightmapsto{}$\verb|type|$]$ intesa come aggiunta di una nuova variabile e non aggiornamento, incrementando contestualmente l'offset in caso $type$ non corrisponda ad un tipo funzione;
-    \item \verb|STEntry lookup(final String id)| che corrisponde all'operazione $\Gamma($\verb|id|$)$, ovvero restituisce la prima \verb|STEntry| corrispondente all'identificatore $id$ a partire da $top(\Gamma)$.
+    \item \verb|STEntry addNewDeclaration(String id, TypeNode type)| che corrisponde all'operazione $\Gamma{}[$\verb|id| $ \rightmapsto{}$\verb|type|$]$ intesa come aggiunta di una nuova variabile e non aggiornamento, incrementando contestualmente l'offset in caso $type$ non corrisponda ad un tipo funzione;
+    \item \verb|STEntry lookup(String id)| che corrisponde all'operazione $\Gamma($\verb|id|$)$, ovvero restituisce la prima \verb|STEntry| corrispondente all'identificatore $id$ a partire da $top(\Gamma)$.
     \item \verb|void popScope()| che corrisponde all'operazione $\Gamma \leftarrow{} \Gamma'$ partendo da $\Gamma = \Gamma'\cdot{}top(\Gamma)$.
 \end{itemize}
 
@@ -36,7 +36,63 @@ Tutte le istanze di \verb|SemanticError| vengono collezionate e ritornate alla f
 Conseguentemente, per quanto spiegato finora, ogni nodo ritorna gli errori di sé e dei suoi nodi figli.\\
 \noindent
 L'implementazione dei metodi \verb|checkSemantics| ricalca quanto visto durante le lezioni sull'analisi semantica del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
+In particolare, nelle prossime sezioni, vengono descritti più in dettaglio alcuni controlli semantici più rilevanti.
 
+\subsection{Variabili e funzioni non dichiarate}\label{s:variabili-funzioni-non-dichiarate}
+Nell'analisi semantica svolta per i nodi di tipo identificatore viene invocata il metodo \verb|lookup| della classe \verb|Environment| passando come argomento l'identificativo della variabile o funzione da utilizzare.
+In caso non venga trovato viene ritornato un errore semantico.\\
+\noindent
+Di seguito la porzione di codice che si occupa di quanto descritto:
+\begin{lstlisting}[language = Java, escapeinside={(*@}{@*)}]
+@Override
+public ArrayList<SemanticError> checkSemantics(Environment env) {
+    ArrayList<SemanticError> errors = new ArrayList<>();
 
+    try {
+        entry = env.lookup(id);
+        currentNestingLevel = env.getNestingLevel();
+    } catch(MissingDeclarationException exception) {
+        errors.add(new SemanticError(exception.getMessage()));
+    }
+
+    return errors;
+}
+\end{lstlisting}
+
+\subsection{Variabili dichiarate più volte nello stesso scope}\label{s:variabili-dichiarate-piu-volte-stesso-scope}
+Nei controlli per i nodi che si occupano della dichiarazione di una variabile o di una funzione viene invocato il metodo \verb|addNewDeclaration| della classe \verb|Environment| passando come argomento l'identificativo della variabile o funzione da dichiarare e il tipo associato.
+In caso venga trovato un identificativo nello \textit{scope} corrente, viene ritornato un errore semantico.\\
+\noindent
+Di seguito la porzione di codice che si occupa di quanto descritto per le dichiarazioni di variabili (per le funzioni viene fatta la stessa cosa sia per il nome della funzione che per gli argomenti):
+\begin{lstlisting}[language = Java, escapeinside={(*@}{@*)}]
+@Override
+public ArrayList<SemanticError> checkSemantics(Environment env) {
+    ArrayList<SemanticError> errors = new ArrayList<>();
+    
+    // ...
+
+    try {
+        id.setEntry(env.addNewDeclaration(id.getId(), type));
+        // ...
+    } catch (MultipleDeclarationException exception) {
+        errors.add(new SemanticError(exception.getMessage()));
+    }
+
+    return errors;
+}
+\end{lstlisting}
+
+\subsection{Corretto uso dei puntatori}\label{s:corretto-usi-puntatori}
+I controlli semantici per i nodi che contengono puntatori dereferenziati o meno vengono controllati diversi aspetti:
+\begin{itemize}
+    \item non è possibile utilizzare puntatori non ancora inizializzati (come del resto le variabili);
+    \item se si dichiarano puntatori multipli (per esempio \verb|^^int a|) l'utente è obbligato ad inizializzarli tutti quanti prima di poterli usare, altrimenti avvengono errori di accesso erroneo alla memoria;
+    \item non è possibile dereferenziare puntatori cancellati;
+    \item è possibile riutilizzare un puntatore cancellato solo previa allocazione di una nuova area di memoria.
+\end{itemize}
+
+\subsection{Parametri attuali non conformi ai parametri formali}\label{s:parametri-attuali-non-conformi-parametri-formali}
+Infine, per quanto concerne l'analisi relativamente ai parametri delle funzioni, viene controllato sia che il numero dei parametri attuali corrisponda con quello dei formali ma anche che il tipo di essi sia corrispondente a quello atteso.
+Questo controllo viene iniziato all'interno di \verb|checkSemantics| e terminato in \verb|typeCheck|.
 \end{document}
 

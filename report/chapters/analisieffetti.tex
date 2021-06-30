@@ -23,7 +23,8 @@ I metodi disponibili per operare su istanze di tipo \verb|Effect| sono tutti sta
 \end{itemize}
 
 \subsection[Classe STEntry]{Classe \texttt{STEntry}}\label{ss:stentry-effetti}
-Oltre ai campi dati illustrati in \hyperref[ss:stentry]{Sezione 3.1.2 \texttt{STEntry}}, è stato aggiunto un campo dati \verb|status| (di tipo \verb|Effect| rappresentate l'effetto corrente per la variabile a cui fa riferimento la \textit{entry}.
+Oltre ai campi dati illustrati in \hyperref[ss:stentry]{Sezione 3.1.2 \texttt{STEntry}}, sono stati aggiunti due campi dati \verb|variableStatus| e \verb|functionStatus| (rispettivamente di tipo \verb|Effect| e \verb|List<Effect>|) rappresentati il primo l'effetto corrente per la variabile a cui fa riferimento la \textit{entry} e il secondo gli effetti applicati agli argomenti della funzione, anch'essa riferita dalla \textit{entry}.
+In caso la \textit{entry} si riferisca ad una variabile, \verb|functionStatus| è una lista vuota e non viene in alcun modo utilizzata; nel caso invece sia una funzione, \verb|variableStatus| ha il valore \verb|INITIALIZED|, ancora una volta inutilizzato.
 
 \subsection[Classe Environment]{Classe \texttt{Environment}}\label{ss:environment-effetti}
 In \verb|Environment|, oltre a quanto descritto in \hyperref[ss:environment]{Sezione 3.1.1 Classe \texttt{Environment}}, ci sono ulteriori metodi che si occupano della gestione dell'analisi degli effetti.\\
@@ -37,6 +38,14 @@ I principali sono descritti di seguito:
     Se \verb|env2| è vuoto oppure non ha variabili definite viene ritornato \verb|env1| (caso base) altrimenti, $\forall u \in$ \verb|env2| prima si rimuove $u$ da \verb|env2|, successivamente se $u \in top($\verb|env1|$)$ allora \verb|env1|$[u \rightmapsto{} u.type]$ e viene ritornato \verb|update(env1, env2)| (è una chiamata ricorsiva, con \verb|env1| e \verb|env2| che sono stati aggiornati), altrimenti effettua un serie di chiamate ricorsive riassumibili nella formula \verb|update(update(env,| $[u \rightmapsto{} u.type]$\verb|)|$\cdot{}\; top($\verb|env1|$)$\verb|, env2)| con \verb|env1| $\leftarrow$ \verb|env| $\cdot{}\; top($\verb|env1|$)$
     \item \verb|ArrayList<SemanticError> checkVariableStatus(IdNode variable,|\\ \verb|BiFunction<Effect, Effect, Effect> rule, Effect effectToApply)| che dato un nodo identificatore dell'AST, lo ricerca all'interno della \textit{Symbol Table}, e applica \verb|rule| (che può essere \verb|max|, \verb|seq| o \verb|par| definite in \hyperref[ss:effect-effetti]{Sezione 4.1.1 Classe \texttt{Effect}}) fra lo stato di \verb|id| e l'effetto \verb|effectToApply|, eventualmente ritornando un errore\footnote{La scelta di ritornare una lista di \texttt{SemanticError} è fatta per evitare di fare controlli di nullità sul risultato che appesantirebbe la lettura del codice e sarebbe prono ad errori.} in caso l'effetto risultante da \verb|rule| sia \verb|ERROR|.
 \end{itemize}
+
+\section{Controllo degli effetti}\label{s:controllo-effetti}
+L'analisi degli effetti viene fatta all'interno del metodo \verb|checkSemantics| per avere accesso alla \textit{Symbol Table} che, essendo appena stata creata o aggiornata dal processo di analisi semantica, contiene tutto il necessario.
+Svolgere questo processo al di fuori di \verb|checkSemantics| avrebbe richiesto la creazione di una copia dell'ambiente in ogni nodo dell'AST, in maniera poco efficiente.\\
+\noindent
+\noindent
+L'implementazione della parte di analisi degli effetti ricalca quanto visto durante le lezioni sull'analisi semantica del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
+In particolare, nelle prossime sezioni, vengono descritti più in dettaglio alcuni dei controlli più rilevanti.
 
 \end{document}
 
