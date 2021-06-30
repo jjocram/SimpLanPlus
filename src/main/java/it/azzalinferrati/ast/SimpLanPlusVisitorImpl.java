@@ -149,7 +149,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public LhsNode visitLhs(SimpLanPlusParser.LhsContext ctx) {
-        // TODO: Recursive function, check with Gilberto Filè teaching
         if (ctx.lhs() == null) {
             // lhs: ID
             IdNode id = new IdNode(ctx.ID().getText());
