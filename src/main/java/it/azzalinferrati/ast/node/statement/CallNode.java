@@ -135,7 +135,7 @@ public class CallNode implements Node {
         // Checking that parameters inside the function do not result in error statuses.
         List<Integer> indexesOfNotPointers = IntStream
                 .range(0, params.size())
-                .filter(i -> !(params.get(i) instanceof DereferenceExpNode))
+                .filter(i -> !((params.get(i) instanceof DereferenceExpNode) && ((DereferenceExpNode) params.get(i)).isPointerType()))
                 .boxed()
                 .collect(Collectors.toList());
         List<Effect> effects = id.getSTEntry().getFunctionStatus();
