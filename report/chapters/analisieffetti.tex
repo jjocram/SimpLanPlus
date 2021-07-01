@@ -46,5 +46,32 @@ Svolgere questo processo al di fuori di \verb|checkSemantics| avrebbe richiesto 
 L'implementazione della parte di analisi degli effetti ricalca quanto visto durante le lezioni sull'analisi degli effetti del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
 In particolare, nelle prossime sezioni, vengono descritti più in dettaglio alcuni dei controlli più rilevanti.
 
+\subsection{Uso di variabili non inizializzate}\label{s:uso-variabili-non-inizializzate}
+Per impedire l'utilizzo di variabili non inizializzate è stato implementato un meccanismo di controllo a runtime (svolto dall'interprete) che lancia un'eccezione nel caso la cella di memoria corrispondente ad una variabile viene acceduta ma è priva di contenuto.
+
+\subsection{Dichiarazione e chiamata di funzione con metodo di punto fisso per il calcolo degli effetti sugli argomenti}\label{s:dichiarazione-chiamata-funzione-mpf}
+Il linguaggio \textbf{SimpLanPlus}, come detto, supporta la ricorsione. Affinché gli effetti applicati agli argomenti della funzione siano calcolati correttamente, è stato implementato un \textbf{metodo di punto fisso (MPF)} per il loro calcolo.\\
+\noindent
+Il MPF è implementato nel contesto dell'analisi degli effetti sulla dichiarazione di funzione, ma il suo funzionamento è strettamente correlato a quello della chiamata di funzione, considerando la presenza della ricorsione.
+Andando con ordine, illustriamo passo dopo passo il controllo sulla dichiarazione:
+\begin{enumerate}
+    \item viene creata una copia dell'ambiente (\verb|Environment|) prima dell'analisi del blocco di istruzioni correlate alla funzione;
+    \item vengono impostati a $\bot{}$ gli stati dei parametri formali;
+    \item viene analizzato il blocco di istruzioni e grazie a ciò gli argomenti della funzione vengono aggiornati con lo stato che ottengono dopo una singola chiamata di funzione;
+    \item se gli effetti applicati agli argomenti sono diversi dagli effetti di partenza, si procede con il prossimo punto, altrimenti si passa al punto 7.;
+    \item viene ripristinato l'ambiente che era stato copiato al punto 1. inserendo nelle \textit{entry} relative agli argomenti i nuovi effetti calcolati;
+    \item aggiornato l'ambiente, si analizza nuovamente il blocco con i nuovi effetti degli argomenti calcolati all'iterazione precedente e successivamente si passa al punto 4.;
+    \item viene effettuato \verb|popScope| e successivamente aggiornati gli effetti degli argomenti della funzione presenti nello scope in cui è stata originariamente definita.
+\end{enumerate}
+Per quanto riguarda la chiamata di funzione:
+\begin{enumerate}
+    \item vengono recuperate tutte le espressioni (incluse anche variabili) non puntatori e ci si assicura che il corrispettivo parametro formale non sia in stato $\top$;
+    \item viene creata una copia dell'ambiente, chiamata \verb|e1|, in cui viene aggiornato l'effetto a $rw$ di tutte le variabili facenti parte delle precedenti trovate espressioni;
+    \item viene creata un'ulteriore copia dell'ambiente, \verb|e2|;
+    \item per ogni puntatore passato come argomento alla funzione viene creato un nuovo ambiente temporaneo in cui salvare solo una \textit{entry}, relativa a quel puntatore, il cui effetto è il \verb|par| fra l'effetto trovato nell'ambiente di partenza e quello trovato nel corrispondente parametro attuale della funzione da chiamare;
+    \item tutti questi ambienti temporanei generati al punto precedente vengono messi in \verb|par| fra loro (a cascata) e il risultato viene memorizzato nel precedentemente creato ambiente \verb|e2| (nel caso non ci fossero ambienti temporanei creati, \verb|e2| $= \emptyset{}$);
+    \item infine, viene invocato \verb|update| con parametri \verb|e1| e \verb|e2| e il risultato è il nuovo ambiente per le successive istruzioni.
+\end{enumerate}
+
 \end{document}
 
