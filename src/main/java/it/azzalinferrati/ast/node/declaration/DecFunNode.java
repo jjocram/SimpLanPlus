@@ -118,10 +118,11 @@ public class DecFunNode implements Node {
 
             while (different_funType) {
                 env.replace(old_env);
-
-                for (int i = 0; i< args.size(); i++) {
+                
+                var idEntry = env.safeLookup(id.getId());
+                for (int i = 0; i < args.size(); i++) {
                     //Update ID in function scope
-                    env.safeLookup(id.getId()).setParamStatus(i, innerFunDecEntry.getFunctionStatus().get(i));
+                    idEntry.setParamStatus(i, innerFunDecEntry.getFunctionStatus().get(i));
                 }
 
                 old_effects = new ArrayList<>(innerFunDecEntry.getFunctionStatus());
@@ -138,10 +139,11 @@ public class DecFunNode implements Node {
             }
 
             env.popScope();
-
+            
+            var idEntry = env.safeLookup(id.getId());
             for (int i = 0; i< args.size(); i++) {
                 //Update ID in previous scope
-                env.safeLookup(id.getId()).setParamStatus(i, innerFunDecEntry.getFunctionStatus().get(i));
+                idEntry.setParamStatus(i, innerFunDecEntry.getFunctionStatus().get(i));
             }
         } catch (MultipleDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
