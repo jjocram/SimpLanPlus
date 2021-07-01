@@ -23,7 +23,7 @@ I metodi disponibili per operare su istanze di tipo \verb|Effect| sono tutti sta
 \end{itemize}
 
 \subsection[Classe STEntry]{Classe \texttt{STEntry}}\label{ss:stentry-effetti}
-Oltre ai campi dati illustrati in \hyperref[ss:stentry]{Sezione 3.1.2 \texttt{STEntry}}, sono stati aggiunti due campi dati \verb|variableStatus| e \verb|functionStatus| (rispettivamente di tipo \verb|Effect| e \verb|List<Effect>|) rappresentati il primo l'effetto corrente per la variabile a cui fa riferimento la \textit{entry} e il secondo gli effetti applicati agli argomenti della funzione, anch'essa riferita dalla \textit{entry}.
+Oltre ai campi dati illustrati in \hyperref[ss:stentry]{Sezione 3.1.2 \texttt{STEntry}}, sono stati aggiunti due campi dati \verb|variableStatus| e \verb|functionStatus| (rispettivamente di tipo \verb|Effect| e \verb|List<Effect>|) rappresentati il primo l'effetto corrente per la variabile a cui fa riferimento la \textit{entry} e il secondo gli effetti applicati agli argomenti della funzione cui fa riferimento la \textit{entry}.
 In caso la \textit{entry} si riferisca ad una variabile, \verb|functionStatus| è una lista vuota e non viene in alcun modo utilizzata; nel caso invece sia una funzione, \verb|variableStatus| ha il valore \verb|INITIALIZED|, ancora una volta inutilizzato.
 
 \subsection[Classe Environment]{Classe \texttt{Environment}}\label{ss:environment-effetti}
@@ -43,7 +43,7 @@ I principali sono descritti di seguito:
 L'analisi degli effetti viene fatta all'interno del metodo \verb|checkSemantics| per avere accesso alla \textit{Symbol Table} che, essendo appena stata creata o aggiornata dal processo di analisi semantica, contiene tutto il necessario.
 Svolgere questo processo al di fuori di \verb|checkSemantics| avrebbe richiesto la creazione di una copia dell'ambiente in ogni nodo dell'AST, in maniera poco efficiente.\\
 \noindent
-L'implementazione della parte di analisi degli effetti ricalca quanto visto durante le lezioni sull'analisi semantica del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
+L'implementazione della parte di analisi degli effetti ricalca quanto visto durante le lezioni sull'analisi degli effetti del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
 In particolare, nelle prossime sezioni, vengono descritti più in dettaglio alcuni dei controlli più rilevanti.
 
 \end{document}
