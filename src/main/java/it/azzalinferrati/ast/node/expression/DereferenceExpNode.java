@@ -46,7 +46,7 @@ public class DereferenceExpNode extends ExpNode {
 
         errors.addAll(lhs.checkSemantics(env));
 
-        errors.addAll(env.checkVariableStatus(lhs.getId(), Effect::seq, Effect.READ_WRITE));
+        errors.addAll(checkVariablesStatus(env));
 
         return errors;
     }
