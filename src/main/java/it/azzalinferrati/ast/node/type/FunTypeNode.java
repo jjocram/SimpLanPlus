@@ -1,7 +1,6 @@
 package it.azzalinferrati.ast.node.type;
 
 import it.azzalinferrati.ast.node.Node;
-import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -37,9 +36,9 @@ public class FunTypeNode extends TypeNode {
     @Override
     public String toPrint(String indent) {
         return indent +
-                params.stream().map((arg) ->  arg.toPrint("")).reduce("",
-                (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " X ")) + arg2)
-                + " -> " + returned.toPrint("");
+                params.stream().map((arg) ->  arg.toString()).reduce("",
+                (arg1, arg2) -> (arg1.toString().isEmpty() ? "" : (arg1 + " X ")) + arg2)
+                + " -> " + returned;
     }
 
     @Override

@@ -5,5 +5,11 @@
         print c;
     }
 
+    void toofew(int a, int b) {
+        print a;
+        print b;
+    }
+
     toomany(1,2,3,4);
+    toofew(1);
 }

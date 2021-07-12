@@ -43,11 +43,11 @@ public class DecFunNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        final String declaration = indent + "Function dec\t>> " + funId.toPrint(" ") + " : "
-                + args.stream().map((arg) -> "(" + arg.toPrint("") + ")").reduce("",
-                (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " X ")) + arg2)
-                + " -> " + type.toPrint("");
-        final String body = indent + "Function body\t>>\n" + block.toPrint(indent);
+        final String declaration = indent + "Fun. dec:\t" + funId + " : "
+                + args.stream().map((arg) -> "(" + arg + ")").reduce("",
+                (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " x ")) + arg2)
+                + " -> " + type;
+        final String body = indent + "Fun. body:\n" + block.toPrint(indent);
 
         return declaration + "\n" + body;
     }
@@ -56,7 +56,7 @@ public class DecFunNode implements Node {
     public TypeNode typeCheck() throws TypeCheckingException {
         if (!Node.isSubtype(type, block.typeCheck())) {
             // Error
-            throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type.toPrint(""));
+            throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type);
         }
         return null; // Nothing to return
     }

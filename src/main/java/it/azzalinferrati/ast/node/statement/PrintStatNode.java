@@ -24,7 +24,7 @@ public class PrintStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent + print.toPrint("");
+        return indent + print;
     }
 
     @Override

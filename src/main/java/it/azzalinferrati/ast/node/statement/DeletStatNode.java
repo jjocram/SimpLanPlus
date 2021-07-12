@@ -24,7 +24,7 @@ public class DeletStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent + deletion.toPrint("");
+        return indent + deletion;
     }
 
     @Override

@@ -29,13 +29,18 @@ public class DeletionNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent + "delete: " + id.toPrint(indent);
+        return indent + "Deletion:\t" + id.toPrint(indent);
+    }
+
+    @Override
+    public String toString() {
+        return toPrint("");
     }
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         if(!(id.typeCheck() instanceof PointerTypeNode)){
-            throw new TypeCheckingException("Variable " + id.toPrint("") + " is not a pointer");
+            throw new TypeCheckingException("Variable " + id + " is not a pointer");
         }
 
         return new VoidTypeNode();

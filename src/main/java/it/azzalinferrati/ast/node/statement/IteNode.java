@@ -38,15 +38,20 @@ public class IteNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent + "If cond\t>> " + condition.toPrint("") + "\n" + indent + "Then stmt\t>>\n"
-                + thenBranch.toPrint(indent) + "\n" + indent + "Else stmt\t>>\n"
-                + (elseBranch != null ? elseBranch.toPrint(indent) : "");
+        return indent + "If cond.:\t" + condition + "\n" + indent + "Then branch:\n"
+                + thenBranch.toPrint(indent) + "\n" + indent
+                + (elseBranch != null ? "Else branch:\n" + elseBranch.toPrint(indent) : "");
+    }
+
+    @Override
+    public String toString() {
+        return toPrint("");
     }
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         if (!(condition.typeCheck() instanceof BoolTypeNode)) {
-            throw new TypeCheckingException("Condition " + condition.toPrint("") + " is not of type bool");
+            throw new TypeCheckingException("Condition " + condition + " is not of type bool");
         }
 
         if (elseBranch != null && !Node.isSubtype(thenBranch.typeCheck(), elseBranch.typeCheck())) {

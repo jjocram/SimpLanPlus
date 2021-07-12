@@ -1,7 +1,6 @@
 package it.azzalinferrati.ast.node.expression;
 
 import it.azzalinferrati.LabelManager;
-import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
@@ -34,7 +33,7 @@ public class BinaryExpNode extends ExpNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent + leftExpression.toPrint("") + " " + operator + " " + rightExpression.toPrint(indent);
+        return indent + leftExpression + " " + operator + " " + rightExpression.toPrint(indent);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class BinaryExpNode extends ExpNode {
         TypeNode rightType = rightExpression.typeCheck();
 
         if (!Node.isSubtype(leftType, rightType)) {
-            throw new TypeCheckingException("Left expression: " + leftExpression.toPrint("") + " has different type from right expression: " + rightExpression.toPrint(""));
+            throw new TypeCheckingException("Left expression: " + leftExpression + " has different type from right expression: " + rightExpression);
         }
 
         //leftType and rightType have the same type

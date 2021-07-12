@@ -1,6 +1,5 @@
 package it.azzalinferrati.ast.node.expression;
 
-import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
@@ -27,7 +26,7 @@ public class NewExpNode extends ExpNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent + "new " + type.toPrint("");
+        return indent + "new " + type;
     }
 
     @Override

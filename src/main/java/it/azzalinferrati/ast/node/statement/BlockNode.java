@@ -70,6 +70,11 @@ public class BlockNode implements Node {
     }
 
     @Override
+    public String toString() {
+        return toPrint("");
+    }
+
+    @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         for (DeclarationNode dec : declarations) {
             dec.typeCheck(); // The important is to perform type check, not to get the returned value

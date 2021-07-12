@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
@@ -132,7 +131,7 @@ public class Environment {
         STEntry declaration = currentScope().put(id, stEntry);
         if (declaration != null) {
             throw new MultipleDeclarationException("Multiple declaration for ID: " + id
-                    + ". It was previously defined of type: " + declaration.getType().toPrint("") + ".");
+                    + ". It was previously defined of type: " + declaration.getType() + ".");
         }
 
         return stEntry;
@@ -160,7 +159,7 @@ public class Environment {
         STEntry declaration = currentScope().put(id, stEntry);
         if (declaration != null) {
             System.err.println("Unexpected multiple assignment for ID: " + id + ". It was previously defined of type: "
-                    + declaration.getType().toPrint("") + ".");
+                    + declaration.getType() + ".");
         }
 
         return stEntry;

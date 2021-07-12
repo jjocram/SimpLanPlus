@@ -33,7 +33,7 @@ public class CallStatNode extends StatementNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent + call.toPrint("");
+        return indent + call;
     }
 
     @Override

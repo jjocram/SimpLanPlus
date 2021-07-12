@@ -1,6 +1,5 @@
 package it.azzalinferrati.ast.node.expression;
 
-import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
@@ -33,7 +32,7 @@ public class NotExpNode extends ExpNode{
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         if(!(exp.typeCheck() instanceof BoolTypeNode)){
-            throw new TypeCheckingException("Expression: " + exp.toPrint("") + " must be of type bool");
+            throw new TypeCheckingException("Expression: " + exp + " must be of type bool");
         }
         
         return new BoolTypeNode();

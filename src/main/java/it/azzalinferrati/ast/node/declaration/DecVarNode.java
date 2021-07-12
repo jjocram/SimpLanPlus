@@ -34,16 +34,17 @@ public class DecVarNode extends DeclarationNode {
     @Override
     public String toPrint(String indent) {
         final String declaration = indent
-                + "Variable\t>> " + id.toPrint(" ") + " : " + type.toPrint("");
+                + "Var. dec:\t" + id + " : " + type;
         /* A declaration could be
             - type ID;
             - type ID = exp
             Exp is optional
         */
-        final String body = exp != null ? ("\t- initialized with: " + exp.toPrint("")) : "";
+        final String offset = "\t- in the AR will be at offset: " + id.getOffset();
+        final String body = exp != null ? ("\t- initialized with: " + exp) : "";
 
 
-        return declaration + "\t- in the AR will be at offset: " + id.getOffset() + body;
+        return declaration + offset + body;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class DecVarNode extends DeclarationNode {
             return null;
         }
 
-        throw new TypeCheckingException("Expression: " + exp.toPrint("") + " cannot be assigned to " + id.toPrint("") + " of type " + type.toPrint(""));
+        throw new TypeCheckingException("Expression: " + exp + " cannot be assigned to " + id + " of type " + type);
     }
 
     @Override

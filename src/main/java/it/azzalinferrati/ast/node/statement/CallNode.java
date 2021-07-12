@@ -41,9 +41,14 @@ public class CallNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        String parametersToPrint = params.stream().map((argNode) -> argNode.toPrint(indent)).reduce("(", (arg1, arg2) -> (arg1.equals("(") ? "(" : (arg1 + ",")) + arg2);
+        String parametersToPrint = params.stream().map((argNode) -> argNode.toPrint(indent)).reduce("(", (arg1, arg2) -> (arg1.equals("(") ? "(" : (arg1 + ", ")) + arg2);
         parametersToPrint += ")";
-        return indent + "call " + id.toPrint(indent) + parametersToPrint;
+        return indent + "Call:\t" + id.toPrint(indent) + parametersToPrint;
+    }
+
+    @Override
+    public String toString() {
+        return toPrint("");
     }
 
     @Override
@@ -51,7 +56,7 @@ public class CallNode implements Node {
         TypeNode idType = id.typeCheck();
 
         if (!(idType instanceof FunTypeNode)) {
-            throw new TypeCheckingException("ID " + id.toPrint("") + " is not a function identifier");
+            throw new TypeCheckingException("ID " + id + " is not a function identifier");
         }
 
         FunTypeNode funType = (FunTypeNode) idType;
@@ -65,7 +70,7 @@ public class CallNode implements Node {
 
         for (int i = 0, size = formalFunArgTypes.size(); i < size; i++) {
             if (!Node.isSubtype(formalFunArgTypes.get(i), actualFunArgTypes.get(i))) {
-                throw new TypeCheckingException("In function " + id.toPrint("") + " expected argument of type " + formalFunArgTypes.get(i).toPrint("") + ", got " + actualFunArgTypes.get(i).toPrint(""));
+                throw new TypeCheckingException("In function " + id + " expected argument of type " + formalFunArgTypes.get(i) + ", got " + actualFunArgTypes.get(i));
             }
         }
 
@@ -91,7 +96,7 @@ public class CallNode implements Node {
 
         params.forEach(param -> {
             buffer.append(param.codeGeneration());
-            buffer.append("push $a0 ;push of ").append(param.toPrint("")).append("\n");
+            buffer.append("push $a0 ;push of ").append(param).append("\n");
         });
 
         // $fp = $sp - 1

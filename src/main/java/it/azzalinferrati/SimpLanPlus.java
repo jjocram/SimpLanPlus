@@ -135,8 +135,7 @@ public class SimpLanPlus {
 
         // Printing (if requested) the AST.
         if (flags.ast()) {
-            System.out.println("Information from the AST:");
-            System.out.println(AST.toPrint(""));
+            System.out.println("Information from the AST:\n" + AST);
         }
 
         return AST.codeGeneration();

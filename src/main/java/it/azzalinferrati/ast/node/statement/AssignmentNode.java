@@ -30,7 +30,12 @@ public class AssignmentNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent + lhs.toPrint("") + " = " + exp.toPrint("");
+        return indent + "Assignment:\t" + lhs + " = " + exp;
+    }
+
+    @Override
+    public String toString() {
+        return toPrint("");
     }
 
     @Override
@@ -42,7 +47,7 @@ public class AssignmentNode implements Node {
             return new VoidTypeNode();
         }
 
-        throw new TypeCheckingException("Expression: " + exp.toPrint("") + " of type " + exp.typeCheck().toPrint("") + " cannot be assigned to " + lhs.getId().toPrint("") + " of type " + lhsType.toPrint(""));
+        throw new TypeCheckingException("Expression: " + exp + " of type " + exp.typeCheck() + " cannot be assigned to " + lhs.getId() + " of type " + lhsType);
     }
 
     @Override

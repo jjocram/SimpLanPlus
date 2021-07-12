@@ -43,10 +43,10 @@ public class LhsNode implements Node {
     @Override
     public String toPrint(String indent) {
         if (lhs == null) {
-            return indent + id.toPrint("");
+            return indent + id;
         }
 
-        return lhs.toPrint("") + "^";
+        return lhs + "^";
     }
 
     @Override
