@@ -25,4 +25,8 @@ public abstract class TypeNode implements Node {
 
         return true;
     }
+
+    public int getDereferenceLevel() {
+        return 1;
+    }
 }

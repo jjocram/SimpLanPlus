@@ -1,6 +1,7 @@
 package it.azzalinferrati.ast.node.value;
 
 import it.azzalinferrati.ast.node.IdNode;
+import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.IntTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
@@ -51,7 +52,7 @@ public class NumberNode extends ExpNode {
     }
 
     @Override
-    public List<IdNode> variables() {
+    public List<LhsNode> variables() {
         return new ArrayList<>();
     }
 }

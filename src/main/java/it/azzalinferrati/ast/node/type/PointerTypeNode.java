@@ -61,5 +61,10 @@ public class PointerTypeNode extends TypeNode {
 
         return true;
     }
+
+    @Override
+    public int getDereferenceLevel() {
+        return 1 + pointedType.getDereferenceLevel();
+    }
     
 }

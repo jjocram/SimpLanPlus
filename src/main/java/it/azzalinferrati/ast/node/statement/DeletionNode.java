@@ -1,6 +1,7 @@
 package it.azzalinferrati.ast.node.statement;
 
 import it.azzalinferrati.ast.node.IdNode;
+import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
@@ -55,10 +56,11 @@ public class DeletionNode implements Node {
 
         errors.addAll(id.checkSemantics(env));
 
-        if (id.getStatus().equals(Effect.DELETE) || id.getStatus().equals(Effect.ERROR)) {
+        // dereferenceLevel = 1 always by language design => delete ID
+        if (id.getStatus(1).equals(Effect.DELETE) || id.getStatus(1).equals(Effect.ERROR)) {
             errors.add(new SemanticError("Variable " + id.getId() + " was already deleted"));
         } else {
-            errors.addAll(env.checkVariableStatus(id, Effect::seq, Effect.DELETE));
+            errors.addAll(env.checkVariableStatus(new LhsNode(id, new LhsNode(id, null)), Effect::seq, Effect.DELETE));
         }
         return errors;
     }

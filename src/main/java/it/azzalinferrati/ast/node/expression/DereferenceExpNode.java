@@ -51,10 +51,10 @@ public class DereferenceExpNode extends ExpNode {
     }
 
     @Override
-    public List<IdNode> variables() {
-        List<IdNode> variable = new ArrayList<>();
+    public List<LhsNode> variables() {
+        List<LhsNode> variable = new ArrayList<>();
 
-        variable.add(lhs.getId());
+        variable.add(lhs);
 
         return variable;
     }

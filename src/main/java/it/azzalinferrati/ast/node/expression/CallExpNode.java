@@ -1,6 +1,7 @@
 package it.azzalinferrati.ast.node.expression;
 
 import it.azzalinferrati.ast.node.IdNode;
+import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.statement.CallNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
@@ -53,7 +54,7 @@ public class CallExpNode extends ExpNode {
     }
 
     @Override
-    public List<IdNode> variables() {
+    public List<LhsNode> variables() {
         return call.variables();
     }
 }

@@ -65,10 +65,10 @@ public class AssignmentNode implements Node {
         errors.addAll(lhs.checkSemantics(env));
         errors.addAll(exp.checkSemantics(env));
 
-        if (lhs.getId().getStatus().equals(Effect.ERROR)) {
-            errors.addAll(env.checkVariableStatus(lhs.getId(), Effect::seq, Effect.READ_WRITE));
+        if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.ERROR)) {
+            errors.addAll(env.checkVariableStatus(lhs, Effect::seq, Effect.READ_WRITE));
         } else {
-            lhs.getId().setStatus(new Effect(Effect.READ_WRITE));
+            lhs.getId().setStatus(new Effect(Effect.READ_WRITE), lhs.getDereferenceLevel());
         }
 
         return errors;

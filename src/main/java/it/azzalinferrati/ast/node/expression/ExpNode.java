@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.azzalinferrati.ast.node.IdNode;
+import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Effect;
@@ -24,7 +25,7 @@ public abstract class ExpNode implements Node {
      * @return all variables (not function identifiers) that are used in the
      *         expression
      */
-    public abstract List<IdNode> variables();
+    public abstract List<LhsNode> variables();
 
     /**
      * Checks, for each variable in the list of used variables by the expression,

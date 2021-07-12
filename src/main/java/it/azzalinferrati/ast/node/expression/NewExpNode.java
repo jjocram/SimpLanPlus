@@ -1,6 +1,7 @@
 package it.azzalinferrati.ast.node.expression;
 
 import it.azzalinferrati.ast.node.IdNode;
+import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
@@ -45,7 +46,7 @@ public class NewExpNode extends ExpNode {
     }
 
     @Override
-    public List<IdNode> variables() {
+    public List<LhsNode> variables() {
         return new ArrayList<>(); // Never will it have any variables in it.
     }
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import it.azzalinferrati.ast.node.IdNode;
+import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.exception.MissingDeclarationException;
@@ -269,7 +270,10 @@ public class Environment {
                 if (entryInScopeEnv2 != null) { // ==> id \in dom(env2)
                     var opEntry = new STEntry(entryInScopeEnv1.getNestingLevel(), entryInScopeEnv1.getType(),
                             entryInScopeEnv1.getOffset());
-                    opEntry.setVariableStatus(operation.apply(entryInScopeEnv1.getVariableStatus(), entryInScopeEnv2.getVariableStatus()));
+                    //opEntry.setVariableStatus(operation.apply(entryInScopeEnv1.getVariableStatus(), entryInScopeEnv2.getVariableStatus()));
+                    for (int j = 0; j < entryInScopeEnv1.getMaxDereferenceLevel(); j++) {
+                        opEntry.setVariableStatus(operation.apply(entryInScopeEnv1.getVariableStatus(j), entryInScopeEnv2.getVariableStatus(j)), j);
+                    }
 
                     resultEnvScope.put(id, opEntry);
                 } else {
@@ -300,7 +304,10 @@ public class Environment {
             if (!scope2.containsKey(xInE1.getKey())) {
                 STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(),
                         xInE1.getValue().getType());
-                entry.setVariableStatus(xInE1.getValue().getVariableStatus());
+                //entry.setVariableStatus(xInE1.getValue().getVariableStatus());
+                for (int j = 0; j < xInE1.getValue().getMaxDereferenceLevel(); j++) {
+                    entry.setVariableStatus(xInE1.getValue().getVariableStatus(j), j);
+                }
             }
         }
 
@@ -308,7 +315,10 @@ public class Environment {
             if (!scope1.containsKey(xInE2.getKey())) {
                 STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE2.getKey(),
                         xInE2.getValue().getType());
-                entry.setVariableStatus(xInE2.getValue().getVariableStatus());
+                //entry.setVariableStatus(xInE2.getValue().getVariableStatus());
+                for (int j = 0; j < xInE2.getValue().getMaxDereferenceLevel(); j++) {
+                    entry.setVariableStatus(xInE2.getValue().getVariableStatus(j), j);
+                }
             }
         }
 
@@ -317,8 +327,11 @@ public class Environment {
                 if (xInE1.getKey().equals(xInE2.getKey())) {
                     STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(),
                             xInE1.getValue().getType());
-                    Effect parResult = Effect.par(xInE1.getValue().getVariableStatus(), xInE2.getValue().getVariableStatus());
-                    entry.setVariableStatus(parResult);
+                    //Effect parResult = Effect.par(xInE1.getValue().getVariableStatus(), xInE2.getValue().getVariableStatus());
+                    //entry.setVariableStatus(parResult);
+                    for (int j = 0; j < xInE2.getValue().getMaxDereferenceLevel(); j++) {
+                        entry.setVariableStatus(Effect.par(xInE1.getValue().getVariableStatus(j), xInE2.getValue().getVariableStatus(j)), j);
+                    }
                 }
             }
         }
@@ -362,7 +375,10 @@ public class Environment {
             Environment envWithOnlyU = new Environment();
             envWithOnlyU.pushNewScope();
             STEntry tmpEntry = envWithOnlyU.addUniqueNewDeclaration(u.getKey(), u.getValue().getType());
-            tmpEntry.setVariableStatus(u.getValue().getVariableStatus());
+            //tmpEntry.setVariableStatus(u.getValue().getVariableStatus());
+            for (int j = 0; j < u.getValue().getMaxDereferenceLevel(); j++) {
+                tmpEntry.setVariableStatus(u.getValue().getVariableStatus(j), j);
+            }
 
             env1.popScope();
             Environment tmpEnv = update(env1, envWithOnlyU);
@@ -391,16 +407,15 @@ public class Environment {
      * @return a list with errors found while checking the status of each variable
      * used in the expression
      */
-    public ArrayList<SemanticError> checkVariableStatus(final IdNode variable,
+    public ArrayList<SemanticError> checkVariableStatus(final LhsNode variable,
                                                         final BiFunction<Effect, Effect, Effect> rule, final Effect effectToApply) {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         try {
-            var stEntry = lookup(variable.getId());
-            Effect status = rule.apply(stEntry.getVariableStatus(), effectToApply);
+            var stEntry = lookup(variable.getId().getId());
+            Effect status = rule.apply(stEntry.getVariableStatus(variable.getDereferenceLevel()), effectToApply);
 
-            stEntry.setVariableStatus(status);
-            variable.setStatus(status);
+            stEntry.setVariableStatus(status, variable.getDereferenceLevel());
 
             if (status.equals(Effect.ERROR)) {
                 errors.add(new SemanticError("Variable " + variable.getId() + " is used after deletion"));
@@ -417,8 +432,10 @@ public class Environment {
         ArrayList<SemanticError> errors = new ArrayList<>();
         for (var scope : symbolTable) {
             for (var entry : scope.entrySet()) {
-                if (entry.getValue().getVariableStatus().equals(Effect.ERROR)) {
-                    errors.add(new SemanticError("Variable " + entry.getKey() + " is used after deletion"));
+                for (int i = 0; i < entry.getValue().getMaxDereferenceLevel(); i++) {
+                    if (entry.getValue().getVariableStatus(i).equals(Effect.ERROR)) {
+                        errors.add(new SemanticError("Dereference pointer " + entry.getKey() + " at level " + i + " is used after deletion"));
+                    }
                 }
             }
         }

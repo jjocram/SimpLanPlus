@@ -2,6 +2,7 @@ package it.azzalinferrati.ast.node;
 
 import java.util.ArrayList;
 
+import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
@@ -55,6 +56,14 @@ public class ArgNode implements Node {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
+    }
+
+    public int getDereferenceLevel() {
+        if (type instanceof PointerTypeNode) {
+            return type.getDereferenceLevel();
+        } else {
+            return 0;
+        }
     }
     
 }

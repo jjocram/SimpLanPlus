@@ -14,5 +14,5 @@
     print(y^);
     // y will be used after deletion -> this is correctly notified
     delete  y;
-    f(y);
+    print y^;
 }

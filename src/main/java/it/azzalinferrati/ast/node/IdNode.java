@@ -30,12 +30,20 @@ public class IdNode implements Node {
         this.entry = entry;
     }
 
-    public void setStatus(Effect effect) {
+/*    public void setStatus(Effect effect) {
         entry.setVariableStatus(effect);
+    }*/
+
+    public void setStatus(Effect effect, int dereferenceLevel) {
+        entry.setVariableStatus(effect, dereferenceLevel);
     }
 
-    public Effect getStatus() {
+/*    public Effect getStatus() {
         return entry.getVariableStatus();
+    }*/
+
+    public Effect getStatus(int dereferenceLevel) {
+        return entry.getVariableStatus(dereferenceLevel);
     }
 
     public String getId() {

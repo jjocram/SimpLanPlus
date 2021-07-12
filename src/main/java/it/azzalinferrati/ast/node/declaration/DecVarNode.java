@@ -87,7 +87,7 @@ public class DecVarNode extends DeclarationNode {
         try {
             id.setEntry(env.addNewDeclaration(id.getId(), type));
             if(exp != null) {
-                id.setStatus(Effect.READ_WRITE);
+                id.setStatus(Effect.READ_WRITE, 0);
             }
         } catch (MultipleDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));

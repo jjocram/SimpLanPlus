@@ -103,4 +103,15 @@ public class LhsNode implements Node {
     public boolean isPointer() {
         return id.getSTEntry().getType() instanceof PointerTypeNode;
     }
+
+    /**
+    Return the number of '^' in the LHSNode
+    */
+    public int getDereferenceLevel() {
+        if (lhs == null) {
+            return 0;
+        }
+
+        return 1 + lhs.getDereferenceLevel();
+    }
 }

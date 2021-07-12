@@ -2,6 +2,7 @@ package it.azzalinferrati.ast.node.expression;
 
 import it.azzalinferrati.LabelManager;
 import it.azzalinferrati.ast.node.IdNode;
+import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.type.BoolTypeNode;
 import it.azzalinferrati.ast.node.type.IntTypeNode;
@@ -238,8 +239,8 @@ public class BinaryExpNode extends ExpNode {
     }
 
     @Override
-    public List<IdNode> variables() {
-        List<IdNode> variables = new ArrayList<>();
+    public List<LhsNode> variables() {
+        List<LhsNode> variables = new ArrayList<>();
 
         variables.addAll(leftExpression.variables());
         variables.addAll(rightExpression.variables());

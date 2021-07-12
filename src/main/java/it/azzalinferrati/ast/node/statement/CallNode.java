@@ -1,6 +1,7 @@
 package it.azzalinferrati.ast.node.statement;
 
 import it.azzalinferrati.ast.node.IdNode;
+import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.DereferenceExpNode;
 import it.azzalinferrati.ast.node.expression.ExpNode;
@@ -138,9 +139,9 @@ public class CallNode implements Node {
                 .filter(i -> !((params.get(i) instanceof DereferenceExpNode) && ((DereferenceExpNode) params.get(i)).isPointerType()))
                 .boxed()
                 .collect(Collectors.toList());
-        List<Effect> effects = id.getSTEntry().getFunctionStatus();
+        List<List<Effect>> effects = id.getSTEntry().getFunctionStatus();
         for (int i : indexesOfNotPointers) {
-            if (effects.get(i).equals(Effect.ERROR)) {
+            if (effects.get(i).stream().anyMatch(e -> e.equals(Effect.ERROR))) {
                 errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId()));
             }
         }
@@ -148,14 +149,14 @@ public class CallNode implements Node {
         // Setting all variables inside expressions to be read/write.
         Environment e1 = new Environment(env); // Creating a copy of the environment.
 
-        List<IdNode> varsInExpressions = params.stream()
+        List<LhsNode> varsInExpressions = params.stream()
                 .filter(param -> !((param instanceof DereferenceExpNode) && ((DereferenceExpNode) param).isPointerType()))
                 .flatMap(param -> param.variables().stream())
                 .collect(Collectors.toList());
 
         for (var variable : varsInExpressions) {
-            var entryInE1 = e1.safeLookup(variable.getId());
-            entryInE1.setVariableStatus(Effect.seq(entryInE1.getVariableStatus(), Effect.READ_WRITE));
+            var entryInE1 = e1.safeLookup(variable.getId().getId());
+            entryInE1.setVariableStatus(Effect.seq(entryInE1.getVariableStatus(0), Effect.READ_WRITE), 0);
         }
 
         Environment e2 = new Environment();
@@ -172,14 +173,16 @@ public class CallNode implements Node {
             Environment mthEnv = new Environment();
             mthEnv.pushNewScope();
 
-            IdNode pointer = params.get(i).variables().stream().findFirst().get(); //always exists only once pointer in the list of variables of this parameter
+            LhsNode pointer = params.get(i).variables().stream().findFirst().get(); //always exists only once pointer in the list of variables of this parameter
 
-            Effect u_iEffect = env.safeLookup(pointer.getId()).getVariableStatus();
-            Effect x_iEffect = effects.get(i);
-            Effect seq = Effect.seq(u_iEffect, x_iEffect);
+            STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId().getId(), pointer.getId().getSTEntry().getType());
+            for (int derefLvl = 0; derefLvl < pointer.getId().getSTEntry().getMaxDereferenceLevel(); derefLvl++) {
+                Effect u_iEffect = env.safeLookup(pointer.getId().getId()).getVariableStatus(derefLvl);
+                Effect x_iEffect = effects.get(i).get(derefLvl);
+                Effect seq = Effect.seq(u_iEffect, x_iEffect);
 
-            STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId(), pointer.getSTEntry().getType());
-            entry.setVariableStatus(seq);
+                entry.setVariableStatus(seq, derefLvl);
+            }
 
             resultingEnvironments.add(mthEnv);
         }
@@ -197,7 +200,7 @@ public class CallNode implements Node {
         return errors;
     }
 
-    public List<IdNode> variables() {
+    public List<LhsNode> variables() {
         return params.stream().flatMap(exp -> exp.variables().stream()).collect(Collectors.toList());
     }
 }
