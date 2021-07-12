@@ -56,7 +56,7 @@ public class CallNode implements Node {
         TypeNode idType = id.typeCheck();
 
         if (!(idType instanceof FunTypeNode)) {
-            throw new TypeCheckingException("ID " + id + " is not a function identifier");
+            throw new TypeCheckingException("ID " + id + " is not a function identifier.");
         }
 
         FunTypeNode funType = (FunTypeNode) idType;
@@ -70,7 +70,7 @@ public class CallNode implements Node {
 
         for (int i = 0, size = formalFunArgTypes.size(); i < size; i++) {
             if (!Node.isSubtype(formalFunArgTypes.get(i), actualFunArgTypes.get(i))) {
-                throw new TypeCheckingException("In function " + id + " expected argument of type " + formalFunArgTypes.get(i) + ", got " + actualFunArgTypes.get(i));
+                throw new TypeCheckingException("In function " + id + " expected argument of type " + formalFunArgTypes.get(i) + ", got " + actualFunArgTypes.get(i) + ".");
             }
         }
 
@@ -131,7 +131,7 @@ public class CallNode implements Node {
         var actualFunArgLen = params.size();
 
         if(formalFunArgLen != actualFunArgLen) {
-            errors.add(new SemanticError("The number of actual parameters do not match that of the formal parameters of function " + id));
+            errors.add(new SemanticError("The number of actual parameters do not match that of the formal parameters of function " + id + "."));
         }
 
         if (!errors.isEmpty()) {
@@ -147,7 +147,7 @@ public class CallNode implements Node {
         List<List<Effect>> effects = id.getSTEntry().getFunctionStatus();
         for (int i : indexesOfNotPointers) {
             if (effects.get(i).stream().anyMatch(e -> e.equals(Effect.ERROR))) {
-                errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId()));
+                errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId() + "."));
             }
         }
 

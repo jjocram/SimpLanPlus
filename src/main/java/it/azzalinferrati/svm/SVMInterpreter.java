@@ -26,7 +26,7 @@ class MemoryCell {
 
     public int getData() throws UninitializedVariableException {
         if (data == null) {
-            throw new UninitializedVariableException("Access to memory cell which contains uninitialized data");
+            throw new UninitializedVariableException("Access to memory cell which contains uninitialized data.");
         } else {
             return data;
         }
@@ -136,7 +136,7 @@ public class SVMInterpreter {
             lastUpdatedMemoryCell = address;
             lastUpdatedRegister = "";
         } catch (IndexOutOfBoundsException e) {
-            throw new MemoryAccessException("Address " + address + " cannot be accessed");
+            throw new MemoryAccessException("Address " + address + " cannot be accessed.");
         }
     }
 
@@ -146,7 +146,7 @@ public class SVMInterpreter {
             lastUpdatedMemoryCell = address;
             lastUpdatedRegister = "";
         } catch (IndexOutOfBoundsException e) {
-            throw new MemoryAccessException("Address " + address + " cannot be accessed");
+            throw new MemoryAccessException("Address " + address + " cannot be accessed.");
         }
     }
 
@@ -154,7 +154,7 @@ public class SVMInterpreter {
         try {
             return memory[address].getData();
         } catch (IndexOutOfBoundsException e) {
-            throw new MemoryAccessException("Address " + address + " cannot be accessed");
+            throw new MemoryAccessException("Address " + address + " cannot be accessed.");
         }
     }
 
@@ -162,7 +162,7 @@ public class SVMInterpreter {
         try {
             memory[address].freeCell();
         } catch (IndexOutOfBoundsException e) {
-            throw new MemoryAccessException("Address " + address + " cannot be accessed");
+            throw new MemoryAccessException("Address " + address + " cannot be accessed.");
         }
     }
 
@@ -175,7 +175,7 @@ public class SVMInterpreter {
 
         while (true) {
             if (hp() > sp()) {
-                throw new MemoryAccessException("Reached max memory limit");
+                throw new MemoryAccessException("Reached max memory limit.");
             }
 
             SVMInstruction instruction = code.get($ip);

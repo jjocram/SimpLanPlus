@@ -60,7 +60,7 @@ public class DecVarNode extends DeclarationNode {
             return null;
         }
 
-        throw new TypeCheckingException("Expression: " + exp + " cannot be assigned to " + id + " of type " + type);
+        throw new TypeCheckingException("Expression: " + exp + " cannot be assigned to " + id + " of type " + type + ".");
     }
 
     @Override

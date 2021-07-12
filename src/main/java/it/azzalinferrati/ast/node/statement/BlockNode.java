@@ -94,7 +94,7 @@ public class BlockNode implements Node {
             for (int i = 0; i < iteStatNodes.size() - 1; i++) {
                 // Multiple if-then-else must have the same returned type
                 if (!Node.isSubtype(iteStatNodes.get(i).typeCheck(), iteStatNodes.get(i + 1).typeCheck())) {
-                    throw new TypeCheckingException("Multiple return statements with different returned types");
+                    throw new TypeCheckingException("Multiple return statements with different returned types.");
                 }
             }
             if (iteStatNodes.size() > 0) {
@@ -185,7 +185,7 @@ public class BlockNode implements Node {
             var firstReturnStm = statements.stream().filter(stm -> stm instanceof RetStatNode).findFirst().get();
             int returnIndex = statements.indexOf(firstReturnStm);
             if (returnIndex + 1 < statements.size()) {
-                errors.add(new SemanticError("There is code after return statement"));
+                errors.add(new SemanticError("There is code after a return statement."));
             }
         }
 

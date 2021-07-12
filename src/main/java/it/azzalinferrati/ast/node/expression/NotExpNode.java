@@ -32,7 +32,7 @@ public class NotExpNode extends ExpNode{
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         if(!(exp.typeCheck() instanceof BoolTypeNode)){
-            throw new TypeCheckingException("Expression: " + exp + " must be of type bool");
+            throw new TypeCheckingException("Expression: " + exp + " must be of type bool.");
         }
         
         return new BoolTypeNode();

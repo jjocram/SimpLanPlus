@@ -56,7 +56,7 @@ public class DecFunNode implements Node {
     public TypeNode typeCheck() throws TypeCheckingException {
         if (!Node.isSubtype(type, block.typeCheck())) {
             // Error
-            throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type);
+            throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type + ".");
         }
         return null; // Nothing to return
     }

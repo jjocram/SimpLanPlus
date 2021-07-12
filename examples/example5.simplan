@@ -2,7 +2,7 @@
 {
     /*
     This example shows the importance of having a fix-point method implemented for performing the effects analysis on functions.
-    The program is not correct because the g function could delete x twice.
+    The program is not correct because the function g could delete x twice.
     */
     ^int a = new int;
     int b = 0;

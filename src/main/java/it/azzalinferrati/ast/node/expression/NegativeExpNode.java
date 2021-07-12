@@ -32,7 +32,7 @@ public class NegativeExpNode extends ExpNode {
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         if(!(exp.typeCheck() instanceof IntTypeNode)){
-            throw new TypeCheckingException("Expression: " + exp + " must be of type int");
+            throw new TypeCheckingException("Expression: " + exp + " must be of type int.");
         }
         
         return new IntTypeNode();

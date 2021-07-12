@@ -6,7 +6,7 @@
     and use it in the following statement:
       f(x, x);
     then the program should display:
-      - "Variable x is used after deletion."
+      - "The dereferenced pointer x^ is used after deletion."
     */
     ^int x = new int;
     void f(^int x, ^int y) {

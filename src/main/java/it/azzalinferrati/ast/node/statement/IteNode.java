@@ -51,11 +51,11 @@ public class IteNode implements Node {
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         if (!(condition.typeCheck() instanceof BoolTypeNode)) {
-            throw new TypeCheckingException("Condition " + condition + " is not of type bool");
+            throw new TypeCheckingException("Condition " + condition + " is not of type bool.");
         }
 
         if (elseBranch != null && !Node.isSubtype(thenBranch.typeCheck(), elseBranch.typeCheck())) {
-            throw new TypeCheckingException("\"Then\" branch and \"Else\" branch have different return types");
+            throw new TypeCheckingException("\"Then\" branch and \"Else\" branch have different return types.");
         }
 
         return thenBranch.typeCheck(); // thenBranch has the same type of elseBranch

@@ -47,7 +47,7 @@ public class AssignmentNode implements Node {
             return new VoidTypeNode();
         }
 
-        throw new TypeCheckingException("Expression: " + exp + " of type " + exp.typeCheck() + " cannot be assigned to " + lhs.getId() + " of type " + lhsType);
+        throw new TypeCheckingException("Expression: " + exp + " of type " + exp.typeCheck() + " cannot be assigned to " + lhs.getId() + " of type " + lhsType + ".");
     }
 
     @Override

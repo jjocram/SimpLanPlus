@@ -182,7 +182,7 @@ public class Environment {
             }
         }
 
-        throw new MissingDeclarationException("Missing declaration for ID: " + id);
+        throw new MissingDeclarationException("Missing declaration for ID: " + id + ".");
     }
 
     /**
@@ -417,7 +417,7 @@ public class Environment {
             stEntry.setVariableStatus(status, variable.getDereferenceLevel());
 
             if (status.equals(Effect.ERROR)) {
-                errors.add(new SemanticError("Variable " + variable.getId() + " is used after deletion"));
+                errors.add(new SemanticError("Variable " + variable.getId() + " is used after deletion."));
             }
         } catch (MissingDeclarationException exception) {
             errors.add(new SemanticError(
@@ -433,7 +433,7 @@ public class Environment {
             for (var entry : scope.entrySet()) {
                 for (int i = 0; i < entry.getValue().getMaxDereferenceLevel(); i++) {
                     if (entry.getValue().getVariableStatus(i).equals(Effect.ERROR)) {
-                        errors.add(new SemanticError("Dereference pointer " + entry.getKey() + " at level " + i + " is used after deletion"));
+                        errors.add(new SemanticError("The dereferenced pointer " + entry.getKey()+ "^".repeat(i)+ " is used after deletion."));
                     }
                 }
             }
