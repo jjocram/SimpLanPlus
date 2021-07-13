@@ -69,6 +69,11 @@ public class AssignmentNode implements Node {
 
         errors.addAll(lhs.checkSemantics(env));
         errors.addAll(exp.checkSemantics(env));
+        if (lhs.getId().getSTEntry() == null) {
+            // What if the variable is not in the Symbol Table
+            errors.add(new SemanticError("Cannot perform effect analysis on " + lhs.getId().getId() + " since it is not declared."));
+            return errors;
+        }
 
         if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.ERROR)) {
             errors.addAll(env.checkVariableStatus(lhs, Effect::seq, Effect.READ_WRITE));

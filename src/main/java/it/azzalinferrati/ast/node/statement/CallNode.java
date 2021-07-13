@@ -124,6 +124,10 @@ public class CallNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(id.checkSemantics(env));
+        if (!errors.isEmpty()) {
+            // If the identifier is not found we cannot proceed with the effect analysis
+            return errors;
+        }
         params.forEach((p) -> errors.addAll(p.checkSemantics(env)));
         currentNestingLevel = env.getNestingLevel();
 
