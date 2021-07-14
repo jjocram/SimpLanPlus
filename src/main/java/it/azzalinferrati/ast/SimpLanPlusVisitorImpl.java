@@ -2,6 +2,8 @@ package it.azzalinferrati.ast;
 
 import it.azzalinferrati.ast.node.*;
 import it.azzalinferrati.ast.node.expression.*;
+import it.azzalinferrati.ast.node.expression.value.BoolNode;
+import it.azzalinferrati.ast.node.expression.value.NumberNode;
 import it.azzalinferrati.ast.node.statement.*;
 import it.azzalinferrati.ast.node.type.*;
 import it.azzalinferrati.ast.node.declaration.DecFunNode;
@@ -13,8 +15,6 @@ import it.azzalinferrati.ast.node.declaration.DeclarationNode;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.azzalinferrati.ast.node.value.BoolNode;
-import it.azzalinferrati.ast.node.value.NumberNode;
 import it.azzalinferrati.parser.SimpLanPlusParser;
 import it.azzalinferrati.parser.SimpLanPlusParser.ArgContext;
 import it.azzalinferrati.parser.SimpLanPlusParser.DeclarationContext;
