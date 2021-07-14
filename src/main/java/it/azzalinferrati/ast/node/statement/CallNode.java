@@ -82,7 +82,7 @@ public class CallNode implements Node {
         StringBuilder buffer = new StringBuilder();
         buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
         buffer.append("push $sp\n"); //push old stack pointer
-        buffer.append("mv $bsp $sp\n"); //update base stack pointer to the new place //TODO: look at BlockNode
+        buffer.append("mv $bsp $sp\n"); //update base stack pointer to the new place
         buffer.append("addi $t1 $bsp 2\n");
         buffer.append("sw $t1 0($bsp)\n");
 

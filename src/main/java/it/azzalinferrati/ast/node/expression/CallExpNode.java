@@ -37,6 +37,13 @@ public class CallExpNode extends ExpNode {
         return ((FunTypeNode) call.getId().typeCheck()).getReturned();
     }
 
+    /**
+     * @return the call node.
+     */
+    public CallNode getCallNode() {
+        return call;
+    }
+
     @Override
     public String codeGeneration() {
         return call.codeGeneration();

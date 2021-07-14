@@ -5,6 +5,7 @@ import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
+import it.azzalinferrati.semanticanalysis.Effect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,10 @@ public class DereferenceExpNode extends ExpNode {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(lhs.checkSemantics(env));
+
+        if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.INITIALIZED)) {
+            errors.add(new SemanticError("The dereferenced pointer " + lhs + " is used prior to initialization."));
+        }
 
         errors.addAll(checkVariablesStatus(env));
 

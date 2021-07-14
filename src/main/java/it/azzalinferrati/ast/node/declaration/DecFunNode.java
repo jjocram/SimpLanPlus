@@ -9,6 +9,7 @@ import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.statement.BlockNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
+import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
@@ -54,6 +55,9 @@ public class DecFunNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
+        if(type instanceof PointerTypeNode) {
+            throw new TypeCheckingException("Functions cannot return pointers.");
+        }
         if (!Node.isSubtype(type, block.typeCheck())) {
             // Error
             throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type + ".");
@@ -95,6 +99,9 @@ public class DecFunNode implements Node {
 
             for (ArgNode arg : args) {
                 var stEntry = env.addNewDeclaration(arg.getId().getId(), arg.getType());
+                for(int derefLvl = 0; derefLvl < stEntry.getMaxDereferenceLevel(); derefLvl++) {
+                    stEntry.setVariableStatus(new Effect(Effect.READ_WRITE), derefLvl);
+                }
                 arg.getId().setEntry(stEntry);
             } // \Sigma_0
 

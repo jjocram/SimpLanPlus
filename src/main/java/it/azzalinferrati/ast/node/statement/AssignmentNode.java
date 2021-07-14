@@ -2,6 +2,7 @@ package it.azzalinferrati.ast.node.statement;
 
 import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.expression.DereferenceExpNode;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.ast.node.type.VoidTypeNode;
@@ -77,6 +78,15 @@ public class AssignmentNode implements Node {
 
         if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.ERROR)) {
             errors.addAll(env.checkVariableStatus(lhs, Effect::seq, Effect.READ_WRITE));
+        } else if(exp instanceof DereferenceExpNode) {
+            LhsNode rhsPointer = ((DereferenceExpNode) exp).variables().get(0);
+            int lhsDerefLvl = lhs.getDereferenceLevel();
+            int expDerefLvl = rhsPointer.getDereferenceLevel();
+            int maxDerefLvl = lhs.getId().getSTEntry().getMaxDereferenceLevel();
+            for(int i = lhsDerefLvl, j = expDerefLvl; i < maxDerefLvl; i++, j++) {
+                var rhsStatus = rhsPointer.getId().getStatus(j);
+                lhs.getId().setStatus(rhsStatus, i);
+            }
         } else {
             lhs.getId().setStatus(new Effect(Effect.READ_WRITE), lhs.getDereferenceLevel());
         }
