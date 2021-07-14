@@ -21,9 +21,6 @@ public class STEntry {
     // Offset for code generation.
     private int offset;
 
-    // Status of the variable.
-    //private Effect variableStatus;
-
     // Statuses of the variable in the stack and in the heap
     private List<Effect> variableStatus;
 
@@ -33,7 +30,6 @@ public class STEntry {
     public STEntry(int nestingLevel, int offset) {
         this.nestingLevel = nestingLevel;
         this.offset = offset;
-        //this.variableStatus = new Effect();
         this.functionStatus = new ArrayList<>();
         this.variableStatus = new ArrayList<>();
     }
@@ -43,9 +39,7 @@ public class STEntry {
         this.type = type;
 
         if(type instanceof FunTypeNode) {
-            //var paramsNumber = ((FunTypeNode) type).getParams().size();
             for(var param: ((FunTypeNode) type).getParams()) {
-                //this.functionStatus.add(new Effect(Effect.INITIALIZED));
                 List<Effect> paramStatus = new ArrayList<>();
                 int numberOfDereference = param.getDereferenceLevel();
                 for (int i = 0; i < numberOfDereference; i++) {
@@ -70,7 +64,6 @@ public class STEntry {
     public STEntry(STEntry s) {
         this(s.nestingLevel, s.offset);
         this.type = s.type;
-        //this.variableStatus = new Effect(s.variableStatus);
         for(var fnStatus: s.functionStatus) {
             List<Effect> paramStatus = new ArrayList<>();
             for  (var status: fnStatus) {
@@ -99,13 +92,6 @@ public class STEntry {
         return type;
     }
 
-    /**
-     * @return the current status of the variable.
-     */
-    /*public Effect getVariableStatus() {
-        return heapStatus.get(0);
-    }*/
-
     public Effect getVariableStatus(int dereferenceLevel) {
         return variableStatus.get(dereferenceLevel);
     }
@@ -132,15 +118,13 @@ public class STEntry {
         return offset;
     }
 
+
     /**
-     * Sets the new effect for the entry in the Symbol Table.
+     * Sets the new effect for the entry in the Symbol Table at the given dereference level.
      * 
      * @param status new status for the variable
+     * @param dereferenceLevel level in which {@code status} applies.
      */
-/*    public void setVariableStatus(Effect status) {
-        this.heapStatus. = new Effect(status);
-    }*/
-
     public void setVariableStatus(Effect status, int dereferenceLevel) {
         this.variableStatus.set(dereferenceLevel, new Effect(status));
     }

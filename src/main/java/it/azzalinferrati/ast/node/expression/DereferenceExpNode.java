@@ -46,7 +46,7 @@ public class DereferenceExpNode extends ExpNode {
         errors.addAll(lhs.checkSemantics(env));
 
         if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.INITIALIZED)) {
-            errors.add(new SemanticError("The dereferenced pointer " + lhs + " is used prior to initialization."));
+            errors.add(new SemanticError(lhs + " is used prior to initialization."));
         }
 
         errors.addAll(checkVariablesStatus(env));
