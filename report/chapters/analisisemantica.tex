@@ -83,10 +83,10 @@ public ArrayList<SemanticError> checkSemantics(Environment env) {
 \end{lstlisting}
 
 \subsection{Corretto uso dei puntatori}\label{s:corretto-usi-puntatori}
-I controlli semantici per i nodi che contengono puntatori dereferenziati o meno vengono controllati diversi aspetti:
+I controlli semantici per i nodi che contengono puntatori dereferenziati o meno includono diversi aspetti:
 \begin{itemize}
-    \item non è possibile utilizzare puntatori non ancora inizializzati (come del resto le variabili);
-    \item se si dichiarano puntatori multipli (per esempio \verb|^^int a|) l'utente è obbligato ad inizializzarli tutti quanti prima di poterli usare, altrimenti avvengono errori di accesso erroneo alla memoria;
+    \item non è possibile leggere il contenuto o l'indirizzo di puntatori non ancora inizializzati (come del resto per le variabili non puntatore);
+    \item se si dichiarano puntatori multipli (per esempio \verb|^^int a|) l'utente è obbligato ad inizializzarli tutti quanti prima di poterli usare (maggiori informazioni su questo punto vengono riportare nella prossima sezione sull'analisi degli effetti);
     \item non è possibile dereferenziare puntatori cancellati;
     \item è possibile riutilizzare un puntatore cancellato solo previa allocazione di una nuova area di memoria.
 \end{itemize}

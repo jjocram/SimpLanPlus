@@ -17,6 +17,7 @@ Nelle seguenti sezioni sono riportati alcuni dei 27 esempi che sono stati utiliz
 L'esempio presente nel file \verb|examples/example1.simplan| mostra il corretto uso dei puntatori.
 Vengono creati due puntatori, \verb|x| che punta a sua volta a un puntatore di interi e \verb|y| che punta a un intero.
 Le aree di memoria puntate dai puntatori vengono scritte e ciò viene verificato stampando il valore intero puntato dal puntatore puntato da \verb|x|.
+Infine, nell'istruzione \verb|x^ = y| oltre a fare la copia del valore della variabile puntatore \verb|y| nella memoria puntata da \verb|x^| vengono copiati anche i relativi effetti.
 
 \section{Esempio 2}\label{s:esempio2}
 \begin{lstlisting}
@@ -43,7 +44,9 @@ Inoltre, tramite l'analisi degli effetti, il compilatore riconosce che la variab
     f(x,x);
 }
 \end{lstlisting}
-L'esempio presente nel file \verb|examples/example3.simplan| mostra il riconoscimento del problema dell'aliasing. La funzione \verb|void f(^int x, ^int y)| prende in input due puntatori e li elimina. Quando la funzione viene invocata passandole lo stesso puntatore due volte \verb|f(x, x)| il compilatore riconosce, correttamente, che il puntatore \verb|x| verrebbe eliminato due volte e lo comunica all'utente tramite il messaggio \verb|Variable x is used after deletion|.
+L'esempio presente nel file \verb|examples/example3.simplan| mostra il riconoscimento del problema dell'aliasing.
+La funzione \verb|void f(^int x, ^int y)| prende in input due puntatori e li elimina.
+Quando la funzione viene invocata passandole lo stesso puntatore due volte \verb|f(x, x)| il compilatore riconosce, correttamente, che il puntatore \verb|x| verrebbe eliminato due volte e lo comunica all'utente tramite il messaggio \verb|The dereferenced pointer x^ is used after deletion|.
 
 \section{Esempio 8}\label{s:esempio8}
 \begin{lstlisting}
