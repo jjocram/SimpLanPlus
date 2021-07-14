@@ -66,7 +66,7 @@ public class SimpLanPlus {
             }
         } catch (Exception exc) {
             System.err.println(exc.getMessage());
-            System.exit(1);
+            System.exit(2);
         }
 
     }
