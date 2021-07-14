@@ -2,6 +2,7 @@ package it.azzalinferrati.ast.node;
 
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
+import it.azzalinferrati.semanticanalysis.Effect;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
@@ -96,8 +97,15 @@ public class LhsNode implements Node {
         if (lhs == null) {
             return id.checkSemantics(env);
         }
+        ArrayList<SemanticError> errors = new ArrayList<>();
 
-        return lhs.checkSemantics(env);
+        errors.addAll(lhs.checkSemantics(env));
+        
+        if(!id.getSTEntry().getVariableStatus(getDereferenceLevel() - 1).equals(Effect.READ_WRITE)) {
+            errors.add(new SemanticError("Cannot use " + this + " since " + this.toString().substring(0, this.toString().length() - 1) + " has not status READ_WRITE."));
+        }
+
+        return errors;
     }
 
     public boolean isPointer() {
