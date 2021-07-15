@@ -29,12 +29,14 @@ public class BlockNode implements Node {
 
     private boolean allowScopeCreation;
     private boolean isMainBlock;
+    private boolean isFunctionBody;
 
     public BlockNode(final List<DeclarationNode> declarations, final List<StatementNode> statements) {
         this.declarations = declarations;
         this.statements = statements;
         allowScopeCreation = true;
         isMainBlock = false;
+        isFunctionBody = false;
     }
 
     public void setEndFunctionLabel(String endFunctionLabel) {
@@ -47,8 +49,12 @@ public class BlockNode implements Node {
         allowScopeCreation = false;
     }
 
-    public void setMainBlock(boolean mainBlock) {
-        isMainBlock = mainBlock;
+    public void setMainBlock() {
+        isMainBlock = true;
+    }
+
+    public void setFunctionBody() {
+        isFunctionBody = true;
     }
 
     @Override
@@ -83,16 +89,16 @@ public class BlockNode implements Node {
         }
 
         if (statements.stream().noneMatch(stm -> stm instanceof RetStatNode)) {
-            List<StatementNode> iteStatNodes = statements.stream().filter(stm -> stm instanceof IteStatNode).collect(Collectors.toList());
-            for (int i = 0; i < iteStatNodes.size() - 1; i++) {
+            List<StatementNode> statNodes = statements.stream().filter(stm -> stm instanceof IteStatNode || stm instanceof BlockStatNode).collect(Collectors.toList());
+            for (int i = 0; i < statNodes.size() - 1; i++) {
                 // Multiple if-then-else must have the same returned type
-                if (!Node.isSubtype(iteStatNodes.get(i).typeCheck(), iteStatNodes.get(i + 1).typeCheck())) {
+                if (!Node.isSubtype(statNodes.get(i).typeCheck(), statNodes.get(i + 1).typeCheck())) {
                     throw new TypeCheckingException("Multiple return statements with different returned types.");
                 }
             }
-            if (iteStatNodes.size() > 0) {
+            if (statNodes.size() > 0) {
                 // There are if-then-else
-                return iteStatNodes.get(0).typeCheck();
+                return statNodes.get(0).typeCheck();
             }
 
             //No return
@@ -159,25 +165,52 @@ public class BlockNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
         if (allowScopeCreation) {
             env.pushNewScope();
         }
-        ArrayList<SemanticError> errors = new ArrayList<>();
 
-        if (!declarations.isEmpty()) {
-            for (DeclarationNode declaration : declarations) {
-                errors.addAll(declaration.checkSemantics(env));
-            }
+        for (DeclarationNode declaration : declarations) {
+            errors.addAll(declaration.checkSemantics(env));
         }
 
         for (StatementNode statement : statements) {
             errors.addAll(statement.checkSemantics(env));
         }
 
-        if (statements.stream().anyMatch(stm -> stm instanceof RetStatNode)) {
-            var firstReturnStm = statements.stream().filter(stm -> stm instanceof RetStatNode).findFirst().orElseGet(null);
-            int returnIndex = statements.indexOf(firstReturnStm);
-            if (returnIndex + 1 < statements.size()) {
+        if (isFunctionBody && !hasReturnStatements()) {
+            statements.add(new RetStatNode(new RetNode(null)));
+        }
+
+
+        int stmWithReturnIndex = -1;
+        var retStmAtThisLevel = statements.stream().filter(stm -> stm instanceof RetStatNode).findFirst();
+        if (retStmAtThisLevel.isPresent()) {
+            stmWithReturnIndex = statements.indexOf(retStmAtThisLevel.get());
+        }
+
+        var iteStmAtThisLevel = statements.stream()
+                .filter(stm ->
+                                stm instanceof IteStatNode &&
+                                ((IteStatNode) stm).hasElseBranch() &&
+                                stm.hasReturnStatements())
+                .findFirst();
+        if (stmWithReturnIndex == -1 &&  iteStmAtThisLevel.isPresent()) {
+            stmWithReturnIndex = statements.indexOf(iteStmAtThisLevel.get());
+        }
+
+        var blockStmAtThisLevel = statements.stream()
+                .filter(stm ->
+                                stm instanceof BlockStatNode &&
+                                stm.hasReturnStatements())
+                .findFirst();
+        if (stmWithReturnIndex == -1 &&  blockStmAtThisLevel.isPresent()) {
+            stmWithReturnIndex = statements.indexOf(blockStmAtThisLevel.get());
+        }
+
+        if (stmWithReturnIndex != -1) {
+            if (stmWithReturnIndex + 1 < statements.size()) {
                 errors.add(new SemanticError("There is code after a return statement."));
             }
         }
@@ -189,4 +222,7 @@ public class BlockNode implements Node {
         return errors;
     }
 
+    public boolean hasReturnStatements() {
+        return statements.stream().anyMatch(StatementNode::hasReturnStatements);
+    }
 }

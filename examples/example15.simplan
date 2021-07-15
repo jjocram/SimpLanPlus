@@ -5,6 +5,7 @@
     Therefore the program should output 1 followed by -1 (default value for allocated space in the heap).
     */
     void f(int a, ^int b){
+        b^ = 2;
         print a;
         print b^;
     }

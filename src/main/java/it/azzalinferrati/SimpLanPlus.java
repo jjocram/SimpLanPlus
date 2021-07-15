@@ -102,7 +102,7 @@ public class SimpLanPlus {
 
         // Visiting the tree and generating the AST.
         BlockNode AST = slpVisitor.visitBlock(slpParser.block());
-        AST.setMainBlock(true); // The main block is special therefore just here a flag is set to signal this
+        AST.setMainBlock(); // The main block is special therefore just here a flag is set to signal this
         // (it's important for the code generation).
 
         // Checking for syntactical errors.

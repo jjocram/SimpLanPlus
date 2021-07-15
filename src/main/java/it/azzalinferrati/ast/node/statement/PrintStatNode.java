@@ -33,6 +33,11 @@ public class PrintStatNode extends StatementNode {
     }
 
     @Override
+    public boolean hasReturnStatements() {
+        return false;
+    }
+
+    @Override
     public String codeGeneration() {
         return print.codeGeneration();
     }

@@ -115,4 +115,12 @@ public class IteNode implements Node {
 
         return errors;
     }
+
+    public boolean hasReturnStatements() {
+        return thenBranch.hasReturnStatements() || (elseBranch != null && elseBranch.hasReturnStatements());
+    }
+
+    public boolean hasElseBranch() {
+        return elseBranch != null;
+    }
 }

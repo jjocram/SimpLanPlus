@@ -33,6 +33,11 @@ public class AssigtStatNode extends StatementNode {
     }
 
     @Override
+    public boolean hasReturnStatements() {
+        return false;
+    }
+
+    @Override
     public String codeGeneration() {
         return assignment.codeGeneration();
     }

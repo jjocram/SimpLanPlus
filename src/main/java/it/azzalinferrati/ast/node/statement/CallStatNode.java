@@ -42,6 +42,11 @@ public class CallStatNode extends StatementNode {
     }
 
     @Override
+    public boolean hasReturnStatements() {
+        return false;
+    }
+
+    @Override
     public String codeGeneration() {
         return call.codeGeneration();
     }

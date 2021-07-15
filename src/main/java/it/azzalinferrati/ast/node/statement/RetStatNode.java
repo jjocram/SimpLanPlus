@@ -33,6 +33,11 @@ public class RetStatNode extends StatementNode {
     }
 
     @Override
+    public boolean hasReturnStatements() {
+        return true;
+    }
+
+    @Override
     public String codeGeneration() {
         ret.setEndFunctionLabel(getEndFunctionLabel());
         return ret.codeGeneration();

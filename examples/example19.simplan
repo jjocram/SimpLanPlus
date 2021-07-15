@@ -20,7 +20,17 @@
         }
     }
 
+    int returnFromBlock() {
+        {
+            return 1;
+        }
+        if (true) {
+            return 1;
+        }
+    }
+
     //print mult2wrong(10);
     print mult2correct(10);
     print returnIte(2+3, 0);
+    print returnFromBlock();
 }

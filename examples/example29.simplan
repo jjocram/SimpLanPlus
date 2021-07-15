@@ -1,0 +1,11 @@
+{
+    void f(int a) {
+        void g(int b) {
+            print b;
+        }
+
+        g(a);
+    }
+
+    f(2);
+}

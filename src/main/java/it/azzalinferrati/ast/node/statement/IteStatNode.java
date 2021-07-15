@@ -33,6 +33,11 @@ public class IteStatNode extends StatementNode {
     }
 
     @Override
+    public boolean hasReturnStatements() {
+        return ite.hasReturnStatements();
+    }
+
+    @Override
     public String codeGeneration() {
         ite.setEndFunctionLabel(getEndFunctionLabel());
         return ite.codeGeneration();
@@ -41,6 +46,10 @@ public class IteStatNode extends StatementNode {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return ite.checkSemantics(env);
+    }
+
+    public boolean hasElseBranch() {
+        return ite.hasElseBranch();
     }
 
 }

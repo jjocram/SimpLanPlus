@@ -94,6 +94,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             args.add(visitArg(argContext));
         }
         BlockNode block = visitBlock(ctx.block());
+        block.setFunctionBody();
 
         return new DecFunNode(type, id, args, block);
     }

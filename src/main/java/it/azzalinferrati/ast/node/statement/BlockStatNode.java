@@ -26,6 +26,11 @@ public class BlockStatNode extends StatementNode {
     }
 
     @Override
+    public boolean hasReturnStatements() {
+        return block.hasReturnStatements();
+    }
+
+    @Override
     public String codeGeneration() {
         block.setEndFunctionLabel(getEndFunctionLabel());
         return block.codeGeneration();
