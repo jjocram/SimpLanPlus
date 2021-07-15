@@ -3,7 +3,7 @@
     This program shows the use of recursion.
     While calling function f in this way:
       f(5,4);
-    is correct and terminates, calling:
+    is correct and terminates (output 9), calling:
       f(4,5);
     then the program should display:
       - "Reached max memory limit."

@@ -37,6 +37,11 @@ public class SimpLanPlus {
             /* FLAGS */
             Flags flags = new Flags(args);
             String filename = args[0];
+
+            if(!Paths.get(filename).toFile().exists()) {
+                throw new NonExistentInputFileException("Input file " + filename + " does not exist.");
+            }
+
             String fileContent = Files.readString(Paths.get(filename));
 
             System.out.println("Input file:\t" + filename);
@@ -287,6 +292,15 @@ final class WrongArgumentsException extends Exception {
     private static final long serialVersionUID = 8745799711138778409L;
 
     public WrongArgumentsException(String message) {
+        super(message);
+    }
+}
+
+final class NonExistentInputFileException extends Exception {
+    private static final long serialVersionUID = 8745799711138778410L;
+
+    
+    public NonExistentInputFileException(String message) {
         super(message);
     }
 }

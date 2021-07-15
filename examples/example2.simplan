@@ -4,7 +4,6 @@
     The program is not well formed and should display three errors:
       - "Missing declaration for ID: y."
       - "Variable x is used after deletion."
-      - "Cannot perform effect analysis on y since it is not declared."
     In fact, x was deleted and yet used after its deletion; y was not even declared.
     */
     ^int x = new int;
