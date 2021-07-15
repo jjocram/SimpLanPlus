@@ -16,7 +16,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
  * <p>Represents a block (statement) in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: </p>
  * <p><strong>Semantic analysis</strong>: </p>
  * <p><strong>Code generation</strong>: </p>
@@ -42,16 +42,9 @@ public class BlockNode implements Node {
             stm.setEndFunctionLabel(endFunctionLabel);
         }
     }
-    public void allowScopeCreation() {
-        allowScopeCreation = true;
-    }
 
     public void disallowScopeCreation() {
         allowScopeCreation = false;
-    }
-
-    public boolean isMainBlock() {
-        return isMainBlock;
     }
 
     public void setMainBlock(boolean mainBlock) {
@@ -182,7 +175,7 @@ public class BlockNode implements Node {
         }
 
         if (statements.stream().anyMatch(stm -> stm instanceof RetStatNode)) {
-            var firstReturnStm = statements.stream().filter(stm -> stm instanceof RetStatNode).findFirst().get();
+            var firstReturnStm = statements.stream().filter(stm -> stm instanceof RetStatNode).findFirst().orElseGet(null);
             int returnIndex = statements.indexOf(firstReturnStm);
             if (returnIndex + 1 < statements.size()) {
                 errors.add(new SemanticError("There is code after a return statement."));

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public interface Node {
     /**
      * Returns a string represention of the node.
+     *
      * @param indent characters to prepend to the string version of the node
      * @return the string version of the node
      */
@@ -21,6 +22,7 @@ public interface Node {
      * Returns the type of the node in the Symbol Table if it is an identifier,
      * the type of the expression if it is an expression. Types can be found in:
      * {@code it.azzalinferrati.ast.node.type}
+     *
      * @return the type of the identifier or expression
      * @throws TypeCheckingException if the node is not a leaf in the AST and children of this node do not match the type.
      */
@@ -28,12 +30,14 @@ public interface Node {
 
     /**
      * Generates the Assembly code for the <strong>SimpLanPlus Virtual Machine (SVM)</strong>.
+     *
      * @return the generated Assembly code
      */
     String codeGeneration();
 
     /**
      * Checks the subtree rooted in this node for semantic errors (Semantic Analysis and Effect Analysis errors).
+     *
      * @param env the environment at this point in the AST (both environments Γ and Σ)
      * @return a list of {@code SemanticError}
      */
@@ -41,6 +45,7 @@ public interface Node {
 
     /**
      * Returns {@code true} if nodes {@code a} and {@code b} have the same type.
+     *
      * @param a the first node
      * @param b the second node
      * @return {@code true} if types match, {@code false} if they do not match

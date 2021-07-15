@@ -37,5 +37,5 @@ public class DeclarateVarNode extends DeclarationNode {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return decVar.checkSemantics(env);
     }
-    
+
 }

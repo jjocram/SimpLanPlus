@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 
 /**
  * <p>Represents the invocation of a function in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: the type returned by the function if the function body returns a matching value, throws a type checking exception if the body of the function does not match the returned type.</p>
  * <p><strong>Semantic analysis</strong>: it checks the existence of the function in the Symbol Table, checks that all the actual arguments are correct and finally performs the Effects Analysis..</p>
  * <p><strong>Code generation</strong>: Pushes the <strong>$fp</strong> onto the stack, goes through the static chain and retrieves the correct <strong>$al</strong> to be pushed onto the stack, generates the code for all the arguments (in order), pushes their value onto the stack, moves the <strong>$fp</strong> back to the previously pushed <strong>$al</strong> and finally jumps to the function definition code.</p>
@@ -134,7 +134,7 @@ public class CallNode implements Node {
         var formalFunArgLen = ((FunTypeNode) id.getSTEntry().getType()).getParams().size();
         var actualFunArgLen = params.size();
 
-        if(formalFunArgLen != actualFunArgLen) {
+        if (formalFunArgLen != actualFunArgLen) {
             errors.add(new SemanticError("The number of actual parameters do not match that of the formal parameters of function " + id + "."));
         }
 
@@ -176,13 +176,13 @@ public class CallNode implements Node {
                 .collect(Collectors.toList());
         List<Environment> resultingEnvironments = new ArrayList<>();
 
-        for(var i : indexesOfPointers) {
+        for (var i : indexesOfPointers) {
             // [u1 |-> seq] par [u2 |-> seq] par ... par [um |-> seq]
             // {[u1 |-> seq], [u2 |-> seq], ..., [um |-> seq]}
             Environment mthEnv = new Environment();
             mthEnv.pushNewScope();
 
-            LhsNode pointer = params.get(i).variables().stream().findFirst().get(); //always exists only once pointer in the list of variables of this parameter
+            LhsNode pointer = params.get(i).variables().stream().findFirst().orElseGet(null); //always exists only once pointer in the list of variables of this parameter
 
             STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId().getId(), pointer.getId().getSTEntry().getType());
             for (int derefLvl = 0; derefLvl < pointer.getId().getSTEntry().getMaxDereferenceLevel(); derefLvl++) {
@@ -196,7 +196,7 @@ public class CallNode implements Node {
             resultingEnvironments.add(mthEnv);
         }
 
-        if(resultingEnvironments.size() > 0) {
+        if (resultingEnvironments.size() > 0) {
             e2 = resultingEnvironments.get(0);
             for (int i = 1; i < resultingEnvironments.size(); i++) {
                 e2 = Environment.par(e2, resultingEnvironments.get(i));

@@ -303,7 +303,6 @@ public class Environment {
             if (!scope2.containsKey(xInE1.getKey())) {
                 STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(),
                         xInE1.getValue().getType());
-                //entry.setVariableStatus(xInE1.getValue().getVariableStatus());
                 for (int j = 0; j < xInE1.getValue().getMaxDereferenceLevel(); j++) {
                     entry.setVariableStatus(xInE1.getValue().getVariableStatus(j), j);
                 }
@@ -314,7 +313,6 @@ public class Environment {
             if (!scope1.containsKey(xInE2.getKey())) {
                 STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE2.getKey(),
                         xInE2.getValue().getType());
-                //entry.setVariableStatus(xInE2.getValue().getVariableStatus());
                 for (int j = 0; j < xInE2.getValue().getMaxDereferenceLevel(); j++) {
                     entry.setVariableStatus(xInE2.getValue().getVariableStatus(j), j);
                 }
@@ -326,8 +324,6 @@ public class Environment {
                 if (xInE1.getKey().equals(xInE2.getKey())) {
                     STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(),
                             xInE1.getValue().getType());
-                    //Effect parResult = Effect.par(xInE1.getValue().getVariableStatus(), xInE2.getValue().getVariableStatus());
-                    //entry.setVariableStatus(parResult);
                     for (int j = 0; j < xInE2.getValue().getMaxDereferenceLevel(); j++) {
                         entry.setVariableStatus(Effect.par(xInE1.getValue().getVariableStatus(j), xInE2.getValue().getVariableStatus(j)), j);
                     }
@@ -374,7 +370,6 @@ public class Environment {
             Environment envWithOnlyU = new Environment();
             envWithOnlyU.pushNewScope();
             STEntry tmpEntry = envWithOnlyU.addUniqueNewDeclaration(u.getKey(), u.getValue().getType());
-            //tmpEntry.setVariableStatus(u.getValue().getVariableStatus());
             for (int j = 0; j < u.getValue().getMaxDereferenceLevel(); j++) {
                 tmpEntry.setVariableStatus(u.getValue().getVariableStatus(j), j);
             }
@@ -433,7 +428,7 @@ public class Environment {
             for (var entry : scope.entrySet()) {
                 for (int i = 0; i < entry.getValue().getMaxDereferenceLevel(); i++) {
                     if (entry.getValue().getVariableStatus(i).equals(Effect.ERROR)) {
-                        errors.add(new SemanticError("The dereferenced pointer " + entry.getKey()+ "^".repeat(i)+ " is used after deletion."));
+                        errors.add(new SemanticError("The dereferenced pointer " + entry.getKey() + "^".repeat(i) + " is used after deletion."));
                     }
                 }
             }
@@ -444,7 +439,7 @@ public class Environment {
 
     @Override
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         buffer.append("Environment {\n");
 
@@ -507,13 +502,13 @@ public class Environment {
             var ithScope = symbolTable.get(i);
             var ithScopeEnv = env.symbolTable.get(i);
 
-            if (!ithScopeEnv.keySet().equals(ithScope.keySet())){
+            if (!ithScopeEnv.keySet().equals(ithScope.keySet())) {
                 return false;
             }
 
-            for (var entry: ithScopeEnv.entrySet()) {
+            for (var entry : ithScopeEnv.entrySet()) {
                 var entryEnv = ithScope.get(entry.getKey());
-                if (!entry.getValue().equals(entryEnv)){
+                if (!entry.getValue().equals(entryEnv)) {
                     return false;
                 }
             }

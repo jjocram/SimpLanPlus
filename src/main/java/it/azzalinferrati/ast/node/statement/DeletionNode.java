@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 /**
  * <p>Represents a deletion statement in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: {@code void} if the passed identifier is of type {@code PointerTypNode}, throws a type checking exception if it is not.</p>
  * <p><strong>Semantic analysis</strong>: it verifies the identifier actually exists and that was not previously deleted.</p>
  * <p><strong>Code generation</strong>: Retrieves the identifier address and marks it for deletion.</p>
@@ -39,7 +39,7 @@ public class DeletionNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if(!(id.typeCheck() instanceof PointerTypeNode)){
+        if (!(id.typeCheck() instanceof PointerTypeNode)) {
             throw new TypeCheckingException("Variable " + id + " is not a pointer.");
         }
 
@@ -48,11 +48,9 @@ public class DeletionNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(id.codeGeneration());
-        buffer.append("del $a0 ;mark as deleted the address in $a0\n");
 
-        return buffer.toString();
+        return id.codeGeneration() +
+                "del $a0 ;mark as deleted the address in $a0\n";
     }
 
     @Override

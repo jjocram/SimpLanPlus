@@ -66,5 +66,5 @@ public class PointerTypeNode extends TypeNode {
     public int getDereferenceLevel() {
         return 1 + pointedType.getDereferenceLevel();
     }
-    
+
 }

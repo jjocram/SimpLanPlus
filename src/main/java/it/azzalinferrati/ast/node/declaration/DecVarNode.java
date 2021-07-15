@@ -14,7 +14,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
  * <p>Represents a variable declaration in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: null (it has no type) if the type if the expression matches the type of the variable declared, otherwise throws an error.</p>
  * <p><strong>Semantic analysis</strong>: checks the expression for errors, updates the current environment with the variable definition (throws an error if already existent), updates the current scope and sets the status in the Symbol Table.</p>
  * <p><strong>Code generation</strong>: Generates the code for the expression and saves its content in <strong>$a0</strong>, pushes <strong>$a0</strong> onto the stack. If the expression does not exist then just the stack pointer is moved by 1 position.</p>
@@ -49,14 +49,14 @@ public class DecVarNode extends DeclarationNode {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if(exp == null) {
+        if (exp == null) {
             // Only declaration of variable occurs (e.g. "int a;")
             return null;
         }
-        
+
         TypeNode expType = exp.typeCheck();
 
-        if(Node.isSubtype(expType, type)) {
+        if (Node.isSubtype(expType, type)) {
             return null;
         }
 
@@ -70,24 +70,21 @@ public class DecVarNode extends DeclarationNode {
         }
 
         // Declaration with initialization
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(exp.codeGeneration());
-        buffer.append("push $a0\n");
 
-        return buffer.toString();
+        return exp.codeGeneration() + "push $a0\n";
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> errors = new ArrayList<>();
-        
-        if(exp != null) {
+
+        if (exp != null) {
             errors.addAll(exp.checkSemantics(env));
         }
 
         try {
             id.setEntry(env.addNewDeclaration(id.getId(), type));
-            if(exp != null) {
+            if (exp != null) {
                 id.setStatus(Effect.READ_WRITE, 0);
             }
         } catch (MultipleDeclarationException exception) {

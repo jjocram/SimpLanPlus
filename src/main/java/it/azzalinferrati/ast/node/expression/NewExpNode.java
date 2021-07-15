@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * <p>Represents the new operator in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: a pointer type.</p>
  * <p><strong>Semantic analysis</strong>: empty.</p>
  * <p><strong>Code generation</strong>: The value {@code -1} is stored inside <strong>$t1</strong> and its content is then stored inside the memory cell addressed by <strong>$hp</strong>.</p>

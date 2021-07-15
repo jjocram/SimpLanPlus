@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * <p>Represents a print statement in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: {@code void} if the expression is correctly typed, throws a type checking exception if it is not.</p>
  * <p><strong>Semantic analysis</strong>: it performs the semantic analysis on the expression and returns its results.</p>
  * <p><strong>Code generation</strong>: Generates the value of the expression in <strong>$a0</strong> and prints it.</p>
@@ -38,7 +38,7 @@ public class PrintNode implements Node {
     public TypeNode typeCheck() throws TypeCheckingException {
         TypeNode expType = exp.typeCheck(); // Executes the type checking on the expression (throwing exceptions if needed)
 
-        if(expType instanceof VoidTypeNode) {
+        if (expType instanceof VoidTypeNode) {
             throw new TypeCheckingException("Print statements cannot output void-returning functions.");
         }
 
@@ -47,10 +47,8 @@ public class PrintNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(exp.codeGeneration());
-        buffer.append("print $a0\n");
-        return buffer.toString();
+        return exp.codeGeneration() +
+                "print $a0\n";
     }
 
     @Override

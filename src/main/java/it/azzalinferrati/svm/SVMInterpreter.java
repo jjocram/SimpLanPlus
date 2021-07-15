@@ -54,10 +54,10 @@ class MemoryCell {
 public class SVMInterpreter {
     private final int memorySize; // Max size of the memory (heap + stack)
 
-    private List<SVMInstruction> code;
-    private MemoryCell[] memory;
+    private final List<SVMInstruction> code;
+    private final MemoryCell[] memory;
 
-    private Map<String, Integer> registers;
+    private final Map<String, Integer> registers;
     private int $ip; // Program Counter (not available in code generation)
 
     private String lastUpdatedRegister;
@@ -323,9 +323,7 @@ public class SVMInterpreter {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append("| $ip: ").append($ip).append(" | ");
-        registers.keySet().forEach(key -> {
-            buffer.append(key).append(": ").append(registers.get(key)).append(lastUpdatedRegister.equals(key) ? " (*) | " : " | ");
-        });
+        registers.keySet().forEach(key -> buffer.append(key).append(": ").append(registers.get(key)).append(lastUpdatedRegister.equals(key) ? " (*) | " : " | "));
 
         buffer.append("\n\n");
 
@@ -338,6 +336,6 @@ public class SVMInterpreter {
                     .append(lastUpdatedMemoryCell == i ? " (*)\n" : "\n");
         }
 
-        System.out.println(buffer.toString());
+        System.out.println(buffer);
     }
 }

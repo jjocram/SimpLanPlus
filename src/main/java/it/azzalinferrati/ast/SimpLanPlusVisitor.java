@@ -117,7 +117,7 @@ public interface SimpLanPlusVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignment(SimpLanPlusParser.AssignmentContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SimpLanPlusParser#lhs}.
+	 * Visit a parse tree produced by {@link SimpLanPlusParser#lhs()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -154,63 +154,63 @@ public interface SimpLanPlusVisitor<T> extends ParseTreeVisitor<T> {
 	T visitCall(SimpLanPlusParser.CallContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code baseExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBaseExp(SimpLanPlusParser.BaseExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code binExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBinExp(SimpLanPlusParser.BinExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code derExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDerExp(SimpLanPlusParser.DerExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code newExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNewExp(SimpLanPlusParser.NewExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code valExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitValExp(SimpLanPlusParser.ValExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code negExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNegExp(SimpLanPlusParser.NegExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code boolExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBoolExp(SimpLanPlusParser.BoolExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code callExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitCallExp(SimpLanPlusParser.CallExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code notExp}
-	 * labeled alternative in {@link SimpLanPlusParser#exp}.
+	 * labeled alternative in {@link SimpLanPlusParser#exp()}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

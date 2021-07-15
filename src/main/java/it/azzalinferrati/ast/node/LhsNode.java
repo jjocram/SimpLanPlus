@@ -100,8 +100,8 @@ public class LhsNode implements Node {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(lhs.checkSemantics(env));
-        
-        if(!id.getSTEntry().getVariableStatus(getDereferenceLevel() - 1).equals(Effect.READ_WRITE)) {
+
+        if (!id.getSTEntry().getVariableStatus(getDereferenceLevel() - 1).equals(Effect.READ_WRITE)) {
             errors.add(new SemanticError("Cannot use " + this + " since " + this.toString().substring(0, this.toString().length() - 1) + " has not status READ_WRITE."));
         }
 
@@ -113,8 +113,8 @@ public class LhsNode implements Node {
     }
 
     /**
-    Return the number of '^' in the LHSNode
-    */
+     * Return the number of '^' in the LHSNode
+     */
     public int getDereferenceLevel() {
         if (lhs == null) {
             return 0;

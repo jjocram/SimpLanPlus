@@ -12,8 +12,8 @@ public class SemanticError {
 
     /**
      * Constructor for a SemanticError.
-     * 
-     * @param msg
+     *
+     * @param msg the error message to communicate
      */
     public SemanticError(String msg) {
         this.msg = msg;

@@ -35,5 +35,5 @@ public class BlockStatNode extends StatementNode {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return block.checkSemantics(env);
     }
-    
+
 }

@@ -11,9 +11,9 @@ import it.azzalinferrati.svm.parser.SVMParser;
 
 
 public class SVMVisitorImpl extends SVMBaseVisitor<Void> {
-    private List<SVMInstruction> code;
-    private Map<String, Integer> labelPositions;
-    private Map<Integer, String> labelReferences;
+    private final List<SVMInstruction> code;
+    private final Map<String, Integer> labelPositions;
+    private final Map<Integer, String> labelReferences;
 
     public SVMVisitorImpl() {
         code = new ArrayList<>();

@@ -35,5 +35,5 @@ public class BoolTypeNode extends TypeNode {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<>();
     }
-    
+
 }

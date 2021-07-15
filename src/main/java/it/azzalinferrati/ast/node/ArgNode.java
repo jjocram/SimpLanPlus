@@ -2,7 +2,6 @@ package it.azzalinferrati.ast.node;
 
 import java.util.ArrayList;
 
-import it.azzalinferrati.ast.node.type.PointerTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
@@ -10,7 +9,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
  * <p>Represents an argument (variable or pointer) of a function declaration in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: {@code null} (it has no type).</p>
  * <p><strong>Semantic analysis</strong>: empty (it cannot return semantic errors).</p>
  * <p><strong>Code generation</strong>: Increments <strong>$sp</strong> by 1.</p>
@@ -58,12 +57,4 @@ public class ArgNode implements Node {
         return new ArrayList<>();
     }
 
-    public int getDereferenceLevel() {
-        if (type instanceof PointerTypeNode) {
-            return type.getDereferenceLevel();
-        } else {
-            return 0;
-        }
-    }
-    
 }

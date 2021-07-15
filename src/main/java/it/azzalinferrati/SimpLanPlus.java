@@ -73,8 +73,8 @@ public class SimpLanPlus {
 
     /**
      * Handles the compilation phase.
-     * 
-     * @param flags    for the compilation phase
+     *
+     * @param flags           for the compilation phase
      * @param simpLanPlusCode the SimpLanPlusCode
      * @return the generated Assembly code for the SimpLanPlus Virtual Machine (SVM)
      */
@@ -103,7 +103,7 @@ public class SimpLanPlus {
         // Visiting the tree and generating the AST.
         BlockNode AST = slpVisitor.visitBlock(slpParser.block());
         AST.setMainBlock(true); // The main block is special therefore just here a flag is set to signal this
-                                // (it's important for the code generation).
+        // (it's important for the code generation).
 
         // Checking for syntactical errors.
         if (slpParser.getNumberOfSyntaxErrors() > 0) {
@@ -143,8 +143,8 @@ public class SimpLanPlus {
 
     /**
      * Handles the interpretation phase.
-     * 
-     * @param flags    for the interpretation phase
+     *
+     * @param flags        for the interpretation phase
      * @param assemblyCode the SVM Assembly code
      */
     private static void run(final Flags flags, final String assemblyCode) {
@@ -186,11 +186,11 @@ public class SimpLanPlus {
  * Flags for the program execution.
  */
 final class Flags {
-    private boolean ast;
+    private final boolean ast;
 
-    private String mode;
+    private final String mode;
 
-    private boolean debugcpu;
+    private final boolean debugcpu;
 
     private int codesize;
 
@@ -216,7 +216,7 @@ final class Flags {
         } else if (arguments.contains("--mode=all")) {
             mode = "all";
         } else if (arguments.contains("--mode=")) { // Argument starts with "-mode=" but the remaining part is not
-                                                    // expected.
+            // expected.
             throw new WrongArgumentsException("Unrecognized mode. These are the available modes: compile, run, all.");
         } else { // There is no "mode" argument.
             mode = "all";

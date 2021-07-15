@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * <p>Represents a return statement in the AST.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: {@code void} if the expression is correctly typed, throws a type checking exception if it is not.</p>
  * <p><strong>Semantic analysis</strong>: it performs the semantic analysis on the expression and returns its results.</p>
  * <p><strong>Code generation</strong>: Generates the value of the expression in <strong>$a0</strong>.</p>
@@ -41,7 +41,7 @@ public class RetNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if(exp == null) {
+        if (exp == null) {
             return new VoidTypeNode();
         }
 
@@ -62,7 +62,7 @@ public class RetNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        if(exp == null) {
+        if (exp == null) {
             return new ArrayList<>();
         }
 

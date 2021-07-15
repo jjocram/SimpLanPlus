@@ -9,7 +9,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
  * <p>Represents the wrapper for an assignment statement.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: {@code void} if the assignment is correct, throws a type checking exception if the assignment is incorrect.</p>
  * <p><strong>Semantic analysis</strong>: it performs the semantic analysis on both the LHS and RHS.</p>
  * <p><strong>Code generation</strong>: Generates the expression and saves its value in the stack, loads in <strong>$a0</strong> the memory address in which to save the value and then stores it there.</p>
@@ -41,5 +41,5 @@ public class AssigtStatNode extends StatementNode {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return assignment.checkSemantics(env);
     }
-    
+
 }

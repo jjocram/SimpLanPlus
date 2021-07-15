@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 /**
  * <p>Represents the wrapper for an assignment statement.</p>
- * 
+ *
  * <p><strong>Type checking</strong>: {@code void} if the assignment is correct, throws a type checking exception if the assignment is incorrect.</p>
  * <p><strong>Semantic analysis</strong>: it performs the semantic analysis on both the LHS and RHS.</p>
  * <p><strong>Code generation</strong>: Generates the expression and saves its value in the stack, loads in <strong>$a0</strong> the memory address in which to save the value and then stores it there.</p>
@@ -40,11 +40,11 @@ public class AssignmentNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck() throws TypeCheckingException {    
+    public TypeNode typeCheck() throws TypeCheckingException {
         TypeNode lhsType = lhs.typeCheck();
         TypeNode expType = exp.typeCheck();
 
-        if(Node.isSubtype(expType, lhsType)) {
+        if (Node.isSubtype(expType, lhsType)) {
             return new VoidTypeNode();
         }
 
@@ -53,15 +53,12 @@ public class AssignmentNode implements Node {
 
     @Override
     public String codeGeneration() {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(exp.codeGeneration());
-        buffer.append("push $a0 ;push the generated expression\n");
-        buffer.append(lhs.codeGeneration());
-        buffer.append("lw $t1 0($sp) ;load the expression from the stack\n");
-        buffer.append("pop ;pop the expression from the stack\n");
-        buffer.append("sw $t1 0($a0) ; store at $a0 dereferenced the value stored in $t1\n");
-
-        return buffer.toString();
+        return exp.codeGeneration() +
+                "push $a0 ;push the generated expression\n" +
+                lhs.codeGeneration() +
+                "lw $t1 0($sp) ;load the expression from the stack\n" +
+                "pop ;pop the expression from the stack\n" +
+                "sw $t1 0($a0) ; store at $a0 dereferenced the value stored in $t1\n";
     }
 
     @Override
@@ -70,20 +67,20 @@ public class AssignmentNode implements Node {
 
         errors.addAll(lhs.checkSemantics(env));
         errors.addAll(exp.checkSemantics(env));
-        if (lhs.getId().getSTEntry() == null) {
-            // What if the variable is not in the Symbol Table
-            errors.add(new SemanticError("Cannot perform effect analysis on " + lhs.getId().getId() + " since it is not declared."));
+
+        if (!errors.isEmpty()) {
+            // Cannot perform effect analysis if some errors were found
             return errors;
         }
 
         if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.ERROR)) {
             errors.addAll(env.checkVariableStatus(lhs, Effect::seq, Effect.READ_WRITE));
-        } else if(exp instanceof DereferenceExpNode) {
-            LhsNode rhsPointer = ((DereferenceExpNode) exp).variables().get(0);
+        } else if (exp instanceof DereferenceExpNode) {
+            LhsNode rhsPointer = exp.variables().get(0);
             int lhsDerefLvl = lhs.getDereferenceLevel();
             int expDerefLvl = rhsPointer.getDereferenceLevel();
             int maxDerefLvl = lhs.getId().getSTEntry().getMaxDereferenceLevel();
-            for(int i = lhsDerefLvl, j = expDerefLvl; i < maxDerefLvl; i++, j++) {
+            for (int i = lhsDerefLvl, j = expDerefLvl; i < maxDerefLvl; i++, j++) {
                 var rhsStatus = rhsPointer.getId().getStatus(j);
                 lhs.getId().setStatus(rhsStatus, i);
             }

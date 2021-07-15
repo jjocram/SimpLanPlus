@@ -13,19 +13,19 @@ import it.azzalinferrati.ast.node.type.TypeNode;
  */
 public class STEntry {
     // Nesting level.
-    private int nestingLevel;
+    private final int nestingLevel;
 
     // Type of the identifier.
     private TypeNode type;
 
     // Offset for code generation.
-    private int offset;
+    private final int offset;
 
     // Statuses of the variable in the stack and in the heap
-    private List<Effect> variableStatus;
+    private final List<Effect> variableStatus;
 
     // Effects of a function.
-    private List<List<Effect>> functionStatus;
+    private final List<List<Effect>> functionStatus;
 
     public STEntry(int nestingLevel, int offset) {
         this.nestingLevel = nestingLevel;
@@ -38,8 +38,8 @@ public class STEntry {
         this(nestingLevel, offset);
         this.type = type;
 
-        if(type instanceof FunTypeNode) {
-            for(var param: ((FunTypeNode) type).getParams()) {
+        if (type instanceof FunTypeNode) {
+            for (var param : ((FunTypeNode) type).getParams()) {
                 List<Effect> paramStatus = new ArrayList<>();
                 int numberOfDereference = param.getDereferenceLevel();
                 for (int i = 0; i < numberOfDereference; i++) {
@@ -58,31 +58,22 @@ public class STEntry {
 
     /**
      * Copy constructor of STEntry.
-     * 
+     *
      * @param s Symbol Table Entry
      */
     public STEntry(STEntry s) {
         this(s.nestingLevel, s.offset);
         this.type = s.type;
-        for(var fnStatus: s.functionStatus) {
+        for (var fnStatus : s.functionStatus) {
             List<Effect> paramStatus = new ArrayList<>();
-            for  (var status: fnStatus) {
+            for (var status : fnStatus) {
                 paramStatus.add(new Effect(status));
             }
             this.functionStatus.add(paramStatus);
         }
-        for(var varStatus : s.variableStatus) {
+        for (var varStatus : s.variableStatus) {
             this.variableStatus.add(new Effect(varStatus));
         }
-    }
-
-    /**
-     * Sets the type of the entry.
-     * 
-     * @param type to set
-     */
-    public void addType(TypeNode type) {
-        this.type = type;
     }
 
     /**
@@ -98,10 +89,6 @@ public class STEntry {
 
     public int getMaxDereferenceLevel() {
         return variableStatus.size();
-    }
-
-    public int getMaxDereferenceLevelForArgument(int argNumber) {
-        return functionStatus.get(argNumber).size();
     }
 
     /**
@@ -121,8 +108,8 @@ public class STEntry {
 
     /**
      * Sets the new effect for the entry in the Symbol Table at the given dereference level.
-     * 
-     * @param status new status for the variable
+     *
+     * @param status           new status for the variable
      * @param dereferenceLevel level in which {@code status} applies.
      */
     public void setVariableStatus(Effect status, int dereferenceLevel) {
@@ -131,7 +118,7 @@ public class STEntry {
 
     /**
      * Sets the new effect for the {@code paramIndex}-th argument of the function.
-     * 
+     *
      * @param status new status for the argument
      */
     public void setParamStatus(int paramIndex, Effect status, int dereferenceLevel) {
@@ -175,7 +162,7 @@ public class STEntry {
             return false;
         }
 
-        if(!functionStatus.equals(entry.functionStatus)) {
+        if (!functionStatus.equals(entry.functionStatus)) {
             return false;
         }
 

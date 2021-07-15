@@ -30,17 +30,9 @@ public class IdNode implements Node {
         this.entry = entry;
     }
 
-/*    public void setStatus(Effect effect) {
-        entry.setVariableStatus(effect);
-    }*/
-
     public void setStatus(Effect effect, int dereferenceLevel) {
         entry.setVariableStatus(effect, dereferenceLevel);
     }
-
-/*    public Effect getStatus() {
-        return entry.getVariableStatus();
-    }*/
 
     public Effect getStatus(int dereferenceLevel) {
         return entry.getVariableStatus(dereferenceLevel);
@@ -64,6 +56,7 @@ public class IdNode implements Node {
 
     /**
      * Returns the offset in the Symbol Table entry.
+     *
      * @return the offset or -1 if the entry is not set.
      */
     public int getOffset() {
@@ -107,11 +100,10 @@ public class IdNode implements Node {
         try {
             entry = env.lookup(id);
             currentNestingLevel = env.getNestingLevel();
-        } catch(MissingDeclarationException exception) {
+        } catch (MissingDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
         }
 
         return errors;
     }
-    
 }

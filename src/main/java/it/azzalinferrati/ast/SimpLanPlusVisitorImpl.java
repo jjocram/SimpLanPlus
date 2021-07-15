@@ -23,17 +23,17 @@ import it.azzalinferrati.parser.SimpLanPlusParser.ExpContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
-    
+
     @Override
     public BlockNode visitBlock(SimpLanPlusParser.BlockContext ctx) {
         List<DeclarationNode> declarations = new ArrayList<>();
         List<StatementNode> statements = new ArrayList<>();
-        
-        for(DeclarationContext declarationContext: ctx.declaration()) {
+
+        for (DeclarationContext declarationContext : ctx.declaration()) {
             declarations.add((DeclarationNode) visit(declarationContext));
         }
-        
-        for(StatementContext statementContext: ctx.statement()) {
+
+        for (StatementContext statementContext : ctx.statement()) {
             statements.add((StatementNode) visit(statementContext));
         }
 
@@ -90,7 +90,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         TypeNode type = visitFunType(ctx.funType());
         IdNode id = new IdNode(ctx.ID().getText());
         List<ArgNode> args = new ArrayList<>();
-        for(ArgContext argContext: ctx.arg()) {
+        for (ArgContext argContext : ctx.arg()) {
             args.add(visitArg(argContext));
         }
         BlockNode block = visitBlock(ctx.block());
@@ -108,13 +108,12 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
 
-
     @Override
     public TypeNode visitType(SimpLanPlusParser.TypeContext ctx) {
         final String text = ctx.getText();
         if (text.equals("int")) {
             return new IntTypeNode();
-        } else if(text.equals("bool")) {
+        } else if (text.equals("bool")) {
             return new BoolTypeNode();
         }
 
@@ -153,7 +152,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             // lhs: ID
             IdNode id = new IdNode(ctx.ID().getText());
             return new LhsNode(id, null);
-        } else{
+        } else {
             // lhs: lhs '^'
             LhsNode lhs = visitLhs(ctx.lhs());
             return new LhsNode(lhs.getId(), lhs);
@@ -264,6 +263,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override
     public Node visit(ParseTree tree) {
-        return tree!=null ? super.visit(tree) : null;
+        return tree != null ? super.visit(tree) : null;
     }
 }

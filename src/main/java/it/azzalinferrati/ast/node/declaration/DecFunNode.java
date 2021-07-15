@@ -55,11 +55,10 @@ public class DecFunNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        if(type instanceof PointerTypeNode) {
+        if (type instanceof PointerTypeNode) {
             throw new TypeCheckingException("Functions cannot return pointers.");
         }
         if (!Node.isSubtype(type, block.typeCheck())) {
-            // Error
             throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type + ".");
         }
         return null; // Nothing to return
@@ -99,7 +98,7 @@ public class DecFunNode implements Node {
 
             for (ArgNode arg : args) {
                 var stEntry = env.addNewDeclaration(arg.getId().getId(), arg.getType());
-                for(int derefLvl = 0; derefLvl < stEntry.getMaxDereferenceLevel(); derefLvl++) {
+                for (int derefLvl = 0; derefLvl < stEntry.getMaxDereferenceLevel(); derefLvl++) {
                     stEntry.setVariableStatus(new Effect(Effect.READ_WRITE), derefLvl);
                 }
                 arg.getId().setEntry(stEntry);
@@ -114,21 +113,13 @@ public class DecFunNode implements Node {
                 old_effects.add(new ArrayList<>(status));
             }
 
-            errors.addAll(block.checkSemantics(env));
-            for (int argIndex = 0; argIndex < args.size(); argIndex++) {
-                var argEntry = env.safeLookup(args.get(argIndex).getId().getId());
-
-                for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
-                    funId.getSTEntry().setParamStatus(argIndex, argEntry.getVariableStatus(derefLvl), derefLvl);
-                    innerFunEntry.setParamStatus(argIndex, argEntry.getVariableStatus(derefLvl), derefLvl);
-                }
-            }
+            checkBlockAndUpdateArgs(env, innerFunEntry, errors);
 
             boolean different_funType = !innerFunEntry.getFunctionStatus().equals(old_effects);
 
             while (different_funType) {
                 env.replace(old_env);
-                
+
                 var funEntry = env.safeLookup(funId.getId());
 
                 for (int argIndex = 0; argIndex < args.size(); argIndex++) {
@@ -142,23 +133,15 @@ public class DecFunNode implements Node {
 
                 old_effects = new ArrayList<>(innerFunEntry.getFunctionStatus());
 
-                errors.addAll(block.checkSemantics(env));
-                for (int argIndex = 0; argIndex < args.size(); argIndex++) {
-                    var argEntry = env.safeLookup(args.get(argIndex).getId().getId());
+                checkBlockAndUpdateArgs(env, innerFunEntry, errors);
 
-                    for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
-                        funId.getSTEntry().setParamStatus(argIndex, argEntry.getVariableStatus(derefLvl), derefLvl);
-                        innerFunEntry.setParamStatus(argIndex, argEntry.getVariableStatus(derefLvl), derefLvl);
-                    }
-                }
-             
                 different_funType = !innerFunEntry.getFunctionStatus().equals(old_effects);
             }
 
             env.popScope();
 
             var idEntry = env.safeLookup(funId.getId());
-            for (int argIndex = 0; argIndex< args.size(); argIndex++) {
+            for (int argIndex = 0; argIndex < args.size(); argIndex++) {
                 //Update ID in previous scope
                 var argStatuses = innerFunEntry.getFunctionStatus().get(argIndex);
 
@@ -170,6 +153,18 @@ public class DecFunNode implements Node {
             errors.add(new SemanticError(exception.getMessage()));
         }
         return errors;
+    }
+
+    private void checkBlockAndUpdateArgs(Environment env, STEntry innerFunEntry, ArrayList<SemanticError> errors) {
+        errors.addAll(block.checkSemantics(env));
+        for (int argIndex = 0; argIndex < args.size(); argIndex++) {
+            var argEntry = env.safeLookup(args.get(argIndex).getId().getId());
+
+            for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
+                funId.getSTEntry().setParamStatus(argIndex, argEntry.getVariableStatus(derefLvl), derefLvl);
+                innerFunEntry.setParamStatus(argIndex, argEntry.getVariableStatus(derefLvl), derefLvl);
+            }
+        }
     }
 
 }

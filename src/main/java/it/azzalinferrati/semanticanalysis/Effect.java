@@ -23,7 +23,7 @@ public class Effect {
 
     /**
      * Constructor of {@code Effect}.
-     * 
+     *
      * @param value can be {@code _INITIALIZED}, {@code _READ_WRITE},
      *              {@code _DELETE}, {@code _ERROR}.
      */
@@ -40,7 +40,7 @@ public class Effect {
 
     /**
      * Copy constructor of {@code Effect}.
-     * 
+     *
      * @param e effect
      */
     public Effect(final Effect e) {
@@ -50,11 +50,11 @@ public class Effect {
     /**
      * Returns a new {@code Effect} instance representing the maximum of the two
      * effects {@code e1} and {@code e2}.
-     * 
+     *
      * @param e1 the first effect
      * @param e2 the second effect
      * @return new {@code Effect} instance representing the maximum of the two
-     *         effects {@code e1} and {@code e2}
+     * effects {@code e1} and {@code e2}
      */
     public static Effect max(final Effect e1, final Effect e2) {
         return new Effect(Math.max(e1.value, e2.value));
@@ -63,11 +63,11 @@ public class Effect {
     /**
      * Returns a new {@code Effect} instance representing the sequence of the two
      * effects {@code e1} and {@code e2}.
-     * 
+     *
      * @param e1 the first effect
      * @param e2 the second effect
      * @return new {@code Effect} instance representing the sequence of the two
-     *         effects {@code e1} and {@code e2}
+     * effects {@code e1} and {@code e2}
      */
     public static Effect seq(final Effect e1, final Effect e2) {
         if (max(e1, e2).value <= _READ_WRITE) {
@@ -85,11 +85,11 @@ public class Effect {
      * Returns a new {@code Effect} instance representing the par of the two effects
      * {@code e1} and {@code e2} (par = maximum of {@code seq(e1, e2)} and
      * {@code seq(e2, e1)}).
-     * 
+     *
      * @param e1 the first effect
      * @param e2 the second effect
      * @return new {@code Effect} instance representing the sequence of the two
-     *         effects {@code e1} and {@code e2}
+     * effects {@code e1} and {@code e2}
      */
     public static Effect par(final Effect e1, final Effect e2) {
         return max(seq(e1, e2), seq(e2, e1));

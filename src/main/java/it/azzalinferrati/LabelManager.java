@@ -6,7 +6,7 @@ package it.azzalinferrati;
  */
 public class LabelManager {
     // Singleton
-    private static LabelManager INSTANCE = new LabelManager();
+    private static final LabelManager INSTANCE = new LabelManager();
 
     private static int labelCount = 0;
 
@@ -19,6 +19,7 @@ public class LabelManager {
 
     /**
      * Generates a new label, unique.
+     *
      * @param key to prepend the unique code
      * @return a fresh label
      */

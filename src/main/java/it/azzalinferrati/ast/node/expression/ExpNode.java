@@ -22,7 +22,7 @@ public abstract class ExpNode implements Node {
 
     /**
      * @return all variables (not function identifiers) that are used in the
-     *         expression
+     * expression
      */
     public abstract List<LhsNode> variables();
 
@@ -30,9 +30,9 @@ public abstract class ExpNode implements Node {
      * Checks, for each variable in the list of used variables by the expression,
      * its status and updates it, if the new status is Effect.ERROR then adds a new
      * semantic error to the list that will be returned.
-     * 
+     *
      * @return a list with errors found while checking the status of each variable
-     *         used in the expression
+     * used in the expression
      */
     protected ArrayList<SemanticError> checkVariablesStatus(Environment env) {
         ArrayList<SemanticError> errors = new ArrayList<>();

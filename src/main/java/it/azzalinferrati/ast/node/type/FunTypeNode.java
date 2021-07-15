@@ -36,8 +36,8 @@ public class FunTypeNode extends TypeNode {
     @Override
     public String toPrint(String indent) {
         return indent +
-                params.stream().map((arg) ->  arg.toString()).reduce("",
-                (arg1, arg2) -> (arg1.toString().isEmpty() ? "" : (arg1 + " X ")) + arg2)
+                params.stream().map(TypeNode::toString).reduce("",
+                        (arg1, arg2) -> (arg1.isEmpty() ? "" : (arg1 + " X ")) + arg2)
                 + " -> " + returned;
     }
 
