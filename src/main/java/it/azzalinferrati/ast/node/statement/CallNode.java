@@ -80,6 +80,7 @@ public class CallNode implements Node {
     @Override
     public String codeGeneration() {
         StringBuilder buffer = new StringBuilder();
+        buffer.append("; BEGIN " + this + "\n");
         buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
         buffer.append("push $sp\n"); //push old stack pointer
         buffer.append("mv $bsp $sp\n"); //update base stack pointer to the new place
@@ -104,6 +105,8 @@ public class CallNode implements Node {
         buffer.append("addi $fp $fp ").append(params.size()).append(" ;fix $fp position to the bottom of the new frame\n");
 
         buffer.append("jal ").append(id.getId()).append(" ;jump to function (this automatically set $ra to the next instruction)\n");
+
+        buffer.append("; END " + this + "\n");
 
         return buffer.toString();
     }

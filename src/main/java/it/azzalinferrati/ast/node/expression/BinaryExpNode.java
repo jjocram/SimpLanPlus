@@ -86,6 +86,8 @@ public class BinaryExpNode extends ExpNode {
         StringBuilder buffer = new StringBuilder();
         LabelManager labelManager = LabelManager.getInstance();
 
+        buffer.append("; BEGIN " + this + "\n");
+
         buffer.append(leftExpression.codeGeneration());
         buffer.append("push $a0 ; push on the stack e1\n");
         buffer.append(rightExpression.codeGeneration());
@@ -221,6 +223,8 @@ public class BinaryExpNode extends ExpNode {
                 break;
             }
         }
+
+        buffer.append("; END " + this + "\n");
 
         return buffer.toString();
     }

@@ -53,12 +53,14 @@ public class AssignmentNode implements Node {
 
     @Override
     public String codeGeneration() {
-        return exp.codeGeneration() +
+        String begin = "; BEGIN " + this + "\n";
+        String end = "; END " + this + "\n";
+        return begin + exp.codeGeneration() +
                 "push $a0 ;push the generated expression\n" +
                 lhs.codeGeneration() +
                 "lw $t1 0($sp) ;load the expression from the stack\n" +
                 "pop ;pop the expression from the stack\n" +
-                "sw $t1 0($a0) ; store at $a0 dereferenced the value stored in $t1\n";
+                "sw $t1 0($a0) ; store at $a0 dereferenced the value stored in $t1\n" + end;
     }
 
     @Override

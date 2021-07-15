@@ -25,7 +25,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
  * <p><strong>Semantic analysis</strong>: updates the current environment with the function definition (throws an error if already existent), pushes a new scope with the function arguments in it, then disallows the scope creation and finally checks the block for semantic errors.</p>
  * <p><strong>Code generation</strong>: Pushes the <strong>$ra</strong>, generates the code for the block, gets and removes the <strong>$ra</strong> from the stack, removes all the arguments from the stack, removes the <strong>$al</strong> from the stack, loads the old <strong>$fp</strong> and finally jumps to the instruction pointed by <strong>$ra</strong>.</p>
  */
-public class DecFunNode implements Node {
+public class DecFunNode extends DeclarationNode {
     final private TypeNode type;
     final private IdNode funId;
     final private List<ArgNode> args;
@@ -70,6 +70,8 @@ public class DecFunNode implements Node {
         String functionLabel = funId.getId();
         String endFunctionLabel = "end" + functionLabel;
 
+        buffer.append("; BEGIN " + this.toString().substring(0, this.toString().indexOf("Fun. body")));
+
         buffer.append(functionLabel).append(":\n");
 
         buffer.append("sw $ra -1($bsp) ;save in the memory cell above old SP the return address\n");
@@ -84,6 +86,8 @@ public class DecFunNode implements Node {
         buffer.append("lw $sp 0($bsp)\n"); //restore old stack pointer
         buffer.append("addi $bsp $fp 2\n"); //restore address of old base stack pointer
         buffer.append("jr $ra\n");
+
+        buffer.append("; END " + this.toString().substring(0, this.toString().indexOf("Fun. body")));
 
         return buffer.toString();
     }

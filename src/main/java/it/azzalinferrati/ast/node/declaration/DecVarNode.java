@@ -65,13 +65,15 @@ public class DecVarNode extends DeclarationNode {
 
     @Override
     public String codeGeneration() {
+        String begin = "; BEGIN " + this + "\n";
+        String end = "; END " + this + "\n";
         if (exp == null) {
-            return "addi $sp $sp -1\n";
+            return begin + "addi $sp $sp -1\n" + end;
         }
 
         // Declaration with initialization
 
-        return exp.codeGeneration() + "push $a0\n";
+        return begin + exp.codeGeneration() + "push $a0\n" + end;
     }
 
     @Override

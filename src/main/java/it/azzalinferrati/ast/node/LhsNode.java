@@ -70,11 +70,12 @@ public class LhsNode implements Node {
     public String codeGeneration() {
         StringBuilder buffer = new StringBuilder();
 
+        buffer.append("; BEGIN loading lhs " + this + "\n");
+
         if (isAssignment) {
             buffer.append("mv $al $fp ;[get address of an LHS node pt1] the variable is declared in the same scope where it is used\n");
             for (int i = 0; i < (id.getCurrentNestingLevel() - id.getNestingLevel()); i++) {
                 buffer.append("lw $al 0($al)\n");
-
             }
 
             int offsetWithAL = -(id.getOffset() + 1);
@@ -88,6 +89,8 @@ public class LhsNode implements Node {
             buffer.append("lw $a0 0($a0) ;").append(id.getId()).append(" is a pointer, dereferencing it \n");
             current = current.lhs;
         }
+
+        buffer.append("; END loading lhs " + this + "\n");
 
         return buffer.toString();
     }
