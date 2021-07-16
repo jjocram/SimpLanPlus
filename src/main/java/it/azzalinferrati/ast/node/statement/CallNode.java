@@ -3,6 +3,7 @@ package it.azzalinferrati.ast.node.statement;
 import it.azzalinferrati.ast.node.IdNode;
 import it.azzalinferrati.ast.node.LhsNode;
 import it.azzalinferrati.ast.node.Node;
+import it.azzalinferrati.ast.node.declaration.DecFunNode;
 import it.azzalinferrati.ast.node.expression.DereferenceExpNode;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
@@ -30,9 +31,12 @@ public class CallNode implements Node {
     final private List<ExpNode> params;
     private int currentNestingLevel;
 
+    private boolean firstCheck;
+
     public CallNode(IdNode id, List<ExpNode> params) {
         this.id = id;
         this.params = params;
+        this.firstCheck = true;
     }
 
     public IdNode getId() {
@@ -80,7 +84,7 @@ public class CallNode implements Node {
     @Override
     public String codeGeneration() {
         StringBuilder buffer = new StringBuilder();
-        buffer.append("; BEGIN " + this + "\n");
+        buffer.append("; BEGIN ").append(this).append("\n");
         buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
         buffer.append("push $sp\n"); //push old stack pointer
         buffer.append("mv $bsp $sp\n"); //update base stack pointer to the new place
@@ -106,7 +110,7 @@ public class CallNode implements Node {
 
         buffer.append("jal ").append(id.getId()).append(" ;jump to function (this automatically set $ra to the next instruction)\n");
 
-        buffer.append("; END " + this + "\n");
+        buffer.append("; END ").append(this).append("\n");
 
         return buffer.toString();
     }
@@ -139,6 +143,32 @@ public class CallNode implements Node {
 
         if (formalFunArgLen != actualFunArgLen) {
             errors.add(new SemanticError("The number of actual parameters do not match that of the formal parameters of function " + id + "."));
+        }
+
+        if (!errors.isEmpty()) {
+            return errors;
+        }
+
+        if (firstCheck) {
+            firstCheck = false;
+            DecFunNode functionNode = id.getSTEntry().getFunctionNode();
+            List<List<Effect>> paramsEffects = new ArrayList<>();
+
+            for (ExpNode expNode : params) {
+                List<Effect> paramEffects = new ArrayList<>();
+                if (expNode instanceof DereferenceExpNode) {
+                    int maxDereferenceLevel = expNode.variables().get(0).getId().getSTEntry().getMaxDereferenceLevel();
+                    for (int derefLvl = 0; derefLvl < maxDereferenceLevel; derefLvl++) {
+                        paramEffects.add(new Effect(expNode.variables().get(0).getId().getStatus(derefLvl)));
+                    }
+                } else {
+                    paramEffects.add(new Effect(Effect.READ_WRITE));
+                }
+
+                paramsEffects.add(paramEffects);
+            }
+
+            errors.addAll(functionNode.checkEffects(env, paramsEffects));
         }
 
         if (!errors.isEmpty()) {
@@ -185,7 +215,7 @@ public class CallNode implements Node {
             Environment mthEnv = new Environment();
             mthEnv.pushNewScope();
 
-            LhsNode pointer = params.get(i).variables().stream().findFirst().orElseGet(null); //always exists only once pointer in the list of variables of this parameter
+            LhsNode pointer = params.get(i).variables().get(0); //always exists only once pointer in the list of variables of this parameter
 
             STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId().getId(), pointer.getId().getSTEntry().getType());
             for (int derefLvl = 0; derefLvl < pointer.getId().getSTEntry().getMaxDereferenceLevel(); derefLvl++) {

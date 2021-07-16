@@ -2,7 +2,7 @@
     /*
     This example shows the problems arising with aliasing.
     The program should display:
-      - "Variable x is used after deletion."
+      - "The dereferenced pointer x^ is used after deletion."
     */
     ^int x = new int;
     ^int y = new int;

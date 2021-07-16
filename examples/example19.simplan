@@ -2,6 +2,9 @@
     /*
     This example shows the semantic analysis performing checks on code after the return statements.
     In a function definition, after a correct return statement cannot be present any other code instruction.
+
+    The program fails to compile for the presence of returnFromBlock method and should output:
+        - "There is code after a return statement."
     */
     int mult2correct(int a) {
         return a*2;

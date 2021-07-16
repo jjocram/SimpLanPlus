@@ -42,6 +42,7 @@ public class DecFunNode extends DeclarationNode {
         funType = new FunTypeNode(argsType, type);
     }
 
+
     @Override
     public String toPrint(String indent) {
         final String declaration = indent + "Fun. dec:\t" + funId + " : "
@@ -70,7 +71,7 @@ public class DecFunNode extends DeclarationNode {
         String functionLabel = funId.getId();
         String endFunctionLabel = "end" + functionLabel;
 
-        buffer.append("; BEGIN " + this.toString().substring(0, this.toString().indexOf("Fun. body")));
+        buffer.append("; BEGIN ").append(this.toString(), 0, this.toString().indexOf("Fun. body"));
 
         buffer.append(functionLabel).append(":\n");
 
@@ -87,9 +88,73 @@ public class DecFunNode extends DeclarationNode {
         buffer.append("addi $bsp $fp 2\n"); //restore address of old base stack pointer
         buffer.append("jr $ra\n");
 
-        buffer.append("; END " + this.toString().substring(0, this.toString().indexOf("Fun. body")));
+        buffer.append("; END ").append(this.toString(), 0, this.toString().indexOf("Fun. body"));
 
         return buffer.toString();
+    }
+
+    public ArrayList<SemanticError> checkEffects(Environment env, List<List<Effect>> effects) {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        env.pushNewScope();
+
+        for (int argIndex = 0; argIndex < args.size(); argIndex++) {
+            var arg = args.get(argIndex);
+            var stEntry = env.addUniqueNewDeclaration(arg.getId().getId(), arg.getType());
+                for (int derefLvl = 0; derefLvl < stEntry.getMaxDereferenceLevel(); derefLvl++) {
+                    stEntry.setVariableStatus(new Effect(effects.get(argIndex).get(derefLvl)), derefLvl);
+                }
+            arg.getId().setEntry(stEntry);
+        }
+
+        STEntry innerFunEntry = env.addUniqueNewDeclaration(funId.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
+        innerFunEntry.setFunctionNode(this);
+        block.disallowScopeCreation();
+
+        Environment old_env = new Environment(env);
+        List<List<Effect>> old_effects = new ArrayList<>();
+        for (var status : innerFunEntry.getFunctionStatus()) {
+            old_effects.add(new ArrayList<>(status));
+        }
+
+        checkBlockAndUpdateArgs(env, innerFunEntry, errors);
+
+        boolean different_funType = !innerFunEntry.getFunctionStatus().equals(old_effects);
+
+        while (different_funType) {
+            env.replace(old_env);
+
+            var funEntry = env.safeLookup(funId.getId());
+
+            for (int argIndex = 0; argIndex < args.size(); argIndex++) {
+                var argEntry = env.safeLookup(args.get(argIndex).getId().getId());
+                var argStatuses = innerFunEntry.getFunctionStatus().get(argIndex);
+
+                for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
+                    funEntry.setParamStatus(argIndex, argStatuses.get(derefLvl), derefLvl);
+                }
+            }
+
+            old_effects = new ArrayList<>(innerFunEntry.getFunctionStatus());
+
+            checkBlockAndUpdateArgs(env, innerFunEntry, errors);
+
+            different_funType = !innerFunEntry.getFunctionStatus().equals(old_effects);
+        }
+
+        env.popScope();
+
+        var idEntry = env.safeLookup(funId.getId());
+        for (int argIndex = 0; argIndex < args.size(); argIndex++) {
+            //Update ID in previous scope
+            var argStatuses = innerFunEntry.getFunctionStatus().get(argIndex);
+
+            for (int derefLvl = 0; derefLvl < argStatuses.size(); derefLvl++) {
+                idEntry.setParamStatus(argIndex, argStatuses.get(derefLvl), derefLvl);
+            }
+        }
+
+        return errors;
     }
 
     @Override
@@ -98,61 +163,32 @@ public class DecFunNode extends DeclarationNode {
 
         try {
             funId.setEntry(env.addNewDeclaration(funId.getId(), funType)); // \Sigma_{FUN}
+            funId.getSTEntry().setFunctionNode(this);
             env.pushNewScope();
 
             for (ArgNode arg : args) {
                 var stEntry = env.addNewDeclaration(arg.getId().getId(), arg.getType());
-                for (int derefLvl = 0; derefLvl < stEntry.getMaxDereferenceLevel(); derefLvl++) {
-                    stEntry.setVariableStatus(new Effect(Effect.READ_WRITE), derefLvl);
-                }
+
                 arg.getId().setEntry(stEntry);
-            } // \Sigma_0
+            }
 
             STEntry innerFunEntry = env.addNewDeclaration(funId.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
+            innerFunEntry.setFunctionNode(this);
             block.disallowScopeCreation();
-
-            Environment old_env = new Environment(env);
-            List<List<Effect>> old_effects = new ArrayList<>();
-            for (var status : innerFunEntry.getFunctionStatus()) {
-                old_effects.add(new ArrayList<>(status));
-            }
-
-            checkBlockAndUpdateArgs(env, innerFunEntry, errors);
-
-            boolean different_funType = !innerFunEntry.getFunctionStatus().equals(old_effects);
-
-            while (different_funType) {
-                env.replace(old_env);
-
-                var funEntry = env.safeLookup(funId.getId());
-
-                for (int argIndex = 0; argIndex < args.size(); argIndex++) {
-                    var argEntry = env.safeLookup(args.get(argIndex).getId().getId());
-                    var argStatuses = innerFunEntry.getFunctionStatus().get(argIndex);
-
-                    for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
-                        funEntry.setParamStatus(argIndex, argStatuses.get(derefLvl), derefLvl);
-                    }
-                }
-
-                old_effects = new ArrayList<>(innerFunEntry.getFunctionStatus());
-
-                checkBlockAndUpdateArgs(env, innerFunEntry, errors);
-
-                different_funType = !innerFunEntry.getFunctionStatus().equals(old_effects);
-            }
 
             env.popScope();
 
-            var idEntry = env.safeLookup(funId.getId());
-            for (int argIndex = 0; argIndex < args.size(); argIndex++) {
-                //Update ID in previous scope
-                var argStatuses = innerFunEntry.getFunctionStatus().get(argIndex);
-
-                for (int derefLvl = 0; derefLvl < argStatuses.size(); derefLvl++) {
-                    idEntry.setParamStatus(argIndex, argStatuses.get(derefLvl), derefLvl);
+            List<List<Effect>> effectAtBeginning = new ArrayList<>();
+            for (ArgNode argNode : args) {
+                List<Effect> argEffects = new ArrayList<>();
+                for (int derefLvl = 0; derefLvl < argNode.getId().getSTEntry().getMaxDereferenceLevel(); derefLvl++) {
+                    argEffects.add(new Effect(Effect.READ_WRITE));
                 }
+                effectAtBeginning.add(argEffects);
             }
+
+            errors.addAll(checkEffects(env, effectAtBeginning));
+
         } catch (MultipleDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
         }

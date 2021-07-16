@@ -1,6 +1,8 @@
 {
     /*
     This example shows the behaviour of the SimpLanPlus interpreter when dealing with uninitialized variables.
+    The program fails to compile and should output:
+        - "a is used prior to initialization."
     */
     int a;
     int b = a;

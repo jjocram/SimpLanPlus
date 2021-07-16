@@ -8,8 +8,10 @@
       a^^ = ...;
       ...
       print a^^;
-    The program should output 10 and then display:
-      - "Address -1 cannot be accessed."
+    The program fails to compile and should output:
+      - "Cannot use a^^ since a^ has not status READ_WRITE."
+      - "a^^ is used prior to initialization."
+
     */
     ^int b = new int;
     ^^int a = new ^int;

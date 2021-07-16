@@ -269,7 +269,7 @@ public class Environment {
                 if (entryInScopeEnv2 != null) { // ==> id \in dom(env2)
                     var opEntry = new STEntry(entryInScopeEnv1.getNestingLevel(), entryInScopeEnv1.getType(),
                             entryInScopeEnv1.getOffset());
-                    //opEntry.setVariableStatus(operation.apply(entryInScopeEnv1.getVariableStatus(), entryInScopeEnv2.getVariableStatus()));
+                    opEntry.setFunctionNode(entryInScopeEnv1.getFunctionNode());
                     for (int j = 0; j < entryInScopeEnv1.getMaxDereferenceLevel(); j++) {
                         opEntry.setVariableStatus(operation.apply(entryInScopeEnv1.getVariableStatus(j), entryInScopeEnv2.getVariableStatus(j)), j);
                     }
@@ -303,6 +303,7 @@ public class Environment {
             if (!scope2.containsKey(xInE1.getKey())) {
                 STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(),
                         xInE1.getValue().getType());
+                entry.setFunctionNode(xInE1.getValue().getFunctionNode());
                 for (int j = 0; j < xInE1.getValue().getMaxDereferenceLevel(); j++) {
                     entry.setVariableStatus(xInE1.getValue().getVariableStatus(j), j);
                 }
@@ -313,6 +314,7 @@ public class Environment {
             if (!scope1.containsKey(xInE2.getKey())) {
                 STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE2.getKey(),
                         xInE2.getValue().getType());
+                entry.setFunctionNode(xInE2.getValue().getFunctionNode());
                 for (int j = 0; j < xInE2.getValue().getMaxDereferenceLevel(); j++) {
                     entry.setVariableStatus(xInE2.getValue().getVariableStatus(j), j);
                 }
@@ -324,6 +326,7 @@ public class Environment {
                 if (xInE1.getKey().equals(xInE2.getKey())) {
                     STEntry entry = resultingEnvironment.addUniqueNewDeclaration(xInE1.getKey(),
                             xInE1.getValue().getType());
+                    entry.setFunctionNode(xInE1.getValue().getFunctionNode());
                     for (int j = 0; j < xInE2.getValue().getMaxDereferenceLevel(); j++) {
                         entry.setVariableStatus(Effect.par(xInE1.getValue().getVariableStatus(j), xInE2.getValue().getVariableStatus(j)), j);
                     }
@@ -370,6 +373,7 @@ public class Environment {
             Environment envWithOnlyU = new Environment();
             envWithOnlyU.pushNewScope();
             STEntry tmpEntry = envWithOnlyU.addUniqueNewDeclaration(u.getKey(), u.getValue().getType());
+            tmpEntry.setFunctionNode(u.getValue().getFunctionNode()); 
             for (int j = 0; j < u.getValue().getMaxDereferenceLevel(); j++) {
                 tmpEntry.setVariableStatus(u.getValue().getVariableStatus(j), j);
             }

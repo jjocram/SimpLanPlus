@@ -25,6 +25,7 @@ public class SimpLanPlusTest {
         filesWithErrors.add("example12.simplan");
         filesWithErrors.add("example13.simplan");
         filesWithErrors.add("example14.simplan");
+        filesWithErrors.add("example15.simplan");
         filesWithErrors.add("example16.simplan");
         filesWithErrors.add("example17.simplan");
         filesWithErrors.add("example18.simplan");

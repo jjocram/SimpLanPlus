@@ -175,8 +175,12 @@ public class BlockNode implements Node {
             errors.addAll(declaration.checkSemantics(env));
         }
 
-        for (StatementNode statement : statements) {
+        /*for (StatementNode statement : statements) {
             errors.addAll(statement.checkSemantics(env));
+        }*/
+
+        for (int stmIndex = 0, stmMaxIndex = statements.size(); stmIndex < stmMaxIndex; stmIndex++) {
+            errors.addAll(statements.get(stmIndex).checkSemantics(env));
         }
 
         if (isFunctionBody && !hasReturnStatements()) {

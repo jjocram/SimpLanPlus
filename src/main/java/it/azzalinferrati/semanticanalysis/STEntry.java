@@ -3,6 +3,7 @@ package it.azzalinferrati.semanticanalysis;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.azzalinferrati.ast.node.declaration.DecFunNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 
@@ -26,6 +27,7 @@ public class STEntry {
 
     // Effects of a function.
     private final List<List<Effect>> functionStatus;
+    private DecFunNode functionNode;
 
     public STEntry(int nestingLevel, int offset) {
         this.nestingLevel = nestingLevel;
@@ -74,6 +76,7 @@ public class STEntry {
         for (var varStatus : s.variableStatus) {
             this.variableStatus.add(new Effect(varStatus));
         }
+        this.functionNode = s.functionNode;
     }
 
     /**
@@ -81,6 +84,14 @@ public class STEntry {
      */
     public TypeNode getType() {
         return type;
+    }
+
+    public DecFunNode getFunctionNode() {
+        return functionNode;
+    }
+
+    public void setFunctionNode(DecFunNode functionNode) {
+        this.functionNode = functionNode;
     }
 
     public Effect getVariableStatus(int dereferenceLevel) {

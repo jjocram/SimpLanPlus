@@ -2,10 +2,10 @@
     /*
     This example shows the incorrect use of pointers.
     The SimpLanPlus programmer is accessing the heap area pointed by y without having it initialized.
-    Therefore the program should output 1 followed by -1 (default value for allocated space in the heap).
+    Therefore the program should output:
+        - "b^ is used prior to initialization."
     */
     void f(int a, ^int b){
-        b^ = 2;
         print a;
         print b^;
     }

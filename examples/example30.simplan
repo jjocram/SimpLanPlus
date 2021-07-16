@@ -1,0 +1,10 @@
+{
+    void f(int a) {
+        if (a == 0)
+            return;
+        else
+            f(a-1);
+    }
+
+    f(1);
+}
