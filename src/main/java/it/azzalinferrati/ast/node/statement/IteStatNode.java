@@ -50,7 +50,7 @@ public class IteStatNode extends StatementNode {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        return ite.checkEffects(env);
     }
 
     public boolean hasElseBranch() {

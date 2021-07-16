@@ -40,7 +40,7 @@ public class DeclarateVarNode extends DeclarationNode {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        return decVar.checkEffects(env);
     }
 
 }

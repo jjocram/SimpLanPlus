@@ -58,7 +58,7 @@ public class CallStatNode extends StatementNode {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        return call.checkEffects(env);
     }
 
 }

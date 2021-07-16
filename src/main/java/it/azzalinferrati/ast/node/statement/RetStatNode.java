@@ -50,7 +50,7 @@ public class RetStatNode extends StatementNode {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        return ret.checkEffects(env);
     }
 
 }
