@@ -55,4 +55,9 @@ public class PrintNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return exp.checkSemantics(env);
     }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
 }

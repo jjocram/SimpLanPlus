@@ -44,6 +44,14 @@ public interface Node {
     ArrayList<SemanticError> checkSemantics(Environment env);
 
     /**
+     * Checks the subtree rooted in this node for semantic errors (Semantic Analysis and Effect Analysis errors).
+     *
+     * @param env the environment at this point in the AST (both environments Γ and Σ)
+     * @return a list of {@code SemanticError}
+     */
+    ArrayList<SemanticError> checkEffects(Environment env);
+
+    /**
      * Returns {@code true} if nodes {@code a} and {@code b} have the same type.
      *
      * @param a the first node

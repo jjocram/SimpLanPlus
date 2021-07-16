@@ -38,4 +38,9 @@ public class DeclarateVarNode extends DeclarationNode {
         return decVar.checkSemantics(env);
     }
 
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
 }

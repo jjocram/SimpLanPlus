@@ -56,6 +56,11 @@ public class NotExpNode extends ExpNode {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
+    @Override
     public List<LhsNode> variables() {
         return exp.variables();
     }

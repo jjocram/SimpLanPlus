@@ -48,6 +48,11 @@ public class IteStatNode extends StatementNode {
         return ite.checkSemantics(env);
     }
 
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
     public boolean hasElseBranch() {
         return ite.hasElseBranch();
     }

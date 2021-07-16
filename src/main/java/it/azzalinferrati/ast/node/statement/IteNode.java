@@ -116,6 +116,11 @@ public class IteNode implements Node {
         return errors;
     }
 
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
     public boolean hasReturnStatements() {
         return thenBranch.hasReturnStatements() || (elseBranch != null && elseBranch.hasReturnStatements());
     }

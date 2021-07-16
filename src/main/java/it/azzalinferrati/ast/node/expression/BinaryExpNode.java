@@ -242,6 +242,11 @@ public class BinaryExpNode extends ExpNode {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
+    @Override
     public List<LhsNode> variables() {
         List<LhsNode> variables = new ArrayList<>();
 

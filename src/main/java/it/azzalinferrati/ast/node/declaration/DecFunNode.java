@@ -100,7 +100,7 @@ public class DecFunNode extends DeclarationNode {
      * @param effects the list of effects applied to the function arguments.
      * @return a list of {@code SemanticError}.
      */
-    public ArrayList<SemanticError> checkEffects(Environment env, List<List<Effect>> effects) {
+    public ArrayList<SemanticError> checkEffectsWithArgs(Environment env, List<List<Effect>> effects) {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         env.pushNewScope();
@@ -198,12 +198,17 @@ public class DecFunNode extends DeclarationNode {
                 effectAtBeginning.add(argEffects);
             }
 
-            errors.addAll(checkEffects(env, effectAtBeginning));
+            errors.addAll(checkEffectsWithArgs(env, effectAtBeginning));
 
         } catch (MultipleDeclarationException exception) {
             errors.add(new SemanticError(exception.getMessage()));
         }
         return errors;
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
     }
 
     /**

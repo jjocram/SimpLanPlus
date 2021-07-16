@@ -230,6 +230,10 @@ public class BlockNode implements Node {
 
         return errors;
     }
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
 
     /**
      * Retunrs `true` if return statements are found in the statements list of this block and in those nested.

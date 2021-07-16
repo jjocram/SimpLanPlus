@@ -111,6 +111,11 @@ public class LhsNode implements Node {
         return errors;
     }
 
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
     public boolean isPointer() {
         return id.getSTEntry().getType() instanceof PointerTypeNode;
     }

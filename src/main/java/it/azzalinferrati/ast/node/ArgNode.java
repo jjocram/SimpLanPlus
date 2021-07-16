@@ -59,4 +59,9 @@ public class ArgNode implements Node {
         return new ArrayList<>();
     }
 
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
 }

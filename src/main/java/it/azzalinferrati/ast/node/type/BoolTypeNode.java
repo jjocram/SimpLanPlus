@@ -36,4 +36,9 @@ public class BoolTypeNode extends TypeNode {
         return new ArrayList<>();
     }
 
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
 }

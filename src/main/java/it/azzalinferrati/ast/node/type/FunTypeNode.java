@@ -57,6 +57,11 @@ public class FunTypeNode extends TypeNode {
     }
 
     @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;

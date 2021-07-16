@@ -171,7 +171,7 @@ public class CallNode implements Node {
                 paramsEffects.add(paramEffects);
             }
 
-            errors.addAll(functionNode.checkEffects(env, paramsEffects));
+            errors.addAll(functionNode.checkEffectsWithArgs(env, paramsEffects));
         }
 
         if (!errors.isEmpty()) {
@@ -243,6 +243,11 @@ public class CallNode implements Node {
         env.replace(updatedEnv);
         errors.addAll(env.getEffectErrors());
         return errors;
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
     }
 
     public List<LhsNode> variables() {

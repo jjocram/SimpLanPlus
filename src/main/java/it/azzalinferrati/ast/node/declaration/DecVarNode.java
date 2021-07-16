@@ -95,4 +95,9 @@ public class DecVarNode extends DeclarationNode {
 
         return errors;
     }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
 }

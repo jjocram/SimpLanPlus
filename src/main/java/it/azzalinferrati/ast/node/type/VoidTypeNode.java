@@ -36,4 +36,9 @@ public class VoidTypeNode extends TypeNode {
         return new ArrayList<>();
     }
 
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
+
 }

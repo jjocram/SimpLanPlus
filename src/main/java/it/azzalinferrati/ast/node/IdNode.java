@@ -106,4 +106,9 @@ public class IdNode implements Node {
 
         return errors;
     }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        return null;
+    }
 }
