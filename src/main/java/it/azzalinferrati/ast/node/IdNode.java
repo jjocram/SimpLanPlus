@@ -38,7 +38,7 @@ public class IdNode implements Node {
         return entry.getVariableStatus(dereferenceLevel);
     }
 
-    public String getId() {
+    public String getIdentifier() {
         return id;
     }
 

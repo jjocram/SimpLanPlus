@@ -61,7 +61,7 @@ public class DeletionNode implements Node {
 
         // dereferenceLevel = 1 always by language design => delete ID
         if (id.getStatus(1).equals(Effect.DELETE) || id.getStatus(1).equals(Effect.ERROR)) {
-            errors.add(new SemanticError("Variable " + id.getId() + " was already deleted."));
+            errors.add(new SemanticError("Variable " + id.getIdentifier() + " was already deleted."));
         } else {
             errors.addAll(env.checkVariableStatus(new LhsNode(id, new LhsNode(id, null)), Effect::seq, Effect.DELETE));
         }

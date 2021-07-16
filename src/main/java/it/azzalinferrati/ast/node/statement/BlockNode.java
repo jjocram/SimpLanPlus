@@ -175,48 +175,53 @@ public class BlockNode implements Node {
             errors.addAll(declaration.checkSemantics(env));
         }
 
-        /*for (StatementNode statement : statements) {
-            errors.addAll(statement.checkSemantics(env));
-        }*/
-
-        for (int stmIndex = 0, stmMaxIndex = statements.size(); stmIndex < stmMaxIndex; stmIndex++) {
-            errors.addAll(statements.get(stmIndex).checkSemantics(env));
-        }
-
         if (isFunctionBody && !hasReturnStatements()) {
             statements.add(new RetStatNode(new RetNode(null)));
         }
 
+        for(StatementNode statement: statements) {
+            errors.addAll(statement.checkSemantics(env));
+        }
 
-        int stmWithReturnIndex = -1;
+        /*
+        The following instructions check if a return statement (wherever it is found) is followed by other statements.
+        In that scenario, those statements would not be executed and therefore a SemanticError is returned.
+        */
+        int stmWithReturnIndex = -1; // -1 is a default value and stands for no return statements found.
+
+        // Looking for return statements in the function body.
         var retStmAtThisLevel = statements.stream().filter(stm -> stm instanceof RetStatNode).findFirst();
         if (retStmAtThisLevel.isPresent()) {
             stmWithReturnIndex = statements.indexOf(retStmAtThisLevel.get());
         }
 
-        var iteStmAtThisLevel = statements.stream()
-                .filter(stm ->
-                                stm instanceof IteStatNode &&
-                                ((IteStatNode) stm).hasElseBranch() &&
-                                stm.hasReturnStatements())
-                .findFirst();
-        if (stmWithReturnIndex == -1 &&  iteStmAtThisLevel.isPresent()) {
-            stmWithReturnIndex = statements.indexOf(iteStmAtThisLevel.get());
+        // Looking for return statements in the if-then-else statements (and not in if-then only statements).
+        if(stmWithReturnIndex == -1) {
+            var iteStmAtThisLevel = statements.stream()
+                    .filter(stm ->
+                                    stm instanceof IteStatNode &&
+                                    ((IteStatNode) stm).hasElseBranch() &&
+                                    stm.hasReturnStatements())
+                    .findFirst();
+            if (iteStmAtThisLevel.isPresent()) {
+                stmWithReturnIndex = statements.indexOf(iteStmAtThisLevel.get());
+            }
         }
 
-        var blockStmAtThisLevel = statements.stream()
+        // Looking for return statements in the nested blocks.
+        if(stmWithReturnIndex == -1) {
+            var blockStmAtThisLevel = statements.stream()
                 .filter(stm ->
                                 stm instanceof BlockStatNode &&
                                 stm.hasReturnStatements())
                 .findFirst();
-        if (stmWithReturnIndex == -1 &&  blockStmAtThisLevel.isPresent()) {
-            stmWithReturnIndex = statements.indexOf(blockStmAtThisLevel.get());
+            if (blockStmAtThisLevel.isPresent()) {
+                stmWithReturnIndex = statements.indexOf(blockStmAtThisLevel.get());
+            }
         }
 
-        if (stmWithReturnIndex != -1) {
-            if (stmWithReturnIndex + 1 < statements.size()) {
-                errors.add(new SemanticError("There is code after a return statement."));
-            }
+        if (stmWithReturnIndex != -1 && stmWithReturnIndex + 1 < statements.size()) {
+            errors.add(new SemanticError("There is code after a return statement."));
         }
 
         if (allowScopeCreation) {
@@ -226,6 +231,10 @@ public class BlockNode implements Node {
         return errors;
     }
 
+    /**
+     * Retunrs `true` if return statements are found in the statements list of this block and in those nested.
+     * @return `true` if found, `false` otherwise.
+     */
     public boolean hasReturnStatements() {
         return statements.stream().anyMatch(StatementNode::hasReturnStatements);
     }

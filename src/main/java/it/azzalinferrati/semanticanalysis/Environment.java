@@ -410,7 +410,7 @@ public class Environment {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         try {
-            var stEntry = lookup(variable.getId().getId());
+            var stEntry = lookup(variable.getId().getIdentifier());
             Effect status = rule.apply(stEntry.getVariableStatus(variable.getDereferenceLevel()), effectToApply);
 
             stEntry.setVariableStatus(status, variable.getDereferenceLevel());

@@ -68,7 +68,7 @@ public class DecFunNode extends DeclarationNode {
     @Override
     public String codeGeneration() {
         StringBuilder buffer = new StringBuilder();
-        String functionLabel = funId.getId();
+        String functionLabel = funId.getIdentifier();
         String endFunctionLabel = "end" + functionLabel;
 
         buffer.append("; BEGIN ").append(this.toString(), 0, this.toString().indexOf("Fun. body"));
@@ -93,6 +93,13 @@ public class DecFunNode extends DeclarationNode {
         return buffer.toString();
     }
 
+    /**
+     * Performs the effect analysis through a Fix Point Method giving {@code effects} as initial statuses to the function arguments.
+     * 
+     * @param env the environment before the function call or definition.
+     * @param effects the list of effects applied to the function arguments.
+     * @return a list of {@code SemanticError}.
+     */
     public ArrayList<SemanticError> checkEffects(Environment env, List<List<Effect>> effects) {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
@@ -100,14 +107,16 @@ public class DecFunNode extends DeclarationNode {
 
         for (int argIndex = 0; argIndex < args.size(); argIndex++) {
             var arg = args.get(argIndex);
-            var stEntry = env.addUniqueNewDeclaration(arg.getId().getId(), arg.getType());
-                for (int derefLvl = 0; derefLvl < stEntry.getMaxDereferenceLevel(); derefLvl++) {
-                    stEntry.setVariableStatus(new Effect(effects.get(argIndex).get(derefLvl)), derefLvl);
-                }
+            var stEntry = env.addUniqueNewDeclaration(arg.getId().getIdentifier(), arg.getType());
+            for (int derefLvl = 0; derefLvl < stEntry.getMaxDereferenceLevel(); derefLvl++) {
+                // effects.get(argIndex).get(derefLvl) is the status of the argIndex-th argument at the dereference level derefLvl
+                // given as this method parameter.  
+                stEntry.setVariableStatus(new Effect(effects.get(argIndex).get(derefLvl)), derefLvl);
+            }
             arg.getId().setEntry(stEntry);
         }
 
-        STEntry innerFunEntry = env.addUniqueNewDeclaration(funId.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
+        STEntry innerFunEntry = env.addUniqueNewDeclaration(funId.getIdentifier(), funType); // Adding the function to the current scope for non-mutual recursive calls.
         innerFunEntry.setFunctionNode(this);
         block.disallowScopeCreation();
 
@@ -117,17 +126,19 @@ public class DecFunNode extends DeclarationNode {
             old_effects.add(new ArrayList<>(status));
         }
 
-        checkBlockAndUpdateArgs(env, innerFunEntry, errors);
+        errors.addAll(checkBlockAndUpdateArgs(env, innerFunEntry)); // env is updated after this call.
 
         boolean different_funType = !innerFunEntry.getFunctionStatus().equals(old_effects);
 
         while (different_funType) {
+            // The environment is replaced with that saved before calling checkBlockAndUpdateArgs,
+            // but the new function argument statuses are set up.
             env.replace(old_env);
 
-            var funEntry = env.safeLookup(funId.getId());
+            var funEntry = env.safeLookup(funId.getIdentifier());
 
             for (int argIndex = 0; argIndex < args.size(); argIndex++) {
-                var argEntry = env.safeLookup(args.get(argIndex).getId().getId());
+                var argEntry = env.safeLookup(args.get(argIndex).getId().getIdentifier());
                 var argStatuses = innerFunEntry.getFunctionStatus().get(argIndex);
 
                 for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
@@ -137,14 +148,15 @@ public class DecFunNode extends DeclarationNode {
 
             old_effects = new ArrayList<>(innerFunEntry.getFunctionStatus());
 
-            checkBlockAndUpdateArgs(env, innerFunEntry, errors);
+            errors.addAll(checkBlockAndUpdateArgs(env, innerFunEntry));
 
             different_funType = !innerFunEntry.getFunctionStatus().equals(old_effects);
         }
 
         env.popScope();
 
-        var idEntry = env.safeLookup(funId.getId());
+        // Setting the computed statuses in the function arguments and saving them in the Symbol Table entry of the function funId.
+        var idEntry = env.safeLookup(funId.getIdentifier());
         for (int argIndex = 0; argIndex < args.size(); argIndex++) {
             //Update ID in previous scope
             var argStatuses = innerFunEntry.getFunctionStatus().get(argIndex);
@@ -162,17 +174,16 @@ public class DecFunNode extends DeclarationNode {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         try {
-            funId.setEntry(env.addNewDeclaration(funId.getId(), funType)); // \Sigma_{FUN}
+            funId.setEntry(env.addNewDeclaration(funId.getIdentifier(), funType)); // \Sigma_{FUN}
             funId.getSTEntry().setFunctionNode(this);
             env.pushNewScope();
 
             for (ArgNode arg : args) {
-                var stEntry = env.addNewDeclaration(arg.getId().getId(), arg.getType());
-
+                var stEntry = env.addNewDeclaration(arg.getId().getIdentifier(), arg.getType());
                 arg.getId().setEntry(stEntry);
             }
 
-            STEntry innerFunEntry = env.addNewDeclaration(funId.getId(), funType); // Adding the function to the current scope for non-mutual recursive calls.
+            STEntry innerFunEntry = env.addNewDeclaration(funId.getIdentifier(), funType); // Adding the function to the current scope for non-mutual recursive calls.
             innerFunEntry.setFunctionNode(this);
             block.disallowScopeCreation();
 
@@ -195,16 +206,26 @@ public class DecFunNode extends DeclarationNode {
         return errors;
     }
 
-    private void checkBlockAndUpdateArgs(Environment env, STEntry innerFunEntry, ArrayList<SemanticError> errors) {
+    /**
+     * Executes the semantic analysis on the block, updating the function argument arguments in {@code env} and {@code innerFunEntry}
+     * @param env the environment before the semantic check.
+     * @param innerFunEntry the function entry in the Symbol Table at nesting level equivalent to that of the arguments of the same function.
+     * @return the semantic errors encountered.
+     */
+    private ArrayList<SemanticError> checkBlockAndUpdateArgs(Environment env, STEntry innerFunEntry) {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
         errors.addAll(block.checkSemantics(env));
         for (int argIndex = 0; argIndex < args.size(); argIndex++) {
-            var argEntry = env.safeLookup(args.get(argIndex).getId().getId());
+            var argEntry = env.safeLookup(args.get(argIndex).getId().getIdentifier());
 
             for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
                 funId.getSTEntry().setParamStatus(argIndex, argEntry.getVariableStatus(derefLvl), derefLvl);
                 innerFunEntry.setParamStatus(argIndex, argEntry.getVariableStatus(derefLvl), derefLvl);
             }
         }
+        
+        return errors;
     }
 
 }

@@ -31,6 +31,7 @@ public class CallNode implements Node {
     final private List<ExpNode> params;
     private int currentNestingLevel;
 
+    // Blocks infinite recursion in recursive function effect analysis.
     private boolean firstCheck;
 
     public CallNode(IdNode id, List<ExpNode> params) {
@@ -108,7 +109,7 @@ public class CallNode implements Node {
         buffer.append("mv $fp $sp ;update $fp\n");
         buffer.append("addi $fp $fp ").append(params.size()).append(" ;fix $fp position to the bottom of the new frame\n");
 
-        buffer.append("jal ").append(id.getId()).append(" ;jump to function (this automatically set $ra to the next instruction)\n");
+        buffer.append("jal ").append(id.getIdentifier()).append(" ;jump to function (this automatically set $ra to the next instruction)\n");
 
         buffer.append("; END ").append(this).append("\n");
 
@@ -154,6 +155,8 @@ public class CallNode implements Node {
             DecFunNode functionNode = id.getSTEntry().getFunctionNode();
             List<List<Effect>> paramsEffects = new ArrayList<>();
 
+            // Creating the statuses of the variables given as input to the function call.
+            // If actual parameters are expressions not instance of DereferenceExpNode, Effect.READ_WRITE is the status given.
             for (ExpNode expNode : params) {
                 List<Effect> paramEffects = new ArrayList<>();
                 if (expNode instanceof DereferenceExpNode) {
@@ -184,7 +187,7 @@ public class CallNode implements Node {
         List<List<Effect>> effects = id.getSTEntry().getFunctionStatus();
         for (int i : indexesOfNotPointers) {
             if (effects.get(i).stream().anyMatch(e -> e.equals(Effect.ERROR))) {
-                errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getId() + "."));
+                errors.add(new SemanticError("The function parameter " + params.get(i) + " was used erroneously inside the body of " + id.getIdentifier() + "."));
             }
         }
 
@@ -197,7 +200,7 @@ public class CallNode implements Node {
                 .collect(Collectors.toList());
 
         for (var variable : varsInExpressions) {
-            var entryInE1 = e1.safeLookup(variable.getId().getId());
+            var entryInE1 = e1.safeLookup(variable.getId().getIdentifier());
             entryInE1.setVariableStatus(Effect.seq(entryInE1.getVariableStatus(0), Effect.READ_WRITE), 0);
         }
 
@@ -217,9 +220,9 @@ public class CallNode implements Node {
 
             LhsNode pointer = params.get(i).variables().get(0); //always exists only once pointer in the list of variables of this parameter
 
-            STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId().getId(), pointer.getId().getSTEntry().getType());
+            STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId().getIdentifier(), pointer.getId().getSTEntry().getType());
             for (int derefLvl = 0; derefLvl < pointer.getId().getSTEntry().getMaxDereferenceLevel(); derefLvl++) {
-                Effect u_iEffect = env.safeLookup(pointer.getId().getId()).getVariableStatus(derefLvl);
+                Effect u_iEffect = env.safeLookup(pointer.getId().getIdentifier()).getVariableStatus(derefLvl);
                 Effect x_iEffect = effects.get(i).get(derefLvl);
                 Effect seq = Effect.seq(u_iEffect, x_iEffect);
 

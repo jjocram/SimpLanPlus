@@ -86,7 +86,7 @@ public class LhsNode implements Node {
 
         LhsNode current = lhs;
         while (current != null) {
-            buffer.append("lw $a0 0($a0) ;").append(id.getId()).append(" is a pointer, dereferencing it \n");
+            buffer.append("lw $a0 0($a0) ;").append(id.getIdentifier()).append(" is a pointer, dereferencing it \n");
             current = current.lhs;
         }
 

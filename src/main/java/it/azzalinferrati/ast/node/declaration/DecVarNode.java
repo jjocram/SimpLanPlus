@@ -85,7 +85,7 @@ public class DecVarNode extends DeclarationNode {
         }
 
         try {
-            id.setEntry(env.addNewDeclaration(id.getId(), type));
+            id.setEntry(env.addNewDeclaration(id.getIdentifier(), type));
             if (exp != null) {
                 id.setStatus(Effect.READ_WRITE, 0);
             }
