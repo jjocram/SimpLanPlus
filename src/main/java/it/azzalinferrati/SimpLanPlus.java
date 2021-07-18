@@ -121,7 +121,7 @@ public class SimpLanPlus {
         // following code generation.
         Environment env = new Environment();
 
-        // Checking for syntactical errors.
+        // Checking for semantic errors.
         ArrayList<SemanticError> semanticErrors = AST.checkSemantics(env);
         if (!semanticErrors.isEmpty()) {
             System.err.println("Semantic analysis:");
@@ -137,6 +137,15 @@ public class SimpLanPlus {
             System.err.println(typeCheckingException.getMessage());
             System.exit(1);
         }
+
+        // Checking for effect analysis errors.
+        // TODO Decommentare quando tutti i checkEffects sono pronti.
+        // ArrayList<SemanticError> effectsAnalysisErrors = AST.checkEffects(env);
+        // if (!effectsAnalysisErrors.isEmpty()) {
+        //     System.err.println("Effects analysis:");
+        //     semanticErrors.stream().filter(DistinctByKey.distinctByKey(SemanticError::toString)).forEach(System.err::println);
+        //     System.exit(1);
+        // }
 
         // Printing (if requested) the AST.
         if (flags.ast()) {
