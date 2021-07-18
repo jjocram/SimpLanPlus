@@ -49,7 +49,7 @@ public class PrintStatNode extends StatementNode {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return print.checkSemantics(env);
+        return print.checkEffects(env);
     }
 
 }

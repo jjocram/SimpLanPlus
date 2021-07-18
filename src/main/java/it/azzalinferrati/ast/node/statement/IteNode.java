@@ -109,8 +109,6 @@ public class IteNode implements Node {
 
             var elseBranchEnv = new Environment(env);
             errors.addAll(elseBranch.checkSemantics(elseBranchEnv)); // env0 |- elseBranch : env2
-
-            env.replace(Environment.max(thenBranchEnv, elseBranchEnv)); // In here dom(thenBranchEnv) == dom(elseBranchEnv)
         }
 
         return errors;
@@ -118,6 +116,21 @@ public class IteNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(condition.checkEffects(env));
+
+        if (elseBranch == null) {
+            errors.addAll(thenBranch.checkEffects(env)); // env0 |- thenBranch : env1 (no else branch)
+        } else {
+            var thenBranchEnv = new Environment(env);
+            errors.addAll(thenBranch.checkEffects(thenBranchEnv)); // env0 |- thenBranch : env1
+
+            var elseBranchEnv = new Environment(env);
+            errors.addAll(elseBranch.checkEffects(elseBranchEnv)); // env0 |- elseBranch : env2
+
+            env.replace(Environment.max(thenBranchEnv, elseBranchEnv)); // In here dom(thenBranchEnv) == dom(elseBranchEnv)
+        }
         return null;
     }
 

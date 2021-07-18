@@ -55,21 +55,23 @@ public class DeletionNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return id.checkSemantics(env);
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
-        errors.addAll(id.checkSemantics(env));
+        errors.addAll(id.checkEffects(env));
 
-        // dereferenceLevel = 1 always by language design => delete ID
+        // Grammar rule is delete ID => dereferenceLevel = 1 always by language design
+        // - Otherwise we would have a lhs and not an id.
+        // - With that lhs.getDerereferenceLevel() would return the number of "^".
         if (id.getStatus(1).equals(Effect.DELETE) || id.getStatus(1).equals(Effect.ERROR)) {
             errors.add(new SemanticError("Variable " + id.getIdentifier() + " was already deleted."));
         } else {
             errors.addAll(env.checkVariableStatus(new LhsNode(id, new LhsNode(id, null)), Effect::seq, Effect.DELETE));
         }
         return errors;
-    }
-
-    @Override
-    public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
     }
 }

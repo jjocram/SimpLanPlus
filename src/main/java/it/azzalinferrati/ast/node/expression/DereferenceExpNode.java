@@ -41,9 +41,14 @@ public class DereferenceExpNode extends ExpNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return lhs.checkSemantics(env);
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
-        errors.addAll(lhs.checkSemantics(env));
+        errors.addAll(lhs.checkEffects(env));
 
         if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.INITIALIZED)) {
             errors.add(new SemanticError(lhs + " is used prior to initialization."));
@@ -52,11 +57,6 @@ public class DereferenceExpNode extends ExpNode {
         errors.addAll(checkVariablesStatus(env));
 
         return errors;
-    }
-
-    @Override
-    public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
     }
 
     @Override

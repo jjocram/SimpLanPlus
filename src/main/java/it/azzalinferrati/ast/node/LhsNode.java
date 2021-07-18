@@ -104,16 +104,23 @@ public class LhsNode implements Node {
 
         errors.addAll(lhs.checkSemantics(env));
 
-        if (!id.getSTEntry().getVariableStatus(getDereferenceLevel() - 1).equals(Effect.READ_WRITE)) {
-            errors.add(new SemanticError("Cannot use " + this + " since " + this.toString().substring(0, this.toString().length() - 1) + " has not status READ_WRITE."));
-        }
-
         return errors;
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        if (lhs == null) {
+            return id.checkEffects(env);
+        }
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(lhs.checkEffects(env));
+
+        if (!id.getSTEntry().getVariableStatus(getDereferenceLevel() - 1).equals(Effect.READ_WRITE)) {
+            errors.add(new SemanticError("Cannot use " + this + " since " + this.toString().substring(0, this.toString().length() - 1) + " has not status READ_WRITE."));
+        }
+
+        return errors;
     }
 
     public boolean isPointer() {

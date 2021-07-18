@@ -109,6 +109,9 @@ public class IdNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        // TODO in teoria non devo fare nulla perché se sono qui so che la variabile sicuramente c'è
+        // altrimenti checkSemantics non avrebbe funzionato e inoltre i due campi entry e currentNestingLevel
+        // già sono impostati.
+        return new ArrayList<>(); 
     }
 }

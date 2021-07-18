@@ -236,14 +236,19 @@ public class BinaryExpNode extends ExpNode {
         errors.addAll(leftExpression.checkSemantics(env));
         errors.addAll(rightExpression.checkSemantics(env));
 
-        errors.addAll(checkVariablesStatus(env));
-
         return errors;
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(leftExpression.checkEffects(env));
+        errors.addAll(rightExpression.checkEffects(env));
+
+        errors.addAll(checkVariablesStatus(env));
+
+        return errors;
     }
 
     @Override

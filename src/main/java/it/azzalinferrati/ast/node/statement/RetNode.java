@@ -71,6 +71,10 @@ public class RetNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        if (exp == null) {
+            return new ArrayList<>();
+        }
+
+        return exp.checkEffects(env);
     }
 }

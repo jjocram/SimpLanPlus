@@ -232,7 +232,26 @@ public class BlockNode implements Node {
     }
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        if (allowScopeCreation) {
+            env.pushNewScope();
+        }
+
+        for (DeclarationNode declaration : declarations) {
+            // TODO che vada fatto qui una chiamata a checkSemantics per inizializzare l'environment con la variabile?
+            errors.addAll(declaration.checkEffects(env));
+        }
+
+        for(StatementNode statement: statements) {
+            errors.addAll(statement.checkEffects(env));
+        }
+
+        if (allowScopeCreation) {
+            env.popScope();
+        }
+
+        return errors;
     }
 
     /**

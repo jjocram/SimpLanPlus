@@ -49,7 +49,7 @@ public class DeletStatNode extends StatementNode {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return deletion.checkSemantics(env);
+        return deletion.checkEffects(env);
     }
 
 }

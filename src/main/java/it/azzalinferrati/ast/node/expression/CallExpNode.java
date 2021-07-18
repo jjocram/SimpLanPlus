@@ -44,17 +44,17 @@ public class CallExpNode extends ExpNode {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        ArrayList<SemanticError> errors = new ArrayList<>();
-
-        errors.addAll(call.checkSemantics(env));
-        errors.addAll(checkVariablesStatus(env));
-
-        return errors;
+        return call.checkSemantics(env);
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(call.checkEffects(env));
+        errors.addAll(checkVariablesStatus(env));
+
+        return errors;
     }
 
     @Override
