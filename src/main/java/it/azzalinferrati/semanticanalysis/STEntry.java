@@ -27,6 +27,8 @@ public class STEntry {
 
     // Effects of a function.
     private final List<List<Effect>> functionStatus;
+
+    // Reference to the node in the AST (which represents the function and its body, in order to perform the effect analysis with the correct variable statuses).
     private DecFunNode functionNode;
 
     public STEntry(int nestingLevel, int offset) {

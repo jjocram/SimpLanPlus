@@ -21,8 +21,8 @@ Il compilatore di \textbf{SimpLanPlus} svolge i seguenti step (in ordine) prima 
 \begin{enumerate}
     \item analisi lessicale, in cui il codice sorgente viene trasformato in \textit{token}, ovvero piccoli blocchi logici, che contribuiscono alla creazione dell'\textbf{Abstract Syntax Tree (AST)};
     \item analisi semantica, in cui viene verificata la correttezza semantica del programma in input (ad esempio, che le variabili vengano utilizzate solo dopo una loro dichiarazione);
-    \item analisi degli effetti, in cui viene verificato lo stato delle variabili e dei puntatori sullo stack (inizializzato $\bot$, letto/scritto $rw$, cancellato $d$, errore $\top$);
-    \item \textit{type checking}, in cui viene controllato che i tipi all'interno delle espressioni, nelle assegnazioni e nelle istruzioni siano concordi a quanto atteso.
+    \item \textit{type checking}, in cui viene controllato che i tipi all'interno delle espressioni, nelle assegnazioni e nelle istruzioni siano concordi a quanto atteso;
+    \item analisi degli effetti, in cui viene verificato lo stato delle variabili e dei puntatori nella memoria (inizializzato $\bot$, letto/scritto $rw$, cancellato $d$, errore $\top$).
 \end{enumerate}
 
 \subsection{L'interprete}\label{ss:interprete}

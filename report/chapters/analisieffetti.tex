@@ -23,9 +23,14 @@ I metodi disponibili per operare su istanze di tipo \verb|Effect| sono tutti sta
 \end{itemize}
 
 \subsection[Classe STEntry]{Classe \texttt{STEntry}}\label{ss:stentry-effetti}
-Oltre ai campi dati illustrati in \hyperref[ss:stentry]{Sezione 3.1.2 \texttt{STEntry}}, sono stati aggiunti due campi dati \verb|variableStatus| e \verb|functionStatus| (rispettivamente di tipo \verb|List<Effect>| e \verb|List<List<Effect>>|) rappresentanti il primo gli effetti correnti sulle aree di memoria occupate dalla variabile e il secondo gli effetti applicati alle aree di memoria degli argomenti della funzione, cui fa riferimento la \textit{entry}.
+Oltre ai campi dati illustrati in \hyperref[ss:stentry]{Sezione 3.1.2 \texttt{STEntry}}, sono stati aggiunti altri campi dati:
+\begin{itemize}
+    \item \verb|variableStatus|, di tipo \verb|List<Effect>|, rappresentante gli effetti correnti sulle aree di memoria occupate da una variabile cui fa riferimento la \textit{entry};
+    \item \verb|functionStatus|, di tipo \verb|List<List<Effect>>|, rappresentante gli effetti applicati alle aree di memoria degli argomenti di una funzione, cui fa riferimento la \textit{entry};
+    \item \verb|functionNode|, utilizzato solo per \textit{entry} relative a funzioni, corrispondente ad un riferimento al nodo dell'AST in cui è definita la funzione stessa e viene utilizzata per verificare al momento della chiamata che gli effetti dei parametri attuali siano compatibili con quanto accade all'interno della funzione.
+\end{itemize}
 In caso la \textit{entry} si riferisca ad una variabile, \verb|functionStatus| è una lista vuota e non viene in alcun modo utilizzata; viceversa nel caso sia una funzione.\\
-La scelta di utilizzare una \verb|List<Effect>| è stata resa necessaria per poter gestire allo stesso modo variabili non puntatori (che avranno a loro associate \verb|variableStatus| di lunghezza 1) e variabili puntatori (che avranno \verb|variableStatus| di lunghezza pari al massimo numero di dereferenziazioni possibili su di esse, certamente $> 1$).
+La scelta di utilizzare una \verb|List<Effect>| è stata resa necessaria per poter gestire allo stesso modo variabili non puntatori (che hanno a loro associate \verb|variableStatus| di lunghezza 1) e variabili puntatori (che hanno \verb|variableStatus| di lunghezza pari al massimo numero di dereferenziazioni possibili su di esse, certamente $> 1$).
 
 
 \subsection[Classe Environment]{Classe \texttt{Environment}}\label{ss:environment-effetti}
@@ -42,8 +47,7 @@ I principali sono descritti di seguito:
 \end{itemize}
 
 \section{Controllo degli effetti}\label{s:controllo-effetti}
-L'analisi degli effetti viene fatta all'interno del metodo \verb|checkSemantics| per avere accesso alla \textit{Symbol Table} che, essendo appena stata creata o aggiornata dal processo di analisi semantica, contiene tutto il necessario.
-Svolgere questo processo al di fuori di \verb|checkSemantics| avrebbe richiesto la creazione di una copia dell'ambiente in ogni nodo dell'AST, in maniera poco efficiente.\\
+L'analisi degli effetti viene fatta all'interno del metodo \verb|ArrayList<SemanticError> checkEffects|\\\verb|(Environment env)| per avere accesso alla \textit{Symbol Table} che, essendo già stata creata durante l'analisi semantica, viene qui ricostruita accedendo alle già esistenti \textit{entry} associate ai nodi dell'AST.\\
 \noindent
 L'implementazione della parte di analisi degli effetti ricalca quanto visto durante le lezioni sull'analisi degli effetti del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
 In particolare, nelle prossime sezioni, vengono descritti più in dettaglio alcuni dei controlli più rilevanti.
@@ -53,7 +57,7 @@ Per impedire l'utilizzo di variabili non inizializzate è stato implementato un 
 Di seguito viene presentato la porzione di codice che se ne occupa:
 \begin{lstlisting}[language = Java, escapeinside={(*@}{@*)}]
 @Override
-public ArrayList<SemanticError> checkSemantics(Environment env) {
+public ArrayList<SemanticError> checkEffects(Environment env) {
     ArrayList<SemanticError> errors = new ArrayList<>();
 
     ...
