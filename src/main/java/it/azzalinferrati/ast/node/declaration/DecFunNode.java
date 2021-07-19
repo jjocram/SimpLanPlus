@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import it.azzalinferrati.ast.node.ArgNode;
 import it.azzalinferrati.ast.node.IdNode;
-import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.statement.BlockNode;
 import it.azzalinferrati.ast.node.type.FunTypeNode;
 import it.azzalinferrati.ast.node.type.PointerTypeNode;
@@ -59,7 +58,7 @@ public class DecFunNode extends DeclarationNode {
         if (type instanceof PointerTypeNode) {
             throw new TypeCheckingException("Functions cannot return pointers.");
         }
-        if (!Node.isSubtype(type, block.typeCheck())) {
+        if (!(type.equals(block.typeCheck()))) {
             throw new TypeCheckingException("Statements inside the function declaration do not return expression of type: " + type + ".");
         }
         return null; // Nothing to return
@@ -154,7 +153,6 @@ public class DecFunNode extends DeclarationNode {
 
         for (int argIndex = 0; argIndex < args.size(); argIndex++) {
             var arg = args.get(argIndex);
-            // var argEntry = env.addUniqueNewDeclaration(arg.getId().getIdentifier(), arg.getType()); // TODO serve al posto delle prossime due righe?
             env.addEntry(arg.getId().getIdentifier(), arg.getId().getSTEntry());
             var argEntry = arg.getId().getSTEntry();
             for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
@@ -162,7 +160,6 @@ public class DecFunNode extends DeclarationNode {
                 // given as this method parameter.  
                 argEntry.setVariableStatus(new Effect(effects.get(argIndex).get(derefLvl)), derefLvl);
             }
-            // arg.getId().setEntry(argEntry); // TODO Conseguenza del commento con TODO di sopra
         }
 
         STEntry innerFunEntry = env.addUniqueNewDeclaration(funId.getIdentifier(), funType); // Adding the function to the current scope for non-mutual recursive calls.

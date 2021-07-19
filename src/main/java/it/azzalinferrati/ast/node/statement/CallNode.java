@@ -74,7 +74,7 @@ public class CallNode implements Node {
         }
 
         for (int i = 0, size = formalFunArgTypes.size(); i < size; i++) {
-            if (!Node.isSubtype(formalFunArgTypes.get(i), actualFunArgTypes.get(i))) {
+            if (!(formalFunArgTypes.get(i).equals(actualFunArgTypes.get(i)))) {
                 throw new TypeCheckingException("In function " + id + " expected argument of type " + formalFunArgTypes.get(i) + ", got " + actualFunArgTypes.get(i) + ".");
             }
         }
@@ -154,7 +154,6 @@ public class CallNode implements Node {
 
         errors.addAll(id.checkEffects(env));
         params.forEach((p) -> errors.addAll(p.checkEffects(env)));
-        // currentNestingLevel = env.getNestingLevel(); // TODO serve???
 
         if (firstCheck) {
             firstCheck = false;

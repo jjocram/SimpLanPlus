@@ -139,7 +139,6 @@ public class SimpLanPlus {
         }
 
         // Checking for effect analysis errors.
-        // TODO Decommentare quando tutti i checkEffects sono pronti.
         ArrayList<SemanticError> effectsAnalysisErrors = AST.checkEffects(env);
         if (!effectsAnalysisErrors.isEmpty()) {
             System.err.println("Effects analysis:");

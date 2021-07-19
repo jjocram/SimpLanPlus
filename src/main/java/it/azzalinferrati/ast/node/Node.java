@@ -50,15 +50,4 @@ public interface Node {
      * @return a list of {@code SemanticError}
      */
     ArrayList<SemanticError> checkEffects(Environment env);
-
-    /**
-     * Returns {@code true} if nodes {@code a} and {@code b} have the same type.
-     *
-     * @param a the first node
-     * @param b the second node
-     * @return {@code true} if types match, {@code false} if they do not match
-     */
-    static boolean isSubtype(Node a, Node b) {
-        return a.getClass().equals(b.getClass());
-    }
 }

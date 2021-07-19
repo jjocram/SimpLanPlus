@@ -1,0 +1,12 @@
+{
+    /*
+    This example shows the incorrect use of pointers in SimpLanPlus since pointers of different types are assigned.
+    The program is wrong and should output the following error:
+      - ""
+    */
+    ^^^int x;
+    ^^int y = new ^int;
+    y^ = new int;
+    y^^ = 1;
+    x = y;
+}

@@ -3,7 +3,6 @@ package it.azzalinferrati.ast.node.declaration;
 import java.util.ArrayList;
 
 import it.azzalinferrati.ast.node.IdNode;
-import it.azzalinferrati.ast.node.Node;
 import it.azzalinferrati.ast.node.expression.ExpNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.semanticanalysis.Effect;
@@ -56,7 +55,7 @@ public class DecVarNode extends DeclarationNode {
 
         TypeNode expType = exp.typeCheck();
 
-        if (Node.isSubtype(expType, type)) {
+        if (expType.equals(type)) {
             return null;
         }
 

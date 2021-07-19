@@ -44,7 +44,7 @@ public class AssignmentNode implements Node {
         TypeNode lhsType = lhs.typeCheck();
         TypeNode expType = exp.typeCheck();
 
-        if (Node.isSubtype(expType, lhsType)) {
+        if (lhsType.equals(expType)) {
             return new VoidTypeNode();
         }
 
@@ -82,20 +82,13 @@ public class AssignmentNode implements Node {
 
         if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.ERROR)) {
             errors.addAll(env.checkVariableStatus(lhs, Effect::seq, Effect.READ_WRITE));
-        } else if (exp instanceof DereferenceExpNode) { // TODO provare a commentare fino a prima del for e vedere se il type checking funziona
+        } else if (exp instanceof DereferenceExpNode) {
             // Since a copy of a pointer/variable is required therefore a copy of the applied effects is also performed.
             // It is okay to copy effects even for plain variables since the only possible status they would have is Effect.READ_WRITE.
             LhsNode rhsPointer = exp.variables().get(0);
             int lhsDerefLvl = lhs.getDereferenceLevel();
             int expDerefLvl = rhsPointer.getDereferenceLevel();
             int lhsMaxDerefLvl = lhs.getId().getSTEntry().getMaxDereferenceLevel();
-            int expMaxDerefLvl = rhsPointer.getId().getSTEntry().getMaxDereferenceLevel();
-            
-            if((lhsMaxDerefLvl - lhsDerefLvl) != (expMaxDerefLvl - expDerefLvl)) {
-                // This is a signal of wrong type checking, therefore everything that is done after this would have no sense.
-                errors.add(new SemanticError("Dereference levels not matching in " + this.toString().replaceFirst("Assignment", "assignment").replaceFirst("\t", " ") + "."));
-                return errors;
-            }
 
             for (int i = lhsDerefLvl, j = expDerefLvl; i < lhsMaxDerefLvl; i++, j++) {
                 var rhsStatus = rhsPointer.getId().getStatus(j);

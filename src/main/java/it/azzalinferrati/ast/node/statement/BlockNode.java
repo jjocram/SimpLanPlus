@@ -92,7 +92,7 @@ public class BlockNode implements Node {
             List<StatementNode> statNodes = statements.stream().filter(stm -> stm instanceof IteStatNode || stm instanceof BlockStatNode).collect(Collectors.toList());
             for (int i = 0; i < statNodes.size() - 1; i++) {
                 // Multiple if-then-else must have the same returned type
-                if (!Node.isSubtype(statNodes.get(i).typeCheck(), statNodes.get(i + 1).typeCheck())) {
+                if(!(statNodes.get(i).typeCheck().equals(statNodes.get(i+1).typeCheck()))) {
                     throw new TypeCheckingException("Multiple return statements with different returned types.");
                 }
             }
