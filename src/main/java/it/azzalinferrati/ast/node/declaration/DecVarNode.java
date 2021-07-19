@@ -98,6 +98,14 @@ public class DecVarNode extends DeclarationNode {
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        if (exp != null) {
+            errors.addAll(exp.checkEffects(env));
+        }
+        
+        env.addEntry(id.getIdentifier(), id.getSTEntry());
+
+        return errors;
     }
 }

@@ -131,7 +131,8 @@ public class IteNode implements Node {
 
             env.replace(Environment.max(thenBranchEnv, elseBranchEnv)); // In here dom(thenBranchEnv) == dom(elseBranchEnv)
         }
-        return null;
+        
+        return errors;
     }
 
     public boolean hasReturnStatements() {

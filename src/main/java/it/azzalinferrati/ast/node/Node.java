@@ -38,13 +38,13 @@ public interface Node {
     /**
      * Checks the subtree rooted in this node for semantic errors (Semantic Analysis and Effect Analysis errors).
      *
-     * @param env the environment at this point in the AST (both environments Γ and Σ)
+     * @param env the environment at this point in the AST (both environments Γ)
      * @return a list of {@code SemanticError}
      */
     ArrayList<SemanticError> checkSemantics(Environment env);
 
     /**
-     * Checks the subtree rooted in this node for semantic errors (Semantic Analysis and Effect Analysis errors).
+     * Checks the subtree rooted in this node for effects analysis errors.
      *
      * @param env the environment at this point in the AST (both environments Γ and Σ)
      * @return a list of {@code SemanticError}

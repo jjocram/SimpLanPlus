@@ -118,17 +118,6 @@ public class CallNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        /*
-        \gamma |- id : id.getSTEntry().getType() DONE(errors.addAll(id.checkSemantics(env));)
-        \sigma(id) = \sigma_0 -> \sigma_1 DONE
-        \sigma_1(y_i) != ERROR per ogni parmetro passato per valore DONE
-
-        \sigma'  = \sigma[z_i |-> z_i.effectInSigma |> RW per ogni variabile utilizzato nei parametri passati per valore] DONE
-        \sigma'' = \par[u_i |-> u_i.effectInSigma |> x_i.effectInSigma_1 per ogni variabile passata per riferimento] TBD
-        ---------------------------------------------------
-         \sigma |- id(params) : update(\sigma', \sigma'') TBD
-        */
-
         ArrayList<SemanticError> errors = new ArrayList<>();
 
         errors.addAll(id.checkSemantics(env));
@@ -146,9 +135,26 @@ public class CallNode implements Node {
             errors.add(new SemanticError("The number of actual parameters do not match that of the formal parameters of function " + id + "."));
         }
 
-        if (!errors.isEmpty()) {
-            return errors;
-        }
+        return errors;
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        /*
+        \gamma |- id : id.getSTEntry().getType() DONE(errors.addAll(id.checkSemantics(env));)
+        \sigma(id) = \sigma_0 -> \sigma_1 DONE
+        \sigma_1(y_i) != ERROR per ogni parmetro passato per valore DONE
+
+        \sigma'  = \sigma[z_i |-> z_i.effectInSigma |> RW per ogni variabile utilizzato nei parametri passati per valore] DONE
+        \sigma'' = \par[u_i |-> u_i.effectInSigma |> x_i.effectInSigma_1 per ogni variabile passata per riferimento] TBD
+        ---------------------------------------------------
+         \sigma |- id(params) : update(\sigma', \sigma'') TBD
+        */
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(id.checkEffects(env));
+        params.forEach((p) -> errors.addAll(p.checkEffects(env)));
+        // currentNestingLevel = env.getNestingLevel(); // TODO serve???
 
         if (firstCheck) {
             firstCheck = false;
@@ -242,12 +248,8 @@ public class CallNode implements Node {
         Environment updatedEnv = Environment.update(e1, e2);
         env.replace(updatedEnv);
         errors.addAll(env.getEffectErrors());
-        return errors;
-    }
 
-    @Override
-    public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
+        return errors;
     }
 
     public List<LhsNode> variables() {

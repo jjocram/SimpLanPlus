@@ -140,12 +140,12 @@ public class SimpLanPlus {
 
         // Checking for effect analysis errors.
         // TODO Decommentare quando tutti i checkEffects sono pronti.
-        // ArrayList<SemanticError> effectsAnalysisErrors = AST.checkEffects(env);
-        // if (!effectsAnalysisErrors.isEmpty()) {
-        //     System.err.println("Effects analysis:");
-        //     semanticErrors.stream().filter(DistinctByKey.distinctByKey(SemanticError::toString)).forEach(System.err::println);
-        //     System.exit(1);
-        // }
+        ArrayList<SemanticError> effectsAnalysisErrors = AST.checkEffects(env);
+        if (!effectsAnalysisErrors.isEmpty()) {
+            System.err.println("Effects analysis:");
+            effectsAnalysisErrors.stream().filter(DistinctByKey.distinctByKey(SemanticError::toString)).forEach(System.err::println);
+            System.exit(1);
+        }
 
         // Printing (if requested) the AST.
         if (flags.ast()) {

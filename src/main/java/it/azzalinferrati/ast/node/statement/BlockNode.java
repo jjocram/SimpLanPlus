@@ -239,7 +239,6 @@ public class BlockNode implements Node {
         }
 
         for (DeclarationNode declaration : declarations) {
-            // TODO che vada fatto qui una chiamata a checkSemantics per inizializzare l'environment con la variabile?
             errors.addAll(declaration.checkEffects(env));
         }
 

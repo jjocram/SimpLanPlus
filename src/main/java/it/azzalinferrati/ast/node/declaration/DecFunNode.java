@@ -93,6 +93,53 @@ public class DecFunNode extends DeclarationNode {
         return buffer.toString();
     }
 
+    @Override
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        try {
+            funId.setEntry(env.addNewDeclaration(funId.getIdentifier(), funType)); // \Sigma_{FUN}
+            env.pushNewScope();
+
+            for (ArgNode arg : args) {
+                arg.getId().setEntry(env.addNewDeclaration(arg.getId().getIdentifier(), arg.getType()));
+            }
+
+            env.addNewDeclaration(funId.getIdentifier(), funType); // Adding the function to the current scope for non-mutual recursive calls.
+            block.disallowScopeCreation();
+
+            errors.addAll(block.checkSemantics(env));
+
+            env.popScope();
+        } catch (MultipleDeclarationException exception) {
+            errors.add(new SemanticError(exception.getMessage()));
+        }
+
+        return errors;
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        env.addEntry(funId.getIdentifier(), funId.getSTEntry());
+        funId.getSTEntry().setFunctionNode(this);
+
+        List<List<Effect>> effectAtBeginning = new ArrayList<>();
+        for (ArgNode argNode : args) {
+            List<Effect> argEffects = new ArrayList<>();
+            int maxDerefLvl = argNode.getId().getSTEntry().getMaxDereferenceLevel();
+            for (int derefLvl = 0; derefLvl < maxDerefLvl; derefLvl++) {
+                argEffects.add(new Effect(Effect.READ_WRITE));
+            }
+            effectAtBeginning.add(argEffects);
+        }
+
+        errors.addAll(checkEffectsWithArgs(env, effectAtBeginning));
+
+        return errors;
+    }
+
     /**
      * Performs the effect analysis through a Fix Point Method giving {@code effects} as initial statuses to the function arguments.
      * 
@@ -107,13 +154,15 @@ public class DecFunNode extends DeclarationNode {
 
         for (int argIndex = 0; argIndex < args.size(); argIndex++) {
             var arg = args.get(argIndex);
-            var stEntry = env.addUniqueNewDeclaration(arg.getId().getIdentifier(), arg.getType());
-            for (int derefLvl = 0; derefLvl < stEntry.getMaxDereferenceLevel(); derefLvl++) {
+            // var argEntry = env.addUniqueNewDeclaration(arg.getId().getIdentifier(), arg.getType()); // TODO serve al posto delle prossime due righe?
+            env.addEntry(arg.getId().getIdentifier(), arg.getId().getSTEntry());
+            var argEntry = arg.getId().getSTEntry();
+            for (int derefLvl = 0; derefLvl < argEntry.getMaxDereferenceLevel(); derefLvl++) {
                 // effects.get(argIndex).get(derefLvl) is the status of the argIndex-th argument at the dereference level derefLvl
                 // given as this method parameter.  
-                stEntry.setVariableStatus(new Effect(effects.get(argIndex).get(derefLvl)), derefLvl);
+                argEntry.setVariableStatus(new Effect(effects.get(argIndex).get(derefLvl)), derefLvl);
             }
-            arg.getId().setEntry(stEntry);
+            // arg.getId().setEntry(argEntry); // TODO Conseguenza del commento con TODO di sopra
         }
 
         STEntry innerFunEntry = env.addUniqueNewDeclaration(funId.getIdentifier(), funType); // Adding the function to the current scope for non-mutual recursive calls.
@@ -169,48 +218,6 @@ public class DecFunNode extends DeclarationNode {
         return errors;
     }
 
-    @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        ArrayList<SemanticError> errors = new ArrayList<>();
-
-        try {
-            funId.setEntry(env.addNewDeclaration(funId.getIdentifier(), funType)); // \Sigma_{FUN}
-            funId.getSTEntry().setFunctionNode(this);
-            env.pushNewScope();
-
-            for (ArgNode arg : args) {
-                var stEntry = env.addNewDeclaration(arg.getId().getIdentifier(), arg.getType());
-                arg.getId().setEntry(stEntry);
-            }
-
-            STEntry innerFunEntry = env.addNewDeclaration(funId.getIdentifier(), funType); // Adding the function to the current scope for non-mutual recursive calls.
-            innerFunEntry.setFunctionNode(this);
-            block.disallowScopeCreation();
-
-            env.popScope();
-
-            List<List<Effect>> effectAtBeginning = new ArrayList<>();
-            for (ArgNode argNode : args) {
-                List<Effect> argEffects = new ArrayList<>();
-                for (int derefLvl = 0; derefLvl < argNode.getId().getSTEntry().getMaxDereferenceLevel(); derefLvl++) {
-                    argEffects.add(new Effect(Effect.READ_WRITE));
-                }
-                effectAtBeginning.add(argEffects);
-            }
-
-            errors.addAll(checkEffectsWithArgs(env, effectAtBeginning));
-
-        } catch (MultipleDeclarationException exception) {
-            errors.add(new SemanticError(exception.getMessage()));
-        }
-        return errors;
-    }
-
-    @Override
-    public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
-    }
-
     /**
      * Executes the semantic analysis on the block, updating the function argument arguments in {@code env} and {@code innerFunEntry}
      * @param env the environment before the semantic check.
@@ -220,7 +227,7 @@ public class DecFunNode extends DeclarationNode {
     private ArrayList<SemanticError> checkBlockAndUpdateArgs(Environment env, STEntry innerFunEntry) {
         ArrayList<SemanticError> errors = new ArrayList<>();
 
-        errors.addAll(block.checkSemantics(env));
+        errors.addAll(block.checkEffects(env));
         for (int argIndex = 0; argIndex < args.size(); argIndex++) {
             var argEntry = env.safeLookup(args.get(argIndex).getId().getIdentifier());
 

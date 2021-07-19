@@ -112,6 +112,8 @@ public class IdNode implements Node {
         // TODO in teoria non devo fare nulla perché se sono qui so che la variabile sicuramente c'è
         // altrimenti checkSemantics non avrebbe funzionato e inoltre i due campi entry e currentNestingLevel
         // già sono impostati.
+        entry = env.safeLookup(id);
+        currentNestingLevel = env.getNestingLevel();
         return new ArrayList<>(); 
     }
 }

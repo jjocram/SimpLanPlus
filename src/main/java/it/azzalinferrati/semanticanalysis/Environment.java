@@ -166,6 +166,24 @@ public class Environment {
     }
 
     /**
+     * Adds a new entry of the Symbol Table with identifier {@code id} into the current scope. The
+     * caller is sure that [id] does not exist in the current scope: if it does,
+     * then unexpected behavior could occur. The offset of functions will be set to
+     * -1, the offset of variables will be set to the current offset and later
+     * incremented.
+     * <strong>ATTENTION</strong>: To be used with {@code Node::checkEffects(Environment env)}.
+     *
+     * @param id   the identifer of the variable or function.
+     * @param entry the type of the variable or function.
+     */
+    public void addEntry(final String id, final STEntry entry) {
+        if(!(entry.getType() instanceof FunTypeNode)) {
+            offset += 1;
+        }
+        currentScope().put(id, entry);
+    }
+
+    /**
      * Searches [id] in the Symbol Table and returns its entry, if present.
      *
      * @param id the identifer of the variable or function.

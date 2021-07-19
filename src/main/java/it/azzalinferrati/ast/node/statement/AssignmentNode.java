@@ -70,14 +70,19 @@ public class AssignmentNode implements Node {
         errors.addAll(lhs.checkSemantics(env));
         errors.addAll(exp.checkSemantics(env));
 
-        if (!errors.isEmpty()) {
-            // Cannot perform effect analysis if some errors were found
-            return errors;
-        }
+        return errors;
+    }
+
+    @Override
+    public ArrayList<SemanticError> checkEffects(Environment env) {
+        ArrayList<SemanticError> errors = new ArrayList<>();
+
+        errors.addAll(lhs.checkEffects(env));
+        errors.addAll(exp.checkEffects(env));
 
         if (lhs.getId().getStatus(lhs.getDereferenceLevel()).equals(Effect.ERROR)) {
             errors.addAll(env.checkVariableStatus(lhs, Effect::seq, Effect.READ_WRITE));
-        } else if (exp instanceof DereferenceExpNode) {
+        } else if (exp instanceof DereferenceExpNode) { // TODO provare a commentare fino a prima del for e vedere se il type checking funziona
             // Since a copy of a pointer/variable is required therefore a copy of the applied effects is also performed.
             // It is okay to copy effects even for plain variables since the only possible status they would have is Effect.READ_WRITE.
             LhsNode rhsPointer = exp.variables().get(0);
@@ -87,7 +92,7 @@ public class AssignmentNode implements Node {
             int expMaxDerefLvl = rhsPointer.getId().getSTEntry().getMaxDereferenceLevel();
             
             if((lhsMaxDerefLvl - lhsDerefLvl) != (expMaxDerefLvl - expDerefLvl)) {
-                // This is a signal of wrong future type checking, therefore everything that is done after this would have no sense.
+                // This is a signal of wrong type checking, therefore everything that is done after this would have no sense.
                 errors.add(new SemanticError("Dereference levels not matching in " + this.toString().replaceFirst("Assignment", "assignment").replaceFirst("\t", " ") + "."));
                 return errors;
             }
@@ -96,15 +101,10 @@ public class AssignmentNode implements Node {
                 var rhsStatus = rhsPointer.getId().getStatus(j);
                 lhs.getId().setStatus(rhsStatus, i);
             }
-        } else {
+        } else { // lhs is not in error status and exp is not a pointer.
             lhs.getId().setStatus(new Effect(Effect.READ_WRITE), lhs.getDereferenceLevel());
         }
 
         return errors;
-    }
-
-    @Override
-    public ArrayList<SemanticError> checkEffects(Environment env) {
-        return null;
     }
 }
