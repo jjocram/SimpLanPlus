@@ -7,11 +7,11 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import java.util.ArrayList;
 
 /**
- * <p>Represents a generic node in the AST.</p>
+ * Represents a generic node in the AST.
  */
 public interface Node {
     /**
-     * Returns a string represention of the node.
+     * Returns a string represention of the node preceded by {@code indent}.
      *
      * @param indent characters to prepend to the string version of the node
      * @return the string version of the node
@@ -36,9 +36,9 @@ public interface Node {
     String codeGeneration();
 
     /**
-     * Checks the subtree rooted in this node for semantic errors (Semantic Analysis and Effect Analysis errors).
+     * Checks the subtree rooted in this node for semantic analysis errors.
      *
-     * @param env the environment at this point in the AST (both environments Γ)
+     * @param env the environment at this point in the AST (only environment Γ)
      * @return a list of {@code SemanticError}
      */
     ArrayList<SemanticError> checkSemantics(Environment env);

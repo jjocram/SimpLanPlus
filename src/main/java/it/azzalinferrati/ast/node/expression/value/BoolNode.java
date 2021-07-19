@@ -12,11 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Represents a boolean constant expression in the AST.</p>
- *
- * <p><strong>Type checking</strong>: bool.</p>
- * <p><strong>Semantic analysis</strong>: empty</p>
- * <p><strong>Code generation</strong>: loads the value in <strong>$a0</strong>.</p>
+ * Represents a boolean constant expression in the AST.
  */
 public class BoolNode extends ExpNode {
     final private boolean value;

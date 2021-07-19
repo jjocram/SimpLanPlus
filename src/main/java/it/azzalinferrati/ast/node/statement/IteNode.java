@@ -12,11 +12,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import java.util.ArrayList;
 
 /**
- * <p>Represents a if-then-else statement in the AST.</p>
- *
- * <p><strong>Type checking</strong>: if there are both then and else statements then the the type of the first branch is returned (they are nonetheless equal), throws an error if the condition is not boolean or if the two branches have different types.</p>
- * <p><strong>Semantic analysis</strong>: it performs the semantic analysis on both the branches of the if-then-else statement, on the condition and returns the maximum effects applied to the variables.</p>
- * <p><strong>Code generation</strong>: Generates the code for the boolean condition, generates the two branches's code and sets the branching labels.</p>
+ * Represents a if-then-else statement in the AST.
  */
 public class IteNode implements Node {
     final private ExpNode condition;
@@ -68,7 +64,7 @@ public class IteNode implements Node {
         String thenBranchLabel = LabelManager.getInstance().freshLabel("thenBranch");
         String endIfLabel = "endIf" + thenBranchLabel;
 
-        buffer.append("; BEGIN if with condition: " + condition).append("\n");
+        buffer.append("; BEGIN if with condition: ").append(condition).append("\n");
 
         buffer.append(condition.codeGeneration());
         buffer.append("li $t1 1 ; load in $t1 the value TRUE\n");
@@ -81,7 +77,7 @@ public class IteNode implements Node {
         buffer.append(thenBranch.codeGeneration());
         buffer.append(endIfLabel).append(":\n");
 
-        buffer.append("; END if with condition: " + condition).append("\n");
+        buffer.append("; END if with condition: ").append(condition).append("\n");
 
         return buffer.toString();
     }
@@ -92,7 +88,7 @@ public class IteNode implements Node {
 
         /*
          * Inference rule for If-Then-Else statement, following the lesson on Semantic
-         * Analysis, Effects Analysis.
+         * Analysis.
          *
          * env |- condition : env0    env0 |- thenBranch : env1    env0 |- elseBranch : env2
          * ---------------------------------------------------------------------------------[If-e]

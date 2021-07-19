@@ -7,6 +7,9 @@ import it.azzalinferrati.semanticanalysis.Environment;
 import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
+/**
+ * Represents the wrapper for a block statement.
+ */
 public class BlockStatNode extends StatementNode {
 
     final private BlockNode block;

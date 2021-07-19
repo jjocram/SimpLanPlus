@@ -8,11 +8,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * <p>Represents a wrapper for an if-then-else statement in the AST.</p>
- *
- * <p><strong>Type checking</strong>: if there are both then and else statements then the the type of the first branch is returned (they are nonetheless equal), throws an error if the condition is not boolean or if the two branches have different types.</p>
- * <p><strong>Semantic analysis</strong>: it performs the semantic analysis on both the branches of the if-then-else statement, on the condition and returns the maximum effects applied to the variables.</p>
- * <p><strong>Code generation</strong>: Generates the code for the boolean condition, generates the two branches's code and sets the branching labels.</p>
+ * Represents a wrapper for an if-then-else statement in the AST.
  */
 public class IteStatNode extends StatementNode {
 

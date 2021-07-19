@@ -114,7 +114,7 @@ public class Environment {
      * offset of functions will be set to -1, the offset of variables will be set to
      * the current offset and later incremented.
      *
-     * @param id   the identifer of the variable or function.
+     * @param id   the identifier of the variable or function.
      * @param type the type of the variable or function.
      * @throws MultipleDeclarationException when [id] is already present in the head
      *                                      of the Symbol Table.
@@ -144,7 +144,7 @@ public class Environment {
      * -1, the offset of variables will be set to the current offset and later
      * incremented.
      *
-     * @param id   the identifer of the variable or function.
+     * @param id   the identifier of the variable or function.
      * @param type the type of the variable or function.
      */
     public STEntry addUniqueNewDeclaration(final String id, final TypeNode type) {
@@ -173,7 +173,7 @@ public class Environment {
      * incremented.
      * <strong>ATTENTION</strong>: To be used with {@code Node::checkEffects(Environment env)}.
      *
-     * @param id   the identifer of the variable or function.
+     * @param id   the identifier of the variable or function.
      * @param entry the type of the variable or function.
      */
     public void addEntry(final String id, final STEntry entry) {
@@ -186,7 +186,7 @@ public class Environment {
     /**
      * Searches [id] in the Symbol Table and returns its entry, if present.
      *
-     * @param id the identifer of the variable or function.
+     * @param id the identifier of the variable or function.
      * @return the entry in the symbol table of the variable or function with that
      * identifier.
      * @throws MissingDeclarationException if [id] is not present.
@@ -206,7 +206,7 @@ public class Environment {
     /**
      * Searches [id] in the Symbol Table and returns its entry. It must be present!.
      *
-     * @param id the identifer of the variable or function.
+     * @param id the identifier of the variable or function.
      * @return the entry in the symbol table of the variable or function with that
      * identifier.
      */

@@ -3,11 +3,7 @@ package it.azzalinferrati.ast.node.type;
 import it.azzalinferrati.ast.node.Node;
 
 /**
- * <p>Represents a generic type token in the AST.</p>
- *
- * <p><strong>Type checking</strong>: {@code null}.</p>
- * <p><strong>Semantic analysis</strong>: empty</p>
- * <p><strong>Code generation</strong>: empty.</p>
+ * Represents a generic type token in the AST.
  */
 public abstract class TypeNode implements Node {
     @Override
@@ -25,6 +21,10 @@ public abstract class TypeNode implements Node {
         return true;
     }
 
+    /**
+     * Returns the number of possible dereferentiations with this type.
+     * @return an integer >= 1.
+     */
     public int getDereferenceLevel() {
         return 1;
     }

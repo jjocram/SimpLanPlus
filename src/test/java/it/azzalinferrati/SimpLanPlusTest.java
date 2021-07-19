@@ -43,8 +43,8 @@ public class SimpLanPlusTest {
         return params;
     }
 
-    String exampleFile;
-    int expectedStatusCode;
+    final String exampleFile;
+    final int expectedStatusCode;
 
     public SimpLanPlusTest(String exampleFile, int statusCode) {
         this.exampleFile = exampleFile;

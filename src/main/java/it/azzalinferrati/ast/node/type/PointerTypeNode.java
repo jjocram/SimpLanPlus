@@ -8,11 +8,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * <p>Represents a pointer type token in the AST.</p>
- *
- * <p><strong>Type checking</strong>: {@code null}.</p>
- * <p><strong>Semantic analysis</strong>: empty</p>
- * <p><strong>Code generation</strong>: empty.</p>
+ * Represents a pointer type token in the AST.
  */
 public class PointerTypeNode extends TypeNode {
 

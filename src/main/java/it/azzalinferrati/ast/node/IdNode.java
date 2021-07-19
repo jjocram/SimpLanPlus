@@ -11,11 +11,7 @@ import it.azzalinferrati.semanticanalysis.exception.MissingDeclarationException;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * <p>Represents an identifier of a variable, pointer or function in the AST.</p>
- *
- * <p><strong>Type checking</strong>: type available in the Symbol Table.</p>
- * <p><strong>Semantic analysis</strong>: checks if available in the Symbol Table, otherwise returns an error.</p>
- * <p><strong>Code generation</strong>: Goes through the static chain to get the offset of the identifier from the Access Link and in the end loads the value in <strong>$a0</strong>.</p>
+ * Represents an identifier of a variable, pointer or function in the AST.
  */
 public class IdNode implements Node {
     private final String id;

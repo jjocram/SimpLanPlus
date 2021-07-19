@@ -11,11 +11,7 @@ import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 import java.util.ArrayList;
 
 /**
- * <p>Represents a print statement in the AST.</p>
- *
- * <p><strong>Type checking</strong>: {@code void} if the expression is correctly typed, throws a type checking exception if it is not.</p>
- * <p><strong>Semantic analysis</strong>: it performs the semantic analysis on the expression and returns its results.</p>
- * <p><strong>Code generation</strong>: Generates the value of the expression in <strong>$a0</strong> and prints it.</p>
+ * Represents a print statement in the AST.
  */
 public class PrintNode implements Node {
     final private ExpNode exp;
@@ -36,7 +32,7 @@ public class PrintNode implements Node {
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        TypeNode expType = exp.typeCheck(); // Executes the type checking on the expression (throwing exceptions if needed)
+        TypeNode expType = exp.typeCheck(); // Executes the type checking on the expression (throwing exceptions if needed).
 
         if (expType instanceof VoidTypeNode) {
             throw new TypeCheckingException("Print statements cannot output void-returning functions.");

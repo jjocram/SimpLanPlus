@@ -15,11 +15,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * <p>Represents a block (statement) in the AST.</p>
- *
- * <p><strong>Type checking</strong>: </p>
- * <p><strong>Semantic analysis</strong>: </p>
- * <p><strong>Code generation</strong>: </p>
+ * Represents a block (statement) in the AST.
  */
 public class BlockNode implements Node {
 
@@ -76,11 +72,11 @@ public class BlockNode implements Node {
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
         for (DeclarationNode dec : declarations) {
-            dec.typeCheck(); // The important is to perform type check, not to get the returned value
+            dec.typeCheck(); // It's important to perform the type checking, not to get the returned value.
         }
 
         for (StatementNode stm : statements) {
-            stm.typeCheck(); // The important is to perform type check, not to get the returned value
+            stm.typeCheck(); // It's important to perform the type checking , not to get the returned value.
         }
 
         if (statements.size() == 0) {
@@ -91,21 +87,21 @@ public class BlockNode implements Node {
         if (statements.stream().noneMatch(stm -> stm instanceof RetStatNode)) {
             List<StatementNode> statNodes = statements.stream().filter(stm -> stm instanceof IteStatNode || stm instanceof BlockStatNode).collect(Collectors.toList());
             for (int i = 0; i < statNodes.size() - 1; i++) {
-                // Multiple if-then-else must have the same returned type
+                // Multiple if-then-else must have the same returned type.
                 if(!(statNodes.get(i).typeCheck().equals(statNodes.get(i+1).typeCheck()))) {
                     throw new TypeCheckingException("Multiple return statements with different returned types.");
                 }
             }
             if (statNodes.size() > 0) {
-                // There are if-then-else
+                // There are if-then-else statements.
                 return statNodes.get(0).typeCheck();
             }
 
-            //No return
+            // No return.
             return new VoidTypeNode();
         }
 
-        return statements.get(statements.size() - 1).typeCheck(); //The last statement will be the return statement
+        return statements.get(statements.size() - 1).typeCheck(); // The last statement will be the return statement.
     }
 
     @Override
@@ -117,7 +113,7 @@ public class BlockNode implements Node {
                 buffer.append("push $sp\n");
             } else {
                 buffer.append("push $fp ;push old fp\n"); // push old $fp
-                buffer.append("push $bsp\n"); //remember old bsp
+                buffer.append("push $bsp\n"); // Save the old bsp
             }
 
             //push fake RA
@@ -149,11 +145,11 @@ public class BlockNode implements Node {
         }
 
         if (allowScopeCreation && !isMainBlock) {
-            buffer.append("addi $sp $sp ").append(varDeclarations.size()).append(" ;pop var declarations\n"); // pop var declarations
+            buffer.append("addi $sp $sp ").append(varDeclarations.size()).append(" ;pop var declarations\n"); // Pop var declarations.
             buffer.append("pop ;pop $al\n");
             buffer.append("pop ;pop fake RA\n");
-            buffer.append("lw $bsp 0($sp)\n"); //restore old bsp
-            buffer.append("pop\n"); //pop old bsp
+            buffer.append("lw $bsp 0($sp)\n"); // Restore old bsp
+            buffer.append("pop\n"); // Pop old bsp
             buffer.append("lw $fp 0($sp) ;restore old $fp\n");
             buffer.append("pop ;pop old $fp\n");
         }

@@ -8,7 +8,7 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * <p>Represents a node in the AST which is wrapper for {@code DecVarNode}.</p>
+ * Represents a node in the AST which is wrapper for {@code DecVarNode}.
  */
 public class DeclarateVarNode extends DeclarationNode {
 

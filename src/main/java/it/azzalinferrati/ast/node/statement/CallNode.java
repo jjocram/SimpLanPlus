@@ -20,11 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * <p>Represents the invocation of a function in the AST.</p>
- *
- * <p><strong>Type checking</strong>: the type returned by the function if the function body returns a matching value, throws a type checking exception if the body of the function does not match the returned type.</p>
- * <p><strong>Semantic analysis</strong>: it checks the existence of the function in the Symbol Table, checks that all the actual arguments are correct and finally performs the Effects Analysis..</p>
- * <p><strong>Code generation</strong>: Pushes the <strong>$fp</strong> onto the stack, goes through the static chain and retrieves the correct <strong>$al</strong> to be pushed onto the stack, generates the code for all the arguments (in order), pushes their value onto the stack, moves the <strong>$fp</strong> back to the previously pushed <strong>$al</strong> and finally jumps to the function definition code.</p>
+ * Represents the invocation of a function in the AST.
  */
 public class CallNode implements Node {
     final private IdNode id;
@@ -86,9 +82,9 @@ public class CallNode implements Node {
     public String codeGeneration() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("; BEGIN ").append(this).append("\n");
-        buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // push old $fp
-        buffer.append("push $sp\n"); //push old stack pointer
-        buffer.append("mv $bsp $sp\n"); //update base stack pointer to the new place
+        buffer.append("push $fp ;we are preparing to call a function, push old $fp\n"); // Push old $fp.
+        buffer.append("push $sp\n"); // Push old stack pointer.
+        buffer.append("mv $bsp $sp\n"); // Update base stack pointer to the new place.
         buffer.append("addi $t1 $bsp 2\n");
         buffer.append("sw $t1 0($bsp)\n");
 
@@ -122,7 +118,7 @@ public class CallNode implements Node {
 
         errors.addAll(id.checkSemantics(env));
         if (!errors.isEmpty()) {
-            // If the identifier is not found we cannot proceed with the effect analysis
+            // If the identifier is not found we cannot proceed with the semantic analysis.
             return errors;
         }
         params.forEach((p) -> errors.addAll(p.checkSemantics(env)));
@@ -143,12 +139,12 @@ public class CallNode implements Node {
         /*
         \gamma |- id : id.getSTEntry().getType() DONE(errors.addAll(id.checkSemantics(env));)
         \sigma(id) = \sigma_0 -> \sigma_1 DONE
-        \sigma_1(y_i) != ERROR per ogni parmetro passato per valore DONE
+        \sigma_1(y_i) != ERROR for each value passed as value DONE
 
-        \sigma'  = \sigma[z_i |-> z_i.effectInSigma |> RW per ogni variabile utilizzato nei parametri passati per valore] DONE
-        \sigma'' = \par[u_i |-> u_i.effectInSigma |> x_i.effectInSigma_1 per ogni variabile passata per riferimento] TBD
+        \sigma'  = \sigma[z_i |-> z_i.effectInSigma |> RW for each variable used in the parameters passed as value] DONE
+        \sigma'' = \par[u_i |-> u_i.effectInSigma |> x_i.effectInSigma_1 for each value passed as reference] DONE
         ---------------------------------------------------
-         \sigma |- id(params) : update(\sigma', \sigma'') TBD
+         \sigma |- id(params) : update(\sigma', \sigma'') DONE
         */
         ArrayList<SemanticError> errors = new ArrayList<>();
 
@@ -223,7 +219,7 @@ public class CallNode implements Node {
             Environment mthEnv = new Environment();
             mthEnv.pushNewScope();
 
-            LhsNode pointer = params.get(i).variables().get(0); //always exists only once pointer in the list of variables of this parameter
+            LhsNode pointer = params.get(i).variables().get(0); // Always exists only once pointer in the list of variables of this parameter.
 
             STEntry entry = mthEnv.addUniqueNewDeclaration(pointer.getId().getIdentifier(), pointer.getId().getSTEntry().getType());
             for (int derefLvl = 0; derefLvl < pointer.getId().getSTEntry().getMaxDereferenceLevel(); derefLvl++) {

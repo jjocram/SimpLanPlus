@@ -9,11 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>Represents a function type ((args) -> type) token in the AST.</p>
- *
- * <p><strong>Type checking</strong>: {@code null}.</p>
- * <p><strong>Semantic analysis</strong>: empty</p>
- * <p><strong>Code generation</strong>: empty.</p>
+ * Represents a function type ((args) -> type) token in the AST.
  */
 public class FunTypeNode extends TypeNode {
 
