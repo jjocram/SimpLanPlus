@@ -8,8 +8,8 @@ import it.azzalinferrati.ast.node.statement.*;
 import it.azzalinferrati.ast.node.type.*;
 import it.azzalinferrati.ast.node.declaration.DecFunNode;
 import it.azzalinferrati.ast.node.declaration.DecVarNode;
-import it.azzalinferrati.ast.node.declaration.DeclarateFunNode;
-import it.azzalinferrati.ast.node.declaration.DeclarateVarNode;
+import it.azzalinferrati.ast.node.declaration.DeclareFunNode;
+import it.azzalinferrati.ast.node.declaration.DeclareVarNode;
 import it.azzalinferrati.ast.node.declaration.DeclarationNode;
 
 import java.util.ArrayList;
@@ -41,13 +41,13 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public AssigtStatNode visitAssigtStat(SimpLanPlusParser.AssigtStatContext ctx) {
-        return new AssigtStatNode(visitAssignment(ctx.assignment()));
+    public AssigStatNode visitAssigStat(SimpLanPlusParser.AssigStatContext ctx) {
+        return new AssigStatNode(visitAssignment(ctx.assignment()));
     }
 
     @Override
-    public DeletStatNode visitDeletStat(SimpLanPlusParser.DeletStatContext ctx) {
-        return new DeletStatNode(visitDeletion(ctx.deletion()));
+    public DelStatNode visitDelStat(SimpLanPlusParser.DelStatContext ctx) {
+        return new DelStatNode(visitDeletion(ctx.deletion()));
     }
 
     @Override
@@ -76,13 +76,13 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override
-    public DeclarateFunNode visitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) {
-        return new DeclarateFunNode(visitDecFun(ctx.decFun()));
+    public DeclareFunNode visitDeclareFun(SimpLanPlusParser.DeclareFunContext ctx) {
+        return new DeclareFunNode(visitDecFun(ctx.decFun()));
     }
 
     @Override
-    public DeclarateVarNode visitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) {
-        return new DeclarateVarNode(visitDecVar(ctx.decVar()));
+    public DeclareVarNode visitDeclareVar(SimpLanPlusParser.DeclareVarContext ctx) {
+        return new DeclareVarNode(visitDecVar(ctx.decVar()));
     }
 
     @Override

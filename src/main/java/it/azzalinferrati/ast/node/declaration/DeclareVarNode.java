@@ -8,39 +8,39 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * Represents a node in the AST which is wrapper for {@code DecFunNode}.
+ * Represents a node in the AST which is wrapper for {@code DecVarNode}.
  */
-public class DeclarateFunNode extends DeclarationNode {
+public class DeclareVarNode extends DeclarationNode {
 
-    private final DecFunNode decFun;
+    private final DecVarNode decVar;
 
-    public DeclarateFunNode(final DecFunNode decFun) {
-        this.decFun = decFun;
+    public DeclareVarNode(final DecVarNode decVar) {
+        this.decVar = decVar;
     }
 
     @Override
     public String toPrint(String indent) {
-        return decFun.toPrint(indent);
+        return decVar.toPrint(indent);
     }
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        return decFun.typeCheck();
+        return decVar.typeCheck();
     }
 
     @Override
     public String codeGeneration() {
-        return decFun.codeGeneration();
+        return decVar.codeGeneration();
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return decFun.checkSemantics(env);
+        return decVar.checkSemantics(env);
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return decFun.checkEffects(env);
+        return decVar.checkEffects(env);
     }
 
 }

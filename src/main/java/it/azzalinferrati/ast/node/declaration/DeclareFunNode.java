@@ -1,4 +1,4 @@
-package it.azzalinferrati.ast.node.statement;
+package it.azzalinferrati.ast.node.declaration;
 
 import java.util.ArrayList;
 
@@ -8,44 +8,39 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * Represents a wrapper for a deletion statement in the AST.
+ * Represents a node in the AST which is wrapper for {@code DecFunNode}.
  */
-public class DeletStatNode extends StatementNode {
+public class DeclareFunNode extends DeclarationNode {
 
-    final private DeletionNode deletion;
+    private final DecFunNode decFun;
 
-    public DeletStatNode(final DeletionNode deletion) {
-        this.deletion = deletion;
+    public DeclareFunNode(final DecFunNode decFun) {
+        this.decFun = decFun;
     }
 
     @Override
     public String toPrint(String indent) {
-        return indent + deletion;
+        return decFun.toPrint(indent);
     }
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        return deletion.typeCheck();
-    }
-
-    @Override
-    public boolean hasReturnStatements() {
-        return false;
+        return decFun.typeCheck();
     }
 
     @Override
     public String codeGeneration() {
-        return deletion.codeGeneration();
+        return decFun.codeGeneration();
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return deletion.checkSemantics(env);
+        return decFun.checkSemantics(env);
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return deletion.checkEffects(env);
+        return decFun.checkEffects(env);
     }
 
 }

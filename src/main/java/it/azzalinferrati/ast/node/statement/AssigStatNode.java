@@ -1,4 +1,4 @@
-package it.azzalinferrati.ast.node.declaration;
+package it.azzalinferrati.ast.node.statement;
 
 import java.util.ArrayList;
 
@@ -8,39 +8,44 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * Represents a node in the AST which is wrapper for {@code DecVarNode}.
+ * Represents the wrapper for an assignment statement.
  */
-public class DeclarateVarNode extends DeclarationNode {
+public class AssigStatNode extends StatementNode {
 
-    private final DecVarNode decVar;
+    final private AssignmentNode assignment;
 
-    public DeclarateVarNode(final DecVarNode decVar) {
-        this.decVar = decVar;
+    public AssigStatNode(final AssignmentNode assignment) {
+        this.assignment = assignment;
     }
 
     @Override
     public String toPrint(String indent) {
-        return decVar.toPrint(indent);
+        return indent + assignment;
     }
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        return decVar.typeCheck();
+        return assignment.typeCheck();
+    }
+
+    @Override
+    public boolean hasReturnStatements() {
+        return false;
     }
 
     @Override
     public String codeGeneration() {
-        return decVar.codeGeneration();
+        return assignment.codeGeneration();
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return decVar.checkSemantics(env);
+        return assignment.checkSemantics(env);
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return decVar.checkEffects(env);
+        return assignment.checkEffects(env);
     }
 
 }

@@ -4,7 +4,7 @@ import it.azzalinferrati.ast.node.Node;
 
 /**
  * <p>Represents a generic declaration node in the AST.</p>
- * <p>It can either be a {@code DeclarateVarNode} or {@code DeclarateFunNode}.</p>
+ * <p>It can either be a {@code DeclareVarNode} or {@code DeclareFunNode}.</p>
  */
 public abstract class DeclarationNode implements Node {
     @Override

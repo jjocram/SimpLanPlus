@@ -14,8 +14,8 @@ public int errorCount() {
 
 block	    : '{' declaration* statement* '}';
 
-statement   : assignment ';'#assigtStat
-	        | deletion ';'  #deletStat
+statement   : assignment ';'#assigStat
+	        | deletion ';'  #delStat
 	        | print ';'     #printStat
 	        | ret ';'       #retStat
 	        | ite           #iteStat
@@ -23,8 +23,8 @@ statement   : assignment ';'#assigtStat
 	        | block         #blockStat;
 
 
-declaration : decFun    #declarateFun
-            | decVar    #declarateVar;
+declaration : decFun    #declareFun
+            | decVar    #declareVar;
 
 decFun	    : funType ID '(' (arg (',' arg)*)? ')' block ;
 

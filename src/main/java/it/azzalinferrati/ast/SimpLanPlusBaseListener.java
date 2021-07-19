@@ -29,25 +29,25 @@ public class SimpLanPlusBaseListener implements SimpLanPlusListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssigtStat(SimpLanPlusParser.AssigtStatContext ctx) { }
+	@Override public void enterAssigStat(SimpLanPlusParser.AssigStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAssigtStat(SimpLanPlusParser.AssigtStatContext ctx) { }
+	@Override public void exitAssigStat(SimpLanPlusParser.AssigStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeletStat(SimpLanPlusParser.DeletStatContext ctx) { }
+	@Override public void enterDelStat(SimpLanPlusParser.DelStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeletStat(SimpLanPlusParser.DeletStatContext ctx) { }
+	@Override public void exitDelStat(SimpLanPlusParser.DelStatContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -113,25 +113,25 @@ public class SimpLanPlusBaseListener implements SimpLanPlusListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) { }
+	@Override public void enterDeclareFun(SimpLanPlusParser.DeclareFunContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx) { }
+	@Override public void exitDeclareFun(SimpLanPlusParser.DeclareFunContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) { }
+	@Override public void enterDeclareVar(SimpLanPlusParser.DeclareVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx) { }
+	@Override public void exitDeclareVar(SimpLanPlusParser.DeclareVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

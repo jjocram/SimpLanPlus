@@ -255,22 +255,22 @@ public class SimpLanPlusParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class DeletStatContext extends StatementContext {
+	public static class DelStatContext extends StatementContext {
 		public DeletionContext deletion() {
 			return getRuleContext(DeletionContext.class,0);
 		}
-		public DeletStatContext(StatementContext ctx) { copyFrom(ctx); }
+		public DelStatContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).enterDeletStat(this);
+			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).enterDelStat(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).exitDeletStat(this);
+			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).exitDelStat(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SimpLanPlusVisitor ) return ((SimpLanPlusVisitor<? extends T>)visitor).visitDeletStat(this);
+			if ( visitor instanceof SimpLanPlusVisitor ) return ((SimpLanPlusVisitor<? extends T>)visitor).visitDelStat(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -312,22 +312,22 @@ public class SimpLanPlusParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class AssigtStatContext extends StatementContext {
+	public static class AssigStatContext extends StatementContext {
 		public AssignmentContext assignment() {
 			return getRuleContext(AssignmentContext.class,0);
 		}
-		public AssigtStatContext(StatementContext ctx) { copyFrom(ctx); }
+		public AssigStatContext(StatementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).enterAssigtStat(this);
+			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).enterAssigStat(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).exitAssigtStat(this);
+			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).exitAssigStat(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SimpLanPlusVisitor ) return ((SimpLanPlusVisitor<? extends T>)visitor).visitAssigtStat(this);
+			if ( visitor instanceof SimpLanPlusVisitor ) return ((SimpLanPlusVisitor<? extends T>)visitor).visitAssigStat(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -340,7 +340,7 @@ public class SimpLanPlusParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
-				_localctx = new AssigtStatContext(_localctx);
+				_localctx = new AssigStatContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(47);
@@ -350,7 +350,7 @@ public class SimpLanPlusParser extends Parser {
 				}
 				break;
 			case 2:
-				_localctx = new DeletStatContext(_localctx);
+				_localctx = new DelStatContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(50);
@@ -429,41 +429,41 @@ public class SimpLanPlusParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class DeclarateVarContext extends DeclarationContext {
+	public static class DeclareVarContext extends DeclarationContext {
 		public DecVarContext decVar() {
 			return getRuleContext(DecVarContext.class,0);
 		}
-		public DeclarateVarContext(DeclarationContext ctx) { copyFrom(ctx); }
+		public DeclareVarContext(DeclarationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).enterDeclarateVar(this);
+			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).enterDeclareVar(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).exitDeclarateVar(this);
+			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).exitDeclareVar(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SimpLanPlusVisitor ) return ((SimpLanPlusVisitor<? extends T>)visitor).visitDeclarateVar(this);
+			if ( visitor instanceof SimpLanPlusVisitor ) return ((SimpLanPlusVisitor<? extends T>)visitor).visitDeclareVar(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class DeclarateFunContext extends DeclarationContext {
+	public static class DeclareFunContext extends DeclarationContext {
 		public DecFunContext decFun() {
 			return getRuleContext(DecFunContext.class,0);
 		}
-		public DeclarateFunContext(DeclarationContext ctx) { copyFrom(ctx); }
+		public DeclareFunContext(DeclarationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).enterDeclarateFun(this);
+			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).enterDeclareFun(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).exitDeclarateFun(this);
+			if ( listener instanceof SimpLanPlusListener ) ((SimpLanPlusListener)listener).exitDeclareFun(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SimpLanPlusVisitor ) return ((SimpLanPlusVisitor<? extends T>)visitor).visitDeclarateFun(this);
+			if ( visitor instanceof SimpLanPlusVisitor ) return ((SimpLanPlusVisitor<? extends T>)visitor).visitDeclareFun(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -476,7 +476,7 @@ public class SimpLanPlusParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
-				_localctx = new DeclarateFunContext(_localctx);
+				_localctx = new DeclareFunContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(66);
@@ -484,7 +484,7 @@ public class SimpLanPlusParser extends Parser {
 				}
 				break;
 			case 2:
-				_localctx = new DeclarateVarContext(_localctx);
+				_localctx = new DeclareVarContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(67);

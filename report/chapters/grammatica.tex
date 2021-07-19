@@ -17,8 +17,8 @@ Lo stesso \verb|block| potrà a sua volta essere utilizzato come parte di un'ist
 Le dichiarazioni sono di due tipi: di variabile e di funzione. La dichiarazione di variabile permette di definire variabili di tipo intero, booleano e puntatori (che puntano a loro volta a zone di memoria contenenti variabili intere, booleane o puntatori). Contestualmente alla dichiarazione di una variabile può anche avvenire l'assegnazione, fornendo un'espressione (\verb|exp|) di cui viene trattato più in dettaglio in \hyperref[s:espressioni]{Sezione 2.4 Espressioni}.
 La dichiarazione di funzione permette di ritornare o meno un valore (nel caso non venga ritornato, il tipo di ritorno è \verb|void|), di avere 0 o più argomenti (c.d. \textbf{parametri formali}) e di avere un \verb|block| di istruzioni correlato, lo stesso presentato nella precedente sezione.
 \begin{lstlisting}[style=antlr]
-declaration : decFun    #declarateFun
-            | decVar    #declarateVar;
+declaration : decFun    #declareFun
+            | decVar    #declareVar;
 
 decFun      : funType ID '(' (arg (',' arg)*)? ')' block;
 
@@ -45,8 +45,8 @@ Le istruzioni possono essere di diverso tipo:
     \item blocco (\verb|block|), che permette di creare un blocco annidato come descritto in \hyperref[s:block]{Sezione 2.1 Block}.
 \end{itemize}
 \begin{lstlisting}[style=antlr]
-statement   : assignment ';'    #assigtStat
-            | deletion ';'      #deletStat
+statement   : assignment ';'    #assigStat
+            | deletion ';'      #delStat
             | print ';'         #printStat
             | ret ';'           #retStat
             | ite               #iteStat

@@ -8,24 +8,24 @@ import it.azzalinferrati.semanticanalysis.SemanticError;
 import it.azzalinferrati.semanticanalysis.exception.TypeCheckingException;
 
 /**
- * Represents the wrapper for an assignment statement.
+ * Represents a wrapper for a deletion statement in the AST.
  */
-public class AssigtStatNode extends StatementNode {
+public class DelStatNode extends StatementNode {
 
-    final private AssignmentNode assignment;
+    final private DeletionNode deletion;
 
-    public AssigtStatNode(final AssignmentNode assignment) {
-        this.assignment = assignment;
+    public DelStatNode(final DeletionNode deletion) {
+        this.deletion = deletion;
     }
 
     @Override
     public String toPrint(String indent) {
-        return indent + assignment;
+        return indent + deletion;
     }
 
     @Override
     public TypeNode typeCheck() throws TypeCheckingException {
-        return assignment.typeCheck();
+        return deletion.typeCheck();
     }
 
     @Override
@@ -35,17 +35,17 @@ public class AssigtStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
-        return assignment.codeGeneration();
+        return deletion.codeGeneration();
     }
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return assignment.checkSemantics(env);
+        return deletion.checkSemantics(env);
     }
 
     @Override
     public ArrayList<SemanticError> checkEffects(Environment env) {
-        return assignment.checkEffects(env);
+        return deletion.checkEffects(env);
     }
 
 }

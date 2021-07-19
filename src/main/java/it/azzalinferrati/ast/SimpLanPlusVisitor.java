@@ -18,19 +18,19 @@ public interface SimpLanPlusVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(SimpLanPlusParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code assigtStat}
+	 * Visit a parse tree produced by the {@code assigStat}
 	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssigtStat(SimpLanPlusParser.AssigtStatContext ctx);
+	T visitAssigStat(SimpLanPlusParser.AssigStatContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code deletStat}
+	 * Visit a parse tree produced by the {@code delStat}
 	 * labeled alternative in {@link SimpLanPlusParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeletStat(SimpLanPlusParser.DeletStatContext ctx);
+	T visitDelStat(SimpLanPlusParser.DelStatContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code printStat}
 	 * labeled alternative in {@link SimpLanPlusParser#statement}.
@@ -67,19 +67,19 @@ public interface SimpLanPlusVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlockStat(SimpLanPlusParser.BlockStatContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code declarateFun}
+	 * Visit a parse tree produced by the {@code declareFun}
 	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclarateFun(SimpLanPlusParser.DeclarateFunContext ctx);
+	T visitDeclareFun(SimpLanPlusParser.DeclareFunContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code declarateVar}
+	 * Visit a parse tree produced by the {@code declareVar}
 	 * labeled alternative in {@link SimpLanPlusParser#declaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclarateVar(SimpLanPlusParser.DeclarateVarContext ctx);
+	T visitDeclareVar(SimpLanPlusParser.DeclareVarContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SimpLanPlusParser#decFun}.
 	 * @param ctx the parse tree

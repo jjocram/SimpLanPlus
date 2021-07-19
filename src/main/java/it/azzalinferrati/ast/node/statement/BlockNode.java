@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import it.azzalinferrati.ast.node.Node;
-import it.azzalinferrati.ast.node.declaration.DeclarateFunNode;
-import it.azzalinferrati.ast.node.declaration.DeclarateVarNode;
+import it.azzalinferrati.ast.node.declaration.DeclareFunNode;
+import it.azzalinferrati.ast.node.declaration.DeclareVarNode;
 import it.azzalinferrati.ast.node.declaration.DeclarationNode;
 import it.azzalinferrati.ast.node.type.TypeNode;
 import it.azzalinferrati.ast.node.type.VoidTypeNode;
@@ -128,8 +128,8 @@ public class BlockNode implements Node {
             }
         }
 
-        var varDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateVarNode).collect(Collectors.toList());
-        var funDeclarations = declarations.stream().filter(dec -> dec instanceof DeclarateFunNode).collect(Collectors.toList());
+        var varDeclarations = declarations.stream().filter(dec -> dec instanceof DeclareVarNode).collect(Collectors.toList());
+        var funDeclarations = declarations.stream().filter(dec -> dec instanceof DeclareFunNode).collect(Collectors.toList());
 
         varDeclarations.forEach(varDec -> buffer.append(varDec.codeGeneration()));
         if (allowScopeCreation && !isMainBlock) {
