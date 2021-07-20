@@ -332,7 +332,7 @@ public class SVMInterpreter {
                     .append(i).append("\t").append(memory[i])
                     .append(i == fp() ? " <- $fp" : "")
                     .append(i == sp() ? " <- $sp" : "")
-                    .append(i == bsp() ? " <- $bps" : "")
+                    .append(i == bsp() ? " <- $bsp" : "")
                     .append(lastUpdatedMemoryCell == i ? " (*)\n" : "\n");
         }
 
