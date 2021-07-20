@@ -23,14 +23,14 @@ Per ogni istruzione letta, viene creato un oggetto di tipo \verb|SVMInstruction|
 \section{CPU e memoria}\label{s:cpu-e-memoria}
 L'interprete emula il comportamento di una CPU e di una memoria.
 \subsection{CPU}\label{ss:cpu}
-La CPU esegue le istruzioni passate al costruttore dell'interprete. Il metodo \verb|run| esegue un ciclo finché o la memoria non ha più celle a disposizione o si raggiunge l'istruzione terminale \verb|halt|. A ogni iterazione si accede all'istruzione indicata dal registro \verb|$ip| che viene poi incrementato di uno per l'iterazione successiva. Il comportamento da seguire dipende dall'istruzione, in particolare dal campo dati \verb|instruction| degli oggetti \verb|SVMInstruction|.
+La CPU esegue le istruzioni passate al costruttore dell'interprete. Il metodo \verb|run| esegue un ciclo finché o la memoria non ha più celle a disposizione o si raggiunge l'istruzione terminale \verb|halt|. A ogni iterazione si accede all'istruzione indicata dal registro \verb|$ip| che viene poi incrementato di uno per l'iterazione successiva. L'operazione da eseguire dipende dall'istruzione, in particolare dal campo dati \verb|instruction| degli oggetti \verb|SVMInstruction|.
 
 \subsection{Registri}\label{ss:registri}
 La CPU ha accesso a 9 registri:
 \begin{itemize}
     \item \textbf{Instruction pointer} (\$ip): indica quale istruzione sarà la prossima a essere eseguita;
     \item \textbf{Stack pointer} (\$sp): punta alla cima dello stack;
-    \item \textbf{Heap pointer} (\$hp): punta alla prima posizione libera dello heap;
+    \item \textbf{Heap pointer} (\$hp): punta alla prima posizione libera dello heap. Non \`e un vero e proprio registro in quanto viene computato quando necessario;
     \item \textbf{Frame pointer} (\$fp): punta all'access link corrente relativo al frame attivo;
     \item \textbf{Base stack pointer} (\$bsp): punta alla cella di memoria contenente il vecchio stack pointer, utile nel caso si esca da una funzione prima della fine delle istruzioni tramite un \verb|return|;
     \item \textbf{Access link} (\$al): registro utilizzato per attraversare la catena statica degli scope;

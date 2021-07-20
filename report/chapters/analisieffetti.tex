@@ -6,7 +6,7 @@
 Essendo l'ambiente dell'analisi degli effetti correlato dal punto di vista implementativo con quello dell'analisi semantica, vale quanto descritto in \hyperref[s:struttura-ambiente]{Sezione 3.1 Struttura ambiente}.
 
 \subsection[Classe Effect]{Classe \texttt{Effect}}\label{ss:effect-effetti}
-La classe \verb|Effect| rappresenta un effetto applicato ad una variabile.
+La classe \verb|Effect| rappresenta un effetto applicato ad un'area di memoria.
 Contiene un solo vero e proprio campo dati, \verb|value| (di tipo intero, in modo che esista un ordinamento), che memorizza l'effetto corrente.
 Ci sono altri campi dati, statici, che sono istanze della stessa classe e rappresentano gli effetti possibili:
 \begin{itemize}
@@ -47,7 +47,7 @@ I principali sono descritti di seguito:
 \end{itemize}
 
 \section{Controllo degli effetti}\label{s:controllo-effetti}
-L'analisi degli effetti viene fatta all'interno del metodo \verb|ArrayList<SemanticError> checkEffects|\\\verb|(Environment env)| per avere accesso alla \textit{Symbol Table} che, essendo già stata creata durante l'analisi semantica, viene qui ricostruita accedendo alle già esistenti \textit{entry} associate ai nodi dell'AST.\\
+L'analisi degli effetti viene fatta all'interno del metodo \verb|ArrayList<SemanticError> checkEffects|\\\verb|(Environment env)|. Per avere accesso alla \textit{Symbol Table} che, essendo già stata creata durante l'analisi semantica, viene ricostruita accedendo alle già esistenti \textit{entry} associate ai nodi dell'AST.\\
 \noindent
 L'implementazione della parte di analisi degli effetti ricalca quanto visto durante le lezioni sull'analisi degli effetti del corso di ``Compilatori e interpreti", i cui riferimenti alle slide si trovano in fondo al presente documento.
 In particolare, nelle prossime sezioni, vengono descritti più in dettaglio alcuni dei controlli più rilevanti.
@@ -96,5 +96,11 @@ Per quanto riguarda la chiamata di funzione:
     \item infine, viene invocato \verb|update| con parametri \verb|e1| e \verb|e2| e il risultato è il nuovo ambiente per le successive istruzioni.
 \end{enumerate}
 
+\subsection{Corretto uso dei puntatori}\label{s:corretto_uso_dei_puntatori}
+I controlli sui puntatori sono presenti in diversi parti dell'AST:
+\begin{itemize}
+    \item quando un puntatore viene utilizzato come un'espressione o durante un'assegnamento tutte le aree di memoria che permettono la raggiunta dell'area che si vuole utilizzare devono essere nello stato $rw$;
+    \item al momento della dichiarazione di una funzione non \`e possibile sapere quali saranno gli stati dei paramatri al momento dell'invocazione. Nel migliore dei casi saranno tutti a $rw$, ed infatti, al momento della dichiarazione viene usato questo stato per calcolare quali effetti i parametri avranno al termine della funzione. Per poter capire, per\`o se i parametri attuali, al momento della chiamata, siano effettivamente compatibili con quanto accade nelle diverse istruzioni del corpo della funzione, \`e stato necessario controllare quali operazioni vengono fatte sui parametri attuali istanziando gli stati con quelli che avranno al momento della chiamata. Un esempio in cui questo risulta essere necessario \`e l'\hyperref[s:esempio32]{esempio 32}.
+\end{itemize}
 \end{document}
 

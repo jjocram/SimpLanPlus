@@ -4,7 +4,7 @@
 \chapter{Type checking}\label{c:typechecking}
 \section{Correttezza dei tipi}\label{s:correttezza-tipi}
 La correttezza dei tipi viene gestista tramite il metodo \verb|Node typeCheck()| che restituisce un nodo rappresentante il tipo del nodo (istanza di \verb|Node|) su cui si è invocato, null in caso quel nodo non debba avere associato un tipo o  un'eccezione in caso di errori durante il processo.\\
-Il valore \verb|null| viene ritornato da tutti i nodi che hanno come supertipo \verb|TypeNode|, dagli argomenti delle funzioni, dalle dichiarazione di variabili e funzioni.\\
+Il valore \verb|null| viene ritornato da tutti i nodi che hanno come supertipo \verb|TypeNode|, dagli argomenti delle funzioni, dalle dichiarazione di variabili e di funzioni.\\
 Le istruzioni, per scelta implementativa, ritornano il tipo \verb|void| ma ci sono alcune eccezioni:
 \begin{itemize}
     \item \verb|RetNode| che ritorna il tipo dell'espressione, \verb|void| nel caso non ce ne sia alcuna;
