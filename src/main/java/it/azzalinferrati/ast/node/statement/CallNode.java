@@ -90,7 +90,7 @@ public class CallNode implements Node {
 
         buffer.append("subi $sp $sp 1 ;create space for RA\n");
 
-        buffer.append("lw $al 0($fp)\n");
+        buffer.append("mv $al $fp\n");
         for (int i = 0; i < (currentNestingLevel - id.getNestingLevel()); i++) {
             buffer.append("lw $al 0($al)\n");
         }
