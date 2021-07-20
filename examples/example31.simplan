@@ -2,7 +2,7 @@
     /*
     This example shows the incorrect use of pointers in SimpLanPlus since pointers of different types are assigned.
     The program is wrong and should output the following error:
-      - ""
+      - "Expression: y of type ^^int cannot be assigned to x of type ^^^int."
     */
     ^^^int x;
     ^^int y = new ^int;
