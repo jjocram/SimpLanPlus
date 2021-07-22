@@ -96,17 +96,12 @@ public class CallNode implements Node {
 
         buffer.append("subi $sp $sp 1 ;create space for RA\n");
 
-        if (callerFunctionIdentifier != null){
-            if(callerFunctionIdentifier.endsWith(id.getIdentifier())) {
-                // Recursive call
-                buffer.append("lw $al 0($fp)");
-            } else {
-                // Not recursive call
-                buffer.append("mv $al $fp\n");
-            }
+        if (callerFunctionIdentifier != null && callerFunctionIdentifier.endsWith(id.getIdentifier())) {
+            // Recursive call
+            buffer.append("lw $al 0($fp)"); // 0($fp) is the value of AL in the previous frame
         } else {
-            // There is no a caller -> this call happened in the main block
-            buffer.append("mv $al $fp\n");
+            // There is no a caller (the main called the function) or this is not a recursive call
+            buffer.append("mv $al $fp\n"); // $fp is the address of AL in the previous frame
         }
 
 
