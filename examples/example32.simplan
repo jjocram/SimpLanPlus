@@ -1,13 +1,13 @@
 {
     /*
-    This example shows how the effect analysis works to find the invocation of functions with wrong variables' statuses
-    The function f takes in input a pointer (a) and try to print the value pointed (print a^), In this case when f will
-    be invoked the pointer passed must be in the status RW (y^ = 2; f(y);); without the assignment to y (only f(y)) the
+    This example shows how the effect analysis works to find the invocation of functions with wrong variables' statuses.
+    The function f takes in input a pointer (a) and try to print the value pointed (print a^). In this case when f will
+    be invoked the pointer passed must be in the status RW (y^ = 2; f(y);). Without the assignment y^=2 (only f(y)) the
     compiler will show the error message "a^ is used prior to initialization.".
-    Also the function h takes in input a pointer but, it always write the value 1 (a^ = 1;) before the print statement.
-    So, in the case of h function an user can pass a pointer without a value assigned (there is not an assignment
+    Moreover, the function h takes a as an input parameter but it writes the value 1 (a^ = 1;) before printing it.
+    So, in the case of h function a user can pass a pointer without a value assigned (there is not an assignment
     instruction for x).
-    When the two functions are declared there is no a way to know which statuses the parameter will have.
+    When the two functions are declared there is no a way to know which statuses the parameters will have.
     */
 
     void f(^int a) {

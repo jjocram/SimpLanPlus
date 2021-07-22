@@ -30,7 +30,14 @@ Oltre ai campi dati illustrati in \hyperref[ss:stentry]{Sezione 3.1.2 \texttt{ST
     \item \verb|functionNode|, utilizzato solo per \textit{entry} relative a funzioni, corrispondente ad un riferimento al nodo dell'AST in cui è definita la funzione stessa e viene utilizzata per verificare al momento della chiamata che gli effetti dei parametri attuali siano compatibili con quanto accade all'interno della funzione.
 \end{itemize}
 In caso la \textit{entry} si riferisca ad una variabile, \verb|functionStatus| è una lista vuota e non viene in alcun modo utilizzata; viceversa nel caso sia una funzione.\\
-La scelta di utilizzare una \verb|List<Effect>| è stata resa necessaria per poter gestire allo stesso modo variabili non puntatori (che hanno a loro associate \verb|variableStatus| di lunghezza 1) e variabili puntatori (che hanno \verb|variableStatus| di lunghezza pari al massimo numero di dereferenziazioni possibili su di esse, certamente $> 1$).
+La scelta di utilizzare una \verb|List<Effect>| è stata resa necessaria per poter gestire allo stesso modo variabili non puntatori (che hanno a loro associate \verb|variableStatus| di lunghezza 1) e variabili puntatori (che hanno \verb|variableStatus| di lunghezza pari al massimo numero di dereferenziazioni possibili su di esse, certamente $> 1$).\\
+Un esempio di come appaiono gli effetti di una variabile nella \textit{Symbol Table} \`e riportato di seguito:
+\begin{lstlisting}
+^int x;         // x |-> [\bot, \bot]
+x = new int;    // x |-> [rw, \bot]
+x^ = 5;         // x |-> [rw, rw]
+delete x;       // x |-> [rw, d]
+\end{lstlisting}
 
 
 \subsection[Classe Environment]{Classe \texttt{Environment}}\label{ss:environment-effetti}
@@ -100,7 +107,7 @@ Per quanto riguarda la chiamata di funzione:
 I controlli sui puntatori sono presenti in diversi parti dell'AST:
 \begin{itemize}
     \item quando un puntatore viene utilizzato come un'espressione o durante un'assegnamento tutte le aree di memoria che permettono la raggiunta dell'area che si vuole utilizzare devono essere nello stato $rw$;
-    \item al momento della dichiarazione di una funzione non \`e possibile sapere quali saranno gli stati dei paramatri al momento dell'invocazione. Nel migliore dei casi saranno tutti a $rw$, ed infatti, al momento della dichiarazione viene usato questo stato per calcolare quali effetti i parametri avranno al termine della funzione. Per poter capire, per\`o se i parametri attuali, al momento della chiamata, siano effettivamente compatibili con quanto accade nelle diverse istruzioni del corpo della funzione, \`e stato necessario controllare quali operazioni vengono fatte sui parametri attuali istanziando gli stati con quelli che avranno al momento della chiamata. Un esempio in cui questo risulta essere necessario \`e l'\hyperref[s:esempio32]{esempio 32}.
+    \item al momento della dichiarazione di una funzione non \`e possibile sapere quali saranno gli stati dei paramatri al momento dell'invocazione. Nel migliore dei casi saranno tutti a $rw$ ed infatti, al momento della dichiarazione, viene usato questo stato per calcolare quali effetti i parametri avranno al termine della funzione. Per poter capire per\`o se i parametri attuali al momento della chiamata siano effettivamente compatibili con quanto accade nelle diverse istruzioni del corpo della funzione, \`e stato necessario controllare quali operazioni vengono fatte sui parametri attuali, istanziando gli stati con quelli che avranno al momento della chiamata. Un esempio in cui questo risulta essere necessario \`e l'\hyperref[s:esempio32]{esempio 32}.
 \end{itemize}
 \end{document}
 
