@@ -48,14 +48,15 @@ Available registers in the SVM:
 ## Activation Record structure in the SVM
 | Activation Record           |
 |-----------------------------|
-| RA (Return Address)         | $sp
-| Par 1                       |
-| ...                         |
+| Par N                       | $sp
 | Par N-1                     |
-| Par N                       |
-| Dec 1                       |
 | ...                         |
+| Par 1                       |
+| Dec M                       |
 | Dec M-1                     |
-| Dec M                       | 
+| ...                         |
+| Dec 1                       | 
 | AL (Access Link)            | $fp
+| RA (Return Address)         |
+| Previous SP (Stack Pointer) | $bsp
 | Previous FP (Frame Pointer) |

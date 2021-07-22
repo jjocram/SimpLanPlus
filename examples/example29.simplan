@@ -1,4 +1,8 @@
 {
+    /*
+    This example shows the correct working of nested functions.
+    The program is well-formed and should output 2.
+    */
     void f(int a) {
         void g(int b) {
             print b;
