@@ -108,22 +108,26 @@ Infatti, sebbene l'istruzione \verb|return| possa semplicemente memorizzare il v
 {
     ^int a = new int;
     ^int b = new int;
-    void f(^int x, ^int y, int n) {
-        if (n == 0) {
+    int c = 2;
+    void f(^int x, ^int y) {
+        if (c == 0) {
             delete y;
         }
         else {
             ^int w = new int;
-            f(w, x, n-1);
+            c = c-1;
+            f(w, x);
             delete y;
         }
     }
 
-    f(a, b, 1);
+    f(a, b);
+    print c;
+    //print a^;
 }
 \end{lstlisting}
 L'esempio presente nel file \verb|examples/example25.simplan|, mostra come sia necessario avere il metodo di punto fisso (MPF) per calcolare gli effetti applicati ai parametri formali delle funzioni.
-Senza il MPF, \verb|f| avrebbe avuto come effetti \verb|x| $\rightmapsto{} rw$, \verb|y| $\rightmapsto{} d$ e \verb|n| $\rightmapsto{} rw$, non riconoscendo che la chiamata ricorsiva nel ramo \verb|else| porta anche \verb|x| ad essere cancellato.
+Senza il MPF, gli argomenti di \verb|f| avrebbero avuto come effetti \verb|x^| $\rightmapsto{} rw$, \verb|y^| $\rightmapsto{} d$ e la variabile globale \verb|c| $\rightmapsto{} rw$, non riconoscendo che la chiamata ricorsiva nel ramo \verb|else| porta anche \verb|x| ad essere cancellato.
 Con l'implementazione corretta che è stata fatta, tentando di accedere in lettura alle variabili \verb|a| e \verb|b| dopo il codice mostrato in esempio viene segnalato un errore perché le variabili potrebbero essere state cancellate.
 
 \section{Esempio 32}\label{s:esempio32}
