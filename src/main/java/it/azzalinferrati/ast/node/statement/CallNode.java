@@ -30,6 +30,8 @@ public class CallNode implements Node {
     // Blocks infinite recursion in recursive function effect analysis.
     private boolean firstCheck;
 
+    private String callerFunctionIdentifier;
+
     public CallNode(IdNode id, List<ExpNode> params) {
         this.id = id;
         this.params = params;
@@ -50,6 +52,10 @@ public class CallNode implements Node {
     @Override
     public String toString() {
         return toPrint("");
+    }
+
+    public void setCallerFunctionIdentifier(String callerFunctionIdentifier) {
+        this.callerFunctionIdentifier = callerFunctionIdentifier;
     }
 
     @Override
@@ -90,7 +96,19 @@ public class CallNode implements Node {
 
         buffer.append("subi $sp $sp 1 ;create space for RA\n");
 
-        buffer.append("lw $al 0($fp)\n");
+        if (callerFunctionIdentifier != null){
+            if(callerFunctionIdentifier.endsWith(id.getIdentifier())) {
+                // Recursive call
+                buffer.append("lw $al 0($fp)");
+            } else {
+                // Not recursive call
+                buffer.append("mv $al $fp\n");
+            }
+        } else {
+            // There is no a caller -> this call happened in the main block
+            buffer.append("mv $al $fp\n");
+        }
+
         for (int i = 0; i < (currentNestingLevel - id.getNestingLevel()); i++) {
             buffer.append("lw $al 0($al)\n");
         }

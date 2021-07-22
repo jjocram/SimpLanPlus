@@ -35,6 +35,7 @@ public class CallStatNode extends StatementNode {
 
     @Override
     public String codeGeneration() {
+        call.setCallerFunctionIdentifier(getEndFunctionLabel());
         return call.codeGeneration();
     }
 
