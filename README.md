@@ -2,6 +2,9 @@
 
 Repository for the course "Compilatori e interpreti" (Compilers and Interpreters) at the University of Bologna, A.Y. 2020/21.
 
+## Addendum post submission
+Feel free to take a cue from this project. The evaluation was good but this project is not without errors (i.e. some edge cases are not considerated).
+
 ## Instructions for compiling
 ```bash
 mvn clean compile assembly:single
